@@ -71,7 +71,7 @@ T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-1
 
 ## FAZ 0 - Tracer Bullet 0: Yürüyen İskelet (uçtan uca boru hattı)
 
-> Hedef: Boş ama **uçtan uca çalışan** bir uygulama: UI -> use-case -> SQLite adapter -> geri UI; testler, lint, CI ve EAS build (Android+iOS) yeşil. Bu, mimarinin tümünü baştan kanıtlar.
+> Hedef: Boş ama **uçtan uca çalışan** bir uygulama: UI -> use-case -> SQLite adapter -> geri UI; testler, lint, CI yeşil. **Android yerel** (`expo start --android`); **iOS bulut build** yalnız EAS ile (Mac gerekmez).
 
 | ID | ✓ | Commit Mesajı | Adım | Neden | Onay (Doğrulama) |
 |---|---|---|---|---|---|
@@ -87,17 +87,17 @@ T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-1
 | T-010 | [✓] | feat: add base theme tokens light dark | Fildişi light + sıcak dark token iskeleti | PRD §11 tema temeli | İki temada arka plan rengi değişiyor (manuel) |
 | T-011 | [✓] | feat: base expo router layout | `app/_layout.tsx` + `index.tsx` | Yönlendirme temeli | Ana ekran açılıyor |
 | T-012 | [✓] | build: init eas json profiles | `eas.json` dev/preview/prod profilleri | Bulut build/dağıtım (Windows'tan iOS) | `eas.json` geçerli; `eas build:configure` ok |
-| T-013 | [ ] | build: verify eas android dev build | EAS ile Android dev client build | Android pipeline kanıtı | Build başarılı, APK indirilebiliyor |
-| T-014 | [ ] | build: verify eas ios cloud build | EAS ile iOS build (Mac'siz) | iOS pipeline kanıtı (PRD §8) | iOS build derleniyor (yeşil) |
+| T-013 | [—] | build: verify local android dev run | **ERTELENDİ** — Android: `pnpm expo start --android` (store hesapları sonrası) | Android-öncelikli geliştirme (PRD §8) | Uygulama Android emülatör/cihazda açılıyor |
+| T-014 | [—] | build: verify eas ios cloud build | **ERTELENDİ** — EAS yalnız iOS (Apple Developer hesabı gerekli) | iOS pipeline kanıtı (PRD §8) | iOS build EAS'te yeşil; IPA/TestFlight'a hazır |
 | T-015 | [✓] | build: env and config management | `app.config.ts` + env yönetimi (sırlar EAS Secret/.env) | Sırları koddan ayır | `.env` ignore'da; config tipli okunuyor |
-| T-016 | [ ] | build: drizzle and expo-sqlite setup | Drizzle + expo-sqlite + metro `.sql` + drizzle.config | Local-first DB altyapısı | `drizzle-kit generate` migration üretiyor |
-| T-017 | [ ] | feat: sqliteprovider and migrations runner | Root'ta SQLiteProvider + `useMigrations` | DB başlatma | Uygulama açılışta migration'ı uyguluyor (log) |
-| T-018 | [ ] | test: healthcheck usecase red | (Red) HealthCheck use-case testi (saf) | Tracer: domain katmanı kanıtı | Test **kırmızı** (henüz kod yok) |
-| T-019 | [ ] | feat: healthcheck usecase green | (Green) HealthCheck use-case implementasyonu | Domain çalışır | T-018 testi yeşil |
-| T-020 | [ ] | test: drizzle health adapter red | (Red) DB health adapter testi (test DB) | Adapter katmanı kanıtı | Test kırmızı |
-| T-021 | [ ] | feat: drizzle health adapter green | (Green) SQLite health adapter | DB okuma/yazma kanıtı | T-020 testi yeşil |
-| T-022 | [ ] | feat: wire home to healthcheck | UI -> hook -> use-case -> adapter "DB OK" göster | Uçtan uca tracer tamam | Ana ekranda "DB OK" görünüyor (component test) |
-| T-023 | [ ] | test: e2e app launch shows db ok | Maestro: uygulama açılır, "DB OK" görülür | E2E pipeline kanıtı | `maestro test` akışı yeşil |
+| T-016 | [✓] | build: drizzle and expo-sqlite setup | Drizzle + expo-sqlite + metro `.sql` + drizzle.config | Local-first DB altyapısı | `drizzle-kit generate` migration üretiyor |
+| T-017 | [✓] | feat: sqliteprovider and migrations runner | Root'ta SQLiteProvider + `useMigrations` | DB başlatma | Uygulama açılışta migration'ı uyguluyor (log) |
+| T-018 | [✓] | test: healthcheck usecase red | (Red) HealthCheck use-case testi (saf) | Tracer: domain katmanı kanıtı | Test **kırmızı** (henüz kod yok) |
+| T-019 | [✓] | feat: healthcheck usecase green | (Green) HealthCheck use-case implementasyonu | Domain çalışır | T-018 testi yeşil |
+| T-020 | [✓] | test: drizzle health adapter red | (Red) DB health adapter testi (test DB) | Adapter katmanı kanıtı | Test kırmızı |
+| T-021 | [✓] | feat: drizzle health adapter green | (Green) SQLite health adapter | DB okuma/yazma kanıtı | T-020 testi yeşil |
+| T-022 | [✓] | feat: wire home to healthcheck | UI -> hook -> use-case -> adapter "DB OK" göster | Uçtan uca tracer tamam | Ana ekranda "DB OK" görünüyor (component test) |
+| T-023 | [✓] | test: e2e app launch shows db ok | Maestro: uygulama açılır, "DB OK" görülür | E2E pipeline kanıtı | `maestro test` akışı yeşil |
 
 ---
 
