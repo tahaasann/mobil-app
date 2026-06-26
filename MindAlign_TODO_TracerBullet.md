@@ -75,11 +75,11 @@ T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-1
 
 | ID | ✓ | Commit Mesajı | Adım | Neden | Onay (Doğrulama) |
 |---|---|---|---|---|---|
-| T-001 | [ ] | chore: bootstrap expo sdk 56 typescript app | `pnpm create expo-app` ile SDK 56 + TypeScript şablonu oluştur (pnpm `nodeLinker: hoisted` otomatik gelir) | Projenin temel iskeleti | `pnpm expo start` ile uygulama Android'de açılıyor; `pnpm-workspace.yaml` içinde `nodeLinker: hoisted` var |
-| T-002 | [ ] | chore: init git and gitignore | Git init + Expo/Node `.gitignore` + ilk commit | Sürüm kontrolü + sır sızıntısını baştan engelle | `git status` temiz; `node_modules`, `.env` ignore'da |
-| T-003 | [ ] | build: enable typescript strict mode | `tsconfig.json` strict + path alias hazırlığı | Tam tip güvenliği (PRD) | `pnpm typecheck` hatasız |
-| T-004 | [ ] | build: add eslint and prettier | ESLint + Prettier kur/yapılandır | Tutarlı, temiz kod | `pnpm lint` çalışıyor, hata yok |
-| T-005 | [ ] | test: setup jest and rntl | Jest + RNTL kurulum + örnek 1 test | TDD altyapısı | `pnpm test` 1 örnek test yeşil |
+| T-001 | [✓] | chore: bootstrap expo sdk 56 typescript app | `pnpm create expo-app` ile SDK 56 + TypeScript şablonu oluştur (pnpm `nodeLinker: hoisted` otomatik gelir) | Projenin temel iskeleti | `pnpm expo start` ile uygulama Android'de açılıyor; `pnpm-workspace.yaml` içinde `nodeLinker: hoisted` var |
+| T-002 | [✓] | chore: init git and gitignore | Git init + Expo/Node `.gitignore` + ilk commit | Sürüm kontrolü + sır sızıntısını baştan engelle | `git status` temiz; `node_modules`, `.env` ignore'da |
+| T-003 | [✓] | build: enable typescript strict mode | `tsconfig.json` strict + path alias hazırlığı | Tam tip güvenliği (PRD) | `pnpm typecheck` hatasız |
+| T-004 | [✓] | build: add eslint and prettier | ESLint + Prettier kur/yapılandır | Tutarlı, temiz kod | `pnpm lint` çalışıyor, hata yok |
+| T-005 | [✓] | test: setup jest and rntl | Jest + RNTL kurulum + örnek 1 test | TDD altyapısı | `pnpm test` 1 örnek test yeşil |
 | T-006 | [ ] | ci: add github actions for lint typecheck test | GitHub Actions: push'ta lint+typecheck+test | Her adımı otomatik doğrula | Actions çalışıp yeşil (örnek push) |
 | T-007 | [ ] | chore: scaffold hexagonal folders | `src/domain, application, infrastructure, presentation` + index | SOLID/hexagonal sınırlar (PRD §9) | Klasörler var; import alias çözülüyor |
 | T-008 | [ ] | build: configure path aliases | `@/` alias (tsconfig + babel + jest) | Temiz import | `@/...` import edilen örnek dosya derleniyor |
