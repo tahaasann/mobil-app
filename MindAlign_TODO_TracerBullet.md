@@ -84,7 +84,7 @@ T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-1
 | T-007 | [✓] | chore: scaffold hexagonal folders | `src/domain, application, infrastructure, presentation` + index | SOLID/hexagonal sınırlar (PRD §9) | Klasörler var; import alias çözülüyor |
 | T-008 | [✓] | build: configure path aliases | `@/` alias (tsconfig + babel + jest) | Temiz import | `@/...` import edilen örnek dosya derleniyor |
 | T-009 | [✓] | feat: setup nativewind and tailwind config | NativeWind + tailwind.config (renk token iskeleti) | Tasarım sistemi temeli | Bir ekranda Tailwind class render oluyor |
-| T-010 | [ ] | feat: add base theme tokens light dark | Fildişi light + sıcak dark token iskeleti | PRD §11 tema temeli | İki temada arka plan rengi değişiyor (manuel) |
+| T-010 | [✓] | feat: add base theme tokens light dark | Fildişi light + sıcak dark token iskeleti | PRD §11 tema temeli | İki temada arka plan rengi değişiyor (manuel) |
 | T-011 | [ ] | feat: base expo router layout | `app/_layout.tsx` + `index.tsx` | Yönlendirme temeli | Ana ekran açılıyor |
 | T-012 | [ ] | build: init eas json profiles | `eas.json` dev/preview/prod profilleri | Bulut build/dağıtım (Windows'tan iOS) | `eas.json` geçerli; `eas build:configure` ok |
 | T-013 | [ ] | build: verify eas android dev build | EAS ile Android dev client build | Android pipeline kanıtı | Build başarılı, APK indirilebiliyor |
