@@ -23,9 +23,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     scheme: 'mindalign',
     userInterfaceStyle: 'automatic',
     ios: {
+      bundleIdentifier: 'com.tahaasann.mindalign',
       icon: './assets/expo.icon',
     },
     android: {
+      package: 'com.tahaasann.mindalign',
       adaptiveIcon: {
         backgroundColor: '#E6F4FE',
         foregroundImage: './assets/images/android-icon-foreground.png',
@@ -41,6 +43,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     plugins: [
       'expo-router',
+      'expo-sqlite',
       [
         'expo-splash-screen',
         {

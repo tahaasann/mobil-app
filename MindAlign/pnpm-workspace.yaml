@@ -4,4 +4,5 @@ nodeLinker: hoisted
 
 # pnpm v10+ blocks postinstall scripts by default; unrs-resolver is used by eslint-config-expo.
 allowBuilds:
+  esbuild: true
   unrs-resolver: true
