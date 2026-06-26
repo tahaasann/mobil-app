@@ -89,7 +89,7 @@ T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-1
 | T-012 | [✓] | build: init eas json profiles | `eas.json` dev/preview/prod profilleri | Bulut build/dağıtım (Windows'tan iOS) | `eas.json` geçerli; `eas build:configure` ok |
 | T-013 | [ ] | build: verify eas android dev build | EAS ile Android dev client build | Android pipeline kanıtı | Build başarılı, APK indirilebiliyor |
 | T-014 | [ ] | build: verify eas ios cloud build | EAS ile iOS build (Mac'siz) | iOS pipeline kanıtı (PRD §8) | iOS build derleniyor (yeşil) |
-| T-015 | [ ] | build: env and config management | `app.config.ts` + env yönetimi (sırlar EAS Secret/.env) | Sırları koddan ayır | `.env` ignore'da; config tipli okunuyor |
+| T-015 | [✓] | build: env and config management | `app.config.ts` + env yönetimi (sırlar EAS Secret/.env) | Sırları koddan ayır | `.env` ignore'da; config tipli okunuyor |
 | T-016 | [ ] | build: drizzle and expo-sqlite setup | Drizzle + expo-sqlite + metro `.sql` + drizzle.config | Local-first DB altyapısı | `drizzle-kit generate` migration üretiyor |
 | T-017 | [ ] | feat: sqliteprovider and migrations runner | Root'ta SQLiteProvider + `useMigrations` | DB başlatma | Uygulama açılışta migration'ı uyguluyor (log) |
 | T-018 | [ ] | test: healthcheck usecase red | (Red) HealthCheck use-case testi (saf) | Tracer: domain katmanı kanıtı | Test **kırmızı** (henüz kod yok) |
