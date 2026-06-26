@@ -8,6 +8,31 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { WebBadge } from '@/components/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { useHealthCheck } from '@/presentation/hooks/use-health-check';
+
+function DbStatusBadge() {
+  const health = useHealthCheck();
+
+  if (health.status === 'loading') {
+    return (
+      <Text className="rounded-lg bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
+        Checking DB…
+      </Text>
+    );
+  }
+
+  const isOk = health.status === 'ok';
+  return (
+    <Text
+      accessibilityRole="text"
+      className={`rounded-lg px-3 py-1 text-sm font-medium ${
+        isOk ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+      }`}
+    >
+      {health.message}
+    </Text>
+  );
+}
 
 function getDevMenuHint() {
   if (Platform.OS === 'web') {
@@ -45,6 +70,7 @@ export default function HomeScreen() {
           </ThemedText>
 
           <ThemedView type="backgroundElement" style={styles.stepContainer}>
+            <DbStatusBadge />
             <Text className="rounded-lg bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-800">
               NativeWind ready
             </Text>
