@@ -3,6 +3,8 @@
 __generated__
 web-build
 bare-apps
+dist/
+
 
 # macOS
 .DS_Store
@@ -113,6 +115,7 @@ shellAppWorkspaces
 /client-builds
 
 # Expo web env
+.env
 .env.local
 .env.development.local
 .env.test.local
