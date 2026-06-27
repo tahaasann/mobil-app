@@ -5,6 +5,7 @@ import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import { DatabaseProvider } from '@/infrastructure/database/database-provider';
 import { AppContainerProvider } from '@/infrastructure/di/app-container';
+import { AuthContainer } from '@/infrastructure/di/auth-container';
 import { FirebaseProvider } from '@/infrastructure/firebase/firebase-provider';
 import { I18nProvider } from '@/presentation/i18n/i18n-provider';
 import { AppThemeProvider, useAppTheme } from '@/presentation/theme/theme-provider';
@@ -17,7 +18,8 @@ function ThemedRootStack() {
       <AnimatedSplashOverlay />
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="onboarding/index" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+        <Stack.Screen name="auth" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="excuse/[habitId]"
@@ -35,7 +37,9 @@ export default function RootLayout() {
         <I18nProvider>
           <AppThemeProvider>
             <AppContainerProvider>
-              <ThemedRootStack />
+              <AuthContainer>
+                <ThemedRootStack />
+              </AuthContainer>
             </AppContainerProvider>
           </AppThemeProvider>
         </I18nProvider>

@@ -6,6 +6,15 @@ const mockSendExcuse = jest.fn();
 const mockRescue = jest.fn();
 const mockGiveUp = jest.fn();
 
+jest.mock('@/infrastructure/di/app-container', () => ({
+  useAppContainer: () => ({
+    bookmarkUseCase: { add: jest.fn() },
+    saveChatMessageUseCase: { execute: jest.fn().mockResolvedValue(undefined) },
+    getAppSettingsUseCase: { execute: jest.fn().mockResolvedValue({ selectedApproach: 'universal' }) },
+    getUserProfileUseCase: { execute: jest.fn().mockResolvedValue(null) },
+  }),
+}));
+
 jest.mock('@/presentation/hooks/use-excuse-chat', () => ({
   useExcuseChat: () => ({
     sendExcuse: mockSendExcuse,

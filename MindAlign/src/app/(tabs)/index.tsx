@@ -1,4 +1,5 @@
-import { ScrollView, Text, View } from 'react-native';
+import { useRouter, type Href } from 'expo-router';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
@@ -7,15 +8,21 @@ import { HabitCard } from '@/presentation/components/habit-card';
 import { useHabits } from '@/presentation/hooks/use-habits';
 
 export default function HomeScreen() {
+  const router = useRouter();
   const { t } = useTranslation();
   const { habits, isLoading, createHabit, markDoneToday } = useHabits();
 
   return (
     <View className="flex-1 bg-ivory dark:bg-charcoal">
       <SafeAreaView className="flex-1 px-4 py-6">
-        <Text className="mb-2 text-3xl font-semibold text-foreground dark:text-foreground-dark">
-          {t('dashboard.title')}
-        </Text>
+        <View className="mb-2 flex-row items-center justify-between">
+          <Text className="text-3xl font-semibold text-foreground dark:text-foreground-dark">
+            {t('dashboard.title')}
+          </Text>
+          <Pressable accessibilityRole="button" onPress={() => router.push('/(tabs)/saved' as Href)}>
+            <Text className="text-sm font-semibold text-accent">{t('saved.link')}</Text>
+          </Pressable>
+        </View>
         <Text className="mb-6 text-base text-muted dark:text-muted-dark">
           {t('dashboard.subtitle')}
         </Text>

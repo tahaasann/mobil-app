@@ -1,7 +1,13 @@
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
 
 import type { AiCoachPort } from '@/application/ports/ai-coach.port';
+import type { SyncPort } from '@/application/ports/sync.port';
+import { BookmarkUseCase } from '@/application/use-cases/bookmark.use-case';
 import { BustExcuseChatUseCase } from '@/application/use-cases/bust-excuse-chat.use-case';
+import {
+  ListChatMessagesUseCase,
+  SaveChatMessageUseCase,
+} from '@/application/use-cases/chat-message.use-case';
 import { CreateHabitUseCase } from '@/application/use-cases/create-habit.use-case';
 import { GetAppSettingsUseCase } from '@/application/use-cases/get-app-settings.use-case';
 import { GetDashboardUseCase } from '@/application/use-cases/get-dashboard.use-case';
@@ -12,13 +18,18 @@ import {
   FailStreakUseCase,
   RescueStreakUseCase,
 } from '@/application/use-cases/rescue-streak.use-case';
+import { SyncOnLoginUseCase } from '@/application/use-cases/sync-on-login.use-case';
 import { useAppDatabase } from '@/infrastructure/database/database-provider';
 import { DrizzleAiUsageRepository } from '@/infrastructure/database/repositories/drizzle-ai-usage.repository';
 import { DrizzleAppSettingsRepository } from '@/infrastructure/database/repositories/drizzle-app-settings.repository';
+import { DrizzleBookmarkRepository } from '@/infrastructure/database/repositories/drizzle-bookmark.repository';
+import { DrizzleChatMessageRepository } from '@/infrastructure/database/repositories/drizzle-chat-message.repository';
 import { DrizzleHabitLogRepository } from '@/infrastructure/database/repositories/drizzle-habit-log.repository';
 import { DrizzleHabitRepository } from '@/infrastructure/database/repositories/drizzle-habit.repository';
 import { DrizzleUserProfileRepository } from '@/infrastructure/database/repositories/drizzle-user-profile.repository';
 import { FirebaseAiCoachAdapter } from '@/infrastructure/firebase/firebase-ai-coach.adapter';
+import { FirestoreSyncAdapter } from '@/infrastructure/firebase/firestore-sync.adapter';
+import { InMemorySyncAdapter } from '@/infrastructure/firebase/in-memory-sync.adapter';
 import { MockAiCoachAdapter } from '@/infrastructure/firebase/mock-ai-coach.adapter';
 
 export type AppContainer = {
@@ -31,6 +42,10 @@ export type AppContainer = {
   saveOnboardingUseCase: SaveOnboardingUseCase;
   getAppSettingsUseCase: GetAppSettingsUseCase;
   getUserProfileUseCase: GetUserProfileUseCase;
+  bookmarkUseCase: BookmarkUseCase;
+  saveChatMessageUseCase: SaveChatMessageUseCase;
+  listChatMessagesUseCase: ListChatMessagesUseCase;
+  syncOnLoginUseCase: SyncOnLoginUseCase;
 };
 
 const AppContainerContext = createContext<AppContainer | null>(null);
@@ -42,6 +57,13 @@ function createAiCoach(): AiCoachPort {
   return new FirebaseAiCoachAdapter();
 }
 
+function createSyncPort(): SyncPort {
+  if (process.env.EXPO_PUBLIC_AUTH_MOCK === 'true' || process.env.EXPO_PUBLIC_SYNC_MOCK === 'true') {
+    return new InMemorySyncAdapter();
+  }
+  return new FirestoreSyncAdapter();
+}
+
 export function AppContainerProvider({ children }: { children: ReactNode }) {
   const db = useAppDatabase();
   const container = useMemo<AppContainer>(() => {
@@ -50,6 +72,9 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
     const aiUsageRepository = new DrizzleAiUsageRepository(db);
     const appSettingsRepository = new DrizzleAppSettingsRepository(db);
     const userProfileRepository = new DrizzleUserProfileRepository(db);
+    const bookmarkRepository = new DrizzleBookmarkRepository(db);
+    const chatMessageRepository = new DrizzleChatMessageRepository(db);
+    const syncPort = createSyncPort();
     const aiCoach = createAiCoach();
     const createHabitUseCase = new CreateHabitUseCase(habitRepository);
 
@@ -67,6 +92,14 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
       ),
       getAppSettingsUseCase: new GetAppSettingsUseCase(appSettingsRepository),
       getUserProfileUseCase: new GetUserProfileUseCase(userProfileRepository),
+      bookmarkUseCase: new BookmarkUseCase(bookmarkRepository),
+      saveChatMessageUseCase: new SaveChatMessageUseCase(chatMessageRepository),
+      listChatMessagesUseCase: new ListChatMessagesUseCase(chatMessageRepository),
+      syncOnLoginUseCase: new SyncOnLoginUseCase(
+        syncPort,
+        bookmarkRepository,
+        chatMessageRepository,
+      ),
     };
   }, [db]);
 

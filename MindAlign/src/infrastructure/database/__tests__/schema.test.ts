@@ -1,4 +1,11 @@
-import { aiUsage, appSettings, habitLogs, userProfile } from '@/infrastructure/database/schema';
+import {
+  aiUsage,
+  appSettings,
+  bookmarks,
+  chatMessages,
+  habitLogs,
+  userProfile,
+} from '@/infrastructure/database/schema';
 
 describe('habits schema', () => {
   it('defines habits table columns', () => {
@@ -18,5 +25,11 @@ describe('habits schema', () => {
     expect(appSettings.onboardingCompleted.name).toBe('onboarding_completed');
     expect(userProfile.defaultTone.name).toBe('default_tone');
     expect(userProfile.commonBarrier.name).toBe('common_barrier');
+  });
+
+  it('defines bookmark and chat message tables', () => {
+    expect(bookmarks.content.name).toBe('content');
+    expect(chatMessages.role.name).toBe('role');
+    expect(chatMessages.habitId.name).toBe('habit_id');
   });
 });

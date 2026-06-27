@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import type { ApproachLens } from '@/application/ports/ai-coach.port';
+import type { ApproachLens, CoachProfileContext } from '@/application/ports/ai-coach.port';
 import type { BustExcuseChatResult } from '@/application/use-cases/bust-excuse-chat.use-case';
 import { useAppContainer } from '@/infrastructure/di/app-container';
 
@@ -9,6 +9,7 @@ type SendExcuseInput = {
   habitTitle: string;
   streak?: number;
   approach?: ApproachLens;
+  profile?: CoachProfileContext;
 };
 
 export function useExcuseChat(habitId: string) {
@@ -26,6 +27,7 @@ export function useExcuseChat(habitId: string) {
           excuse: input.excuse,
           streak: input.streak,
           approach: input.approach ?? 'universal',
+          profile: input.profile,
           onPartial: setStreamingText,
         });
       } finally {

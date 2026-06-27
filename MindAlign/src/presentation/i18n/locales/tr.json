@@ -75,5 +75,22 @@
     "back": "Geri",
     "next": "İleri",
     "loading": "Yükleniyor…"
+  },
+  "auth": {
+    "title": "İlerlemeni kaydet",
+    "subtitle": "Bookmark ve sohbet geçmişini cihazlar arası senkronize etmek için giriş yap veya misafir devam et.",
+    "emailPlaceholder": "E-posta",
+    "passwordPlaceholder": "Şifre",
+    "signIn": "Giriş yap",
+    "continueGuest": "Misafir devam et",
+    "errorGeneric": "Bir şeyler ters gitti. Tekrar dene.",
+    "errorSignIn": "Giriş yapılamadı. Bilgilerini kontrol et."
+  },
+  "saved": {
+    "title": "Kaydedilenler",
+    "subtitle": "Gününü kurtaran koç cevapları",
+    "empty": "Henüz kayıtlı cevap yok.",
+    "remove": "Kaldır",
+    "link": "Kaydedilenler"
   }
 }

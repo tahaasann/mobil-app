@@ -1,10 +1,12 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ScrollView, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import type { BustExcuseChatResult } from '@/application/use-cases/bust-excuse-chat.use-case';
 import { todayUtc } from '@/domain/utils/date';
+import { useAppContainer } from '@/infrastructure/di/app-container';
 import { ChatBubble } from '@/presentation/components/chat-bubble';
 import { MicroTaskCard } from '@/presentation/components/microtask-card';
 import { useExcuseChat } from '@/presentation/hooks/use-excuse-chat';
@@ -12,6 +14,9 @@ import { speakCoachText } from '@/presentation/utils/speech';
 
 export default function ExcuseChatScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
+  const { bookmarkUseCase, saveChatMessageUseCase, getAppSettingsUseCase, getUserProfileUseCase } =
+    useAppContainer();
   const params = useLocalSearchParams<{ habitId: string; title?: string; streak?: string }>();
   const habitId = params.habitId ?? '';
   const habitTitle = params.title ?? 'Alışkanlık';
@@ -27,19 +32,80 @@ export default function ExcuseChatScreen() {
     [result],
   );
 
+  const runCoachRequest = useCallback(
+    async (message: string) => {
+      const settings = await getAppSettingsUseCase.execute();
+      const profile = await getUserProfileUseCase.execute();
+
+      await saveChatMessageUseCase.execute({
+        habitId,
+        role: 'user',
+        content: message,
+      });
+
+      const next = await sendExcuse({
+        excuse: message,
+        habitTitle,
+        streak,
+        approach: settings?.selectedApproach,
+        profile: profile
+          ? {
+              identityGoal: profile.identityGoal,
+              defaultTone: profile.defaultTone,
+              commonBarrier: profile.commonBarrier,
+            }
+          : undefined,
+      });
+
+      setResult(next);
+
+      if (next.kind === 'coach') {
+        await saveChatMessageUseCase.execute({
+          habitId,
+          role: 'assistant',
+          content: next.response.reflection,
+        });
+        const spoken = `${next.response.reflection} ${next.response.encouragement}`;
+        void speakCoachText(spoken);
+      }
+
+      return next;
+    },
+    [
+      getAppSettingsUseCase,
+      getUserProfileUseCase,
+      saveChatMessageUseCase,
+      sendExcuse,
+      habitId,
+      habitTitle,
+      streak,
+    ],
+  );
+
   const handleSend = async () => {
     const trimmed = excuse.trim();
     if (!trimmed || isLoading) return;
 
     setSubmittedExcuse(trimmed);
     setExcuse('');
-    const next = await sendExcuse({ excuse: trimmed, habitTitle, streak });
-    setResult(next);
+    await runCoachRequest(trimmed);
+  };
 
-    if (next.kind === 'coach') {
-      const spoken = `${next.response.reflection} ${next.response.encouragement}`;
-      void speakCoachText(spoken);
-    }
+  const handleBookmark = async () => {
+    if (!coachResponse) return;
+    await bookmarkUseCase.add({
+      habitId,
+      habitTitle,
+      content: coachResponse.reflection,
+      barrierLabel: coachResponse.barrier_label,
+      microTask: coachResponse.micro_task,
+    });
+  };
+
+  const handleRegenerate = async () => {
+    if (!submittedExcuse || isLoading) return;
+    setResult(null);
+    await runCoachRequest(submittedExcuse);
   };
 
   const handleRescue = async () => {
@@ -77,7 +143,13 @@ export default function ExcuseChatScreen() {
 
           {result?.kind === 'coach' ? (
             <>
-              <ChatBubble role="assistant">{result.response.reflection}</ChatBubble>
+              <ChatBubble
+                role="assistant"
+                onBookmark={() => void handleBookmark()}
+                onRegenerate={() => void handleRegenerate()}
+              >
+                {result.response.reflection}
+              </ChatBubble>
               <MicroTaskCard
                 barrierLabel={result.response.barrier_label}
                 microTask={result.response.micro_task}
@@ -118,7 +190,7 @@ export default function ExcuseChatScreen() {
               }`}
               onPress={() => void handleSend()}
             >
-              {isLoading ? 'Gönderiliyor…' : 'Gönder'}
+              {isLoading ? t('common.loading') : 'Gönder'}
             </Text>
           </View>
         ) : null}
