@@ -12,6 +12,7 @@ jest.mock('@/infrastructure/di/app-container', () => ({
     saveChatMessageUseCase: { execute: jest.fn().mockResolvedValue(undefined) },
     getAppSettingsUseCase: { execute: jest.fn().mockResolvedValue({ selectedApproach: 'universal' }) },
     getUserProfileUseCase: { execute: jest.fn().mockResolvedValue(null) },
+    grantRewardedAdBonusUseCase: { execute: jest.fn().mockResolvedValue('rewarded') },
   }),
 }));
 
@@ -26,7 +27,7 @@ jest.mock('@/presentation/hooks/use-excuse-chat', () => ({
 }));
 
 jest.mock('expo-router', () => ({
-  useRouter: () => ({ back: jest.fn() }),
+  useRouter: () => ({ back: jest.fn(), push: jest.fn() }),
   useLocalSearchParams: () => ({ habitId: 'habit-1', title: 'Meditasyon', streak: '2' }),
 }));
 

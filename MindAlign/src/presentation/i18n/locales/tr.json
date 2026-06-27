@@ -102,5 +102,17 @@
       "title": "Zincirin tehlikede",
       "body": "Gün bitmeden \"{{habit}}\" için 5 dakikan var mı?"
     }
+  },
+  "paywall": {
+    "title": "MindAlign Plus",
+    "subtitle": "Sınırsız koç sohbeti, bookmark senkronu ve daha sakin bir deneyim.",
+    "subscribe": "Abone ol",
+    "startTrial": "7 gün ücretsiz dene",
+    "restore": "Satın alımları geri yükle",
+    "continueFree": "Ücretsiz devam et",
+    "upgrade": "Plus'a yükselt",
+    "watchAd": "Kısa reklam izle (+1 sohbet)",
+    "quotaTitle": "Haftalık ücretsiz sohbet hakkın bitti",
+    "quotaSubtitle": "Sınırsız koçluk için yükselt veya bu hafta bir sohbet daha için nazik bir reklam izle."
   }
 }

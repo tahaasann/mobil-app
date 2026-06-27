@@ -6,7 +6,12 @@ import type {
   CoachStreamHandler,
 } from '@/application/ports/ai-coach.port';
 import type { AiUsageRepository } from '@/application/ports/ai-usage-repository.port';
-import { canConsumeAiQuota, getWeekStartUtc } from '@/domain/ai/ai-quota';
+import type { SubscriptionPort } from '@/application/ports/subscription.port';
+import {
+  canConsumeAiQuota,
+  getWeekStartUtc,
+  resolveWeeklyQuotaLimit,
+} from '@/domain/ai/ai-quota';
 import { buildCrisisSupportResponse } from '@/domain/ai/crisis-guardrail';
 import { classifyExcuseText } from '@/domain/ai/preclassifier';
 
@@ -32,13 +37,18 @@ export class BustExcuseChatUseCase {
   constructor(
     private readonly aiCoach: AiCoachPort,
     private readonly aiUsageRepository: AiUsageRepository,
+    private readonly subscriptionPort: SubscriptionPort,
   ) {}
 
   async execute(input: BustExcuseChatInput): Promise<BustExcuseChatResult> {
     const weekStart = getWeekStartUtc(new Date());
-    const used = await this.aiUsageRepository.getCountForWeek(weekStart);
+    const [{ isPremium }, usage] = await Promise.all([
+      this.subscriptionPort.getEntitlement(),
+      this.aiUsageRepository.getUsageForWeek(weekStart),
+    ]);
+    const limit = resolveWeeklyQuotaLimit({ isPremium, bonusCount: usage.bonusCount });
 
-    if (!canConsumeAiQuota(used)) {
+    if (!canConsumeAiQuota(usage.count, limit)) {
       return {
         kind: 'quota_exceeded',
         message: 'Bu hafta ücretsiz 3 AI koçluk hakkını kullandın. Gelecek hafta yenilenir.',

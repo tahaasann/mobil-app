@@ -102,5 +102,17 @@
       "title": "Your streak is at risk",
       "body": "Got 5 minutes for \"{{habit}}\" before the day ends?"
     }
+  },
+  "paywall": {
+    "title": "MindAlign Plus",
+    "subtitle": "Unlimited coach chats, bookmarks sync, and a calmer experience.",
+    "subscribe": "Subscribe",
+    "startTrial": "Start 7-day free trial",
+    "restore": "Restore purchases",
+    "continueFree": "Continue for free",
+    "upgrade": "Upgrade to Plus",
+    "watchAd": "Watch a short ad for +1 chat",
+    "quotaTitle": "Weekly free chats used",
+    "quotaSubtitle": "Upgrade for unlimited coaching, or watch one gentle ad for one more chat this week."
   }
 }

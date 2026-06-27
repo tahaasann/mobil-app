@@ -37,6 +37,7 @@ export const habitLogs = sqliteTable(
 export const aiUsage = sqliteTable('ai_usage', {
   weekStart: text('week_start').primaryKey().notNull(),
   count: integer('count').notNull().default(0),
+  bonusCount: integer('bonus_count').notNull().default(0),
   updatedAt: text('updated_at').notNull(),
 });
 

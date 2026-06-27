@@ -24,7 +24,13 @@ import {
   RescheduleAllNotificationsUseCase,
   ScheduleHabitNotificationsUseCase,
 } from '@/application/use-cases/notification.use-case';
+import {
+  GrantRewardedAdBonusUseCase,
+  PurchaseSubscriptionUseCase,
+  RestorePurchasesUseCase,
+} from '@/application/use-cases/subscription.use-case';
 import { SyncOnLoginUseCase } from '@/application/use-cases/sync-on-login.use-case';
+import { useSubscriptionPorts } from '@/infrastructure/di/subscription-container';
 import { useAppDatabase } from '@/infrastructure/database/database-provider';
 import { DrizzleAiUsageRepository } from '@/infrastructure/database/repositories/drizzle-ai-usage.repository';
 import { DrizzleAppSettingsRepository } from '@/infrastructure/database/repositories/drizzle-app-settings.repository';
@@ -57,6 +63,9 @@ export type AppContainer = {
   scheduleHabitNotificationsUseCase: ScheduleHabitNotificationsUseCase;
   rescheduleAllNotificationsUseCase: RescheduleAllNotificationsUseCase;
   requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase;
+  purchaseSubscriptionUseCase: PurchaseSubscriptionUseCase;
+  restorePurchasesUseCase: RestorePurchasesUseCase;
+  grantRewardedAdBonusUseCase: GrantRewardedAdBonusUseCase;
 };
 
 const AppContainerContext = createContext<AppContainer | null>(null);
@@ -84,6 +93,7 @@ function createNotificationPort(): NotificationPort {
 
 export function AppContainerProvider({ children }: { children: ReactNode }) {
   const db = useAppDatabase();
+  const { subscriptionPort, adsPort } = useSubscriptionPorts();
   const container = useMemo<AppContainer>(() => {
     const habitRepository = new DrizzleHabitRepository(db);
     const habitLogRepository = new DrizzleHabitLogRepository(db);
@@ -104,7 +114,7 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
       createHabitUseCase,
       logHabitUseCase: new LogHabitUseCase(habitLogRepository),
       getDashboardUseCase: new GetDashboardUseCase(habitRepository, habitLogRepository),
-      bustExcuseChatUseCase: new BustExcuseChatUseCase(aiCoach, aiUsageRepository),
+      bustExcuseChatUseCase: new BustExcuseChatUseCase(aiCoach, aiUsageRepository, subscriptionPort),
       rescueStreakUseCase: new RescueStreakUseCase(habitLogRepository),
       failStreakUseCase: new FailStreakUseCase(habitLogRepository),
       saveOnboardingUseCase: new SaveOnboardingUseCase(
@@ -131,8 +141,15 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
       requestNotificationPermissionUseCase: new RequestNotificationPermissionUseCase(
         notificationPort,
       ),
+      purchaseSubscriptionUseCase: new PurchaseSubscriptionUseCase(subscriptionPort),
+      restorePurchasesUseCase: new RestorePurchasesUseCase(subscriptionPort),
+      grantRewardedAdBonusUseCase: new GrantRewardedAdBonusUseCase(
+        adsPort,
+        aiUsageRepository,
+        subscriptionPort,
+      ),
     };
-  }, [db]);
+  }, [db, subscriptionPort, adsPort]);
 
   return <AppContainerContext.Provider value={container}>{children}</AppContainerContext.Provider>;
 }

@@ -1,4 +1,5 @@
 export const FREE_WEEKLY_AI_QUOTA = 3;
+export const PREMIUM_WEEKLY_AI_QUOTA = 60;
 
 export function getWeekStartUtc(date: Date): string {
   const utc = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
@@ -8,7 +9,18 @@ export function getWeekStartUtc(date: Date): string {
   return utc.toISOString().slice(0, 10);
 }
 
-export function canConsumeAiQuota(currentCount: number, limit = FREE_WEEKLY_AI_QUOTA): boolean {
+export function resolveWeeklyQuotaLimit(input: {
+  isPremium: boolean;
+  bonusCount?: number;
+}): number {
+  if (input.isPremium) {
+    return PREMIUM_WEEKLY_AI_QUOTA;
+  }
+
+  return FREE_WEEKLY_AI_QUOTA + (input.bonusCount ?? 0);
+}
+
+export function canConsumeAiQuota(currentCount: number, limit: number): boolean {
   return currentCount < limit;
 }
 
