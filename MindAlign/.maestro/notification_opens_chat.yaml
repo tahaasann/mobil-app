@@ -1,0 +1,11 @@
+appId: com.tahaasann.mindalign
+---
+# Tracer Bullet 5: tap a scheduled notification -> excuse chat opens.
+# Requires a dev build with notifications enabled and a near-future test schedule.
+- launchApp
+- extendedWaitUntil:
+    visible: "MindAlign"
+    timeout: 60000
+- tapOn:
+    text: "Couldn't do it"
+    optional: true

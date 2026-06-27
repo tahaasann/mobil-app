@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { ApproachSelector } from '@/presentation/components/approach-selector';
 import { GlassCard } from '@/presentation/components/glass-card';
 import { useAppContainer } from '@/infrastructure/di/app-container';
+import { createNotificationContentBuilder } from '@/presentation/notifications/notification-content';
 import {
   canFinishOnboarding,
   createOnboardingDraft,
@@ -22,7 +23,8 @@ const NOTIF_WINDOWS = ['morning', 'afternoon', 'evening'] as const;
 export default function OnboardingScreen() {
   const router = useRouter();
   const { t, i18n } = useTranslation();
-  const { saveOnboardingUseCase } = useAppContainer();
+  const { saveOnboardingUseCase, requestNotificationPermissionUseCase, rescheduleAllNotificationsUseCase } =
+    useAppContainer();
   const [step, setStep] = useState<OnboardingStep>('welcome');
   const [draft, setDraft] = useState<OnboardingDraft>(() => ({
     ...createOnboardingDraft(),
@@ -76,6 +78,15 @@ export default function OnboardingScreen() {
         notifFrequency: draft.notifFrequency,
         habitTitles: draft.habitTitles,
       });
+
+      if (draft.notifWindow) {
+        await requestNotificationPermissionUseCase.execute();
+      }
+
+      await rescheduleAllNotificationsUseCase.execute({
+        content: createNotificationContentBuilder(t),
+      });
+
       router.replace('/auth' as Href);
     } finally {
       setIsSaving(false);

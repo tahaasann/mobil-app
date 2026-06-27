@@ -92,5 +92,15 @@
     "empty": "Henüz kayıtlı cevap yok.",
     "remove": "Kaldır",
     "link": "Kaydedilenler"
+  },
+  "notifications": {
+    "checkin": {
+      "title": "Ne durumdasın?",
+      "body": "\"{{habit}}\" için direnç mi var? Konuşalım."
+    },
+    "streakRisk": {
+      "title": "Zincirin tehlikede",
+      "body": "Gün bitmeden \"{{habit}}\" için 5 dakikan var mı?"
+    }
   }
 }

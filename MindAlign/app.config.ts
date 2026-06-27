@@ -52,6 +52,13 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       '@react-native-firebase/auth',
       '@react-native-firebase/firestore',
       [
+        'expo-notifications',
+        {
+          icon: './assets/images/icon.png',
+          color: '#208AEF',
+        },
+      ],
+      [
         'expo-build-properties',
         {
           ios: {
