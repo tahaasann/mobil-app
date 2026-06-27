@@ -1,18 +1,20 @@
 import { useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 type AddHabitFormProps = {
   onSubmit: (title: string) => Promise<void>;
 };
 
 export function AddHabitForm({ onSubmit }: AddHabitFormProps) {
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     const trimmed = title.trim();
     if (!trimmed) {
-      setError('Alışkanlık adı gerekli');
+      setError(t('addHabit.errorRequired', { defaultValue: 'Title is required' }));
       return;
     }
 
@@ -21,7 +23,7 @@ export function AddHabitForm({ onSubmit }: AddHabitFormProps) {
       await onSubmit(trimmed);
       setTitle('');
     } catch {
-      setError('Alışkanlık eklenemedi');
+      setError(t('addHabit.errorFailed', { defaultValue: 'Could not add habit' }));
     }
   };
 
@@ -30,7 +32,7 @@ export function AddHabitForm({ onSubmit }: AddHabitFormProps) {
       <TextInput
         accessibilityLabel="Habit title"
         className="rounded-lg border border-gray-300 px-3 py-2 text-base text-foreground dark:text-foreground-dark"
-        placeholder="Yeni alışkanlık"
+        placeholder={t('addHabit.placeholder')}
         value={title}
         onChangeText={setTitle}
       />
@@ -40,7 +42,7 @@ export function AddHabitForm({ onSubmit }: AddHabitFormProps) {
         className="rounded-lg bg-accent px-4 py-2 text-center text-sm font-semibold text-white"
         onPress={() => void handleSubmit()}
       >
-        Ekle
+        {t('addHabit.submit')}
       </Text>
     </View>
   );

@@ -1,0 +1,77 @@
+{
+  "dashboard": {
+    "title": "MindAlign",
+    "subtitle": "عاداتك اليوم",
+    "empty": "لا توجد عادات بعد. أضف واحدة من الأعلى.",
+    "loading": "جارٍ التحميل…"
+  },
+  "habit": {
+    "markDone": "تم",
+    "couldntDo": "لم أستطع",
+    "streak": "سلسلة {{count}}"
+  },
+  "addHabit": {
+    "placeholder": "عنوان عادة جديدة",
+    "submit": "إضافة عادة"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "مرحبًا بك في MindAlign",
+      "subtitle": "مدرب العادات الذي يكسر الأعذار",
+      "continue": "ابدأ"
+    },
+    "approach": {
+      "title": "اختر عدستك",
+      "subtitle": "يحدد نبرة مدربك — وليس هويتك",
+      "spiritual": "روحي / إسلامي",
+      "spiritualHint": "إطار رحيم مبني على النية والخطوات الثابتة",
+      "scientific": "علمي / CBT",
+      "scientificHint": "إعادة تأطير معرفية لطيفة مبنية على الأدلة",
+      "universal": "هدوء universal",
+      "universalHint": "لغة واعية ومتعاطفة مع الذات",
+      "previewLabel": "معاينة"
+    },
+    "identity": {
+      "title": "من تريد أن تصبح؟",
+      "subtitle": "جملة واحدة تكفي",
+      "placeholder": "مثال: شخص يحضر لنفسه يوميًا"
+    },
+    "habits": {
+      "title": "العادات الأولى",
+      "subtitle": "أضف 1–3 عادات للبدء",
+      "placeholder": "عنوان العادة",
+      "add": "إضافة",
+      "continue": "متابعة"
+    },
+    "barrier": {
+      "title": "ما الذي يوقفك عادةً؟",
+      "subtitle": "سنخصص مهام الإنقاذ حول هذا",
+      "tired": "متعب جدًا",
+      "noTime": "لا وقت",
+      "forgot": "أنسى",
+      "overwhelmed": "مرهق",
+      "other": "شيء آخر"
+    },
+    "tone": {
+      "title": "نبرة المدرب",
+      "gentle": "لطيف",
+      "direct": "مباشر وصادق"
+    },
+    "notifications": {
+      "title": "تفضيلات التذكير",
+      "subtitle": "متى نذكّرك؟",
+      "morning": "صباحًا (7–10)",
+      "afternoon": "بعد الظهر (12–15)",
+      "evening": "مساءً (18–21)",
+      "frequencyOnce": "مرة واحدة يوميًا",
+      "frequencyTwice": "مرتين يوميًا",
+      "skip": "تخطّ الآن",
+      "finish": "إنهاء الإعداد"
+    }
+  },
+  "common": {
+    "back": "رجوع",
+    "next": "التالي",
+    "loading": "جارٍ التحميل…"
+  }
+}

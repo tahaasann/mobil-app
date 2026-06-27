@@ -1,0 +1,79 @@
+{
+  "dashboard": {
+    "title": "MindAlign",
+    "subtitle": "Your habits today",
+    "empty": "No habits yet. Add one above.",
+    "loading": "Loading…"
+  },
+  "habit": {
+    "markDone": "Done",
+    "couldntDo": "Couldn't do it",
+    "streak": "Streak {{count}}"
+  },
+  "addHabit": {
+    "placeholder": "New habit title",
+    "submit": "Add habit",
+    "errorRequired": "Title is required",
+    "errorFailed": "Could not add habit"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Welcome to MindAlign",
+      "subtitle": "Your excuse-busting habit coach",
+      "continue": "Get started"
+    },
+    "approach": {
+      "title": "Choose your lens",
+      "subtitle": "This shapes the tone of your coach — not your identity",
+      "spiritual": "Spiritual / Islamic",
+      "spiritualHint": "Compassionate framing rooted in intention and steady steps",
+      "scientific": "Scientific / CBT",
+      "scientificHint": "Evidence-informed, gentle cognitive reframing",
+      "universal": "Universal calm",
+      "universalHint": "Mindful, self-compassionate language",
+      "previewLabel": "Preview"
+    },
+    "identity": {
+      "title": "Who do you want to become?",
+      "subtitle": "One sentence is enough",
+      "placeholder": "e.g. Someone who shows up for myself daily"
+    },
+    "habits": {
+      "title": "First habits",
+      "subtitle": "Add 1–3 habits to start",
+      "placeholder": "Habit title",
+      "add": "Add",
+      "continue": "Continue"
+    },
+    "barrier": {
+      "title": "What usually stops you?",
+      "subtitle": "We'll tailor rescue tasks around this",
+      "tired": "Too tired",
+      "noTime": "No time",
+      "forgot": "I forget",
+      "overwhelmed": "Overwhelmed",
+      "other": "Something else"
+    },
+    "tone": {
+      "title": "Coach tone",
+      "gentle": "Gentle",
+      "direct": "Direct & honest"
+    },
+    "notifications": {
+      "title": "Check-in preferences",
+      "subtitle": "When should we nudge you?",
+      "morning": "Morning (7–10)",
+      "afternoon": "Afternoon (12–15)",
+      "evening": "Evening (18–21)",
+      "frequencyOnce": "Once a day",
+      "frequencyTwice": "Twice a day",
+      "skip": "Skip for now",
+      "finish": "Finish setup"
+    }
+  },
+  "common": {
+    "back": "Back",
+    "next": "Next",
+    "loading": "Loading…"
+  }
+}

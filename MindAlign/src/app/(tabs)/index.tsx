@@ -1,32 +1,32 @@
 import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { AddHabitForm } from '@/presentation/components/add-habit-form';
 import { HabitCard } from '@/presentation/components/habit-card';
 import { useHabits } from '@/presentation/hooks/use-habits';
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const { habits, isLoading, createHabit, markDoneToday } = useHabits();
 
   return (
     <View className="flex-1 bg-ivory dark:bg-charcoal">
       <SafeAreaView className="flex-1 px-4 py-6">
         <Text className="mb-2 text-3xl font-semibold text-foreground dark:text-foreground-dark">
-          MindAlign
+          {t('dashboard.title')}
         </Text>
         <Text className="mb-6 text-base text-muted dark:text-muted-dark">
-          Bugünkü alışkanlıkların
+          {t('dashboard.subtitle')}
         </Text>
 
         <AddHabitForm onSubmit={createHabit} />
 
         <ScrollView className="mt-6" contentContainerClassName="gap-4 pb-8">
           {isLoading ? (
-            <Text className="text-muted dark:text-muted-dark">Yükleniyor…</Text>
+            <Text className="text-muted dark:text-muted-dark">{t('dashboard.loading')}</Text>
           ) : habits.length === 0 ? (
-            <Text className="text-muted dark:text-muted-dark">
-              Henüz alışkanlık yok. Yukarıdan bir tane ekle.
-            </Text>
+            <Text className="text-muted dark:text-muted-dark">{t('dashboard.empty')}</Text>
           ) : (
             habits.map((item) => (
               <HabitCard key={item.habit.id} item={item} onMarkDone={markDoneToday} />

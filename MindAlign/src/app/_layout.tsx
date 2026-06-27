@@ -8,6 +8,7 @@ import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import { DatabaseProvider } from '@/infrastructure/database/database-provider';
 import { AppContainerProvider } from '@/infrastructure/di/app-container';
 import { FirebaseProvider } from '@/infrastructure/firebase/firebase-provider';
+import { I18nProvider } from '@/presentation/i18n/i18n-provider';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -15,8 +16,9 @@ export default function RootLayout() {
   return (
     <DatabaseProvider>
       <FirebaseProvider>
-        <AppContainerProvider>
-          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <I18nProvider>
+          <AppContainerProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
             <AnimatedSplashOverlay />
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -25,8 +27,9 @@ export default function RootLayout() {
                 options={{ title: 'Bahane Sohbeti', presentation: 'modal' }}
               />
             </Stack>
-          </ThemeProvider>
-        </AppContainerProvider>
+            </ThemeProvider>
+          </AppContainerProvider>
+        </I18nProvider>
       </FirebaseProvider>
     </DatabaseProvider>
   );

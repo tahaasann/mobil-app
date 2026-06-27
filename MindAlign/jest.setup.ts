@@ -62,3 +62,7 @@ jest.mock('expo-speech', () => ({
   speak: jest.fn(),
   stop: jest.fn(),
 }));
+
+jest.mock('expo-localization', () => ({
+  getLocales: () => [{ languageCode: 'en' }],
+}));
