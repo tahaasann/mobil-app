@@ -229,22 +229,22 @@ T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-1
 
 | ID    | ✓   | Commit Mesajı                         | Adım                                                        | Neden                          | Onay (Doğrulama)                                 |
 | ----- | --- | ------------------------------------- | ----------------------------------------------------------- | ------------------------------ | ------------------------------------------------ |
-| T-102 | [ ] | feat: define auth sync bookmark ports | `AuthPort`, `SyncPort`, `BookmarkRepository` interface'leri | DI sınırları                   | Mock'lar yazılabiliyor                           |
-| T-103 | [ ] | test: auth usecases red               | (Red) sign-in/guest/sign-out use-case testleri (mock)       | Hesap mantığı                  | Test kırmızı                                     |
-| T-104 | [ ] | feat: firebase auth adapter green     | (Green) Firebase Auth (Apple/Google/e-posta + anonim)       | Hesap sistemi (Soru 9)         | T-103 yeşil                                      |
-| T-105 | [ ] | feat: auth ui and guest continue      | Giriş ekranları + "misafir devam et"                        | Sürtünmesiz başlangıç          | Misafir ve girişli akış çalışıyor                |
-| T-106 | [ ] | test: bookmark usecase red            | (Red) BookmarkUseCase (ekle/sil/listele) testi              | Kaydetme mantığı               | Test kırmızı                                     |
-| T-107 | [ ] | feat: bookmarks schema and repo green | (Green) bookmarks şema/migration + repo (yerel)             | Bookmark saklama               | T-106 yeşil                                      |
-| T-108 | [ ] | feat: bookmark and regenerate wiring  | ChatBubble'da bookmark + yeniden üret aksiyonları           | Soru 9 değeri                  | Buton çalışıyor (component test)                 |
-| T-109 | [ ] | test: chat history repo red           | (Red) chat_messages şema + repo testi                       | Geçmiş saklama                 | Test kırmızı                                     |
-| T-110 | [ ] | feat: chat history repo green         | (Green) chat_messages şema + repo + kalıcılık               | Sohbet geçmişi                 | T-109 yeşil                                      |
-| T-111 | [ ] | test: saved screen red                | (Red) Kaydedilenler ekranı testi                            | Bookmark erişimi               | Test kırmızı                                     |
-| T-112 | [ ] | feat: saved screen green              | (Green) Kaydedilenler ekranı                                | "Gününü kurtaran" cevaba dönüş | T-111 yeşil                                      |
-| T-113 | [ ] | test: firestore sync adapter red      | (Red) FirestoreSync (push/pull, mock) testi                 | Cihazlar arası sync            | Test kırmızı                                     |
-| T-114 | [ ] | feat: firestore sync green            | (Green) FirestoreSync + basit çakışma (last-write-wins)     | Veri taşınabilirliği           | T-113 yeşil                                      |
-| T-115 | [ ] | feat: firestore security rules        | Deny-by-default + kullanıcıya-özel kapsam kuralları         | Veri güvenliği (kritik)        | Emülatörde başka kullanıcı verisine erişim reddi |
-| T-116 | [ ] | feat: sync on login                   | Girişte sync tetikleme                                      | Kesintisiz deneyim             | Girişte bookmark'lar çekiliyor                   |
-| T-117 | [ ] | feat: e2e signin bookmark persists    | Maestro: giriş -> bookmark -> yeniden aç -> kalıcı          | Tracer Bullet 4 kanıtı         | E2E akış yeşil                                   |
+| T-102 | [✓] | feat: define auth sync bookmark ports | `AuthPort`, `SyncPort`, `BookmarkRepository` interface'leri | DI sınırları                   | Mock'lar yazılabiliyor                           |
+| T-103 | [✓] | test: auth usecases red               | (Red) sign-in/guest/sign-out use-case testleri (mock)       | Hesap mantığı                  | Test kırmızı                                     |
+| T-104 | [✓] | feat: firebase auth adapter green     | (Green) Firebase Auth (Apple/Google/e-posta + anonim)       | Hesap sistemi (Soru 9)         | T-103 yeşil                                      |
+| T-105 | [✓] | feat: auth ui and guest continue      | Giriş ekranları + "misafir devam et"                        | Sürtünmesiz başlangıç          | Misafir ve girişli akış çalışıyor                |
+| T-106 | [✓] | test: bookmark usecase red            | (Red) BookmarkUseCase (ekle/sil/listele) testi              | Kaydetme mantığı               | Test kırmızı                                     |
+| T-107 | [✓] | feat: bookmarks schema and repo green | (Green) bookmarks şema/migration + repo (yerel)             | Bookmark saklama               | T-106 yeşil                                      |
+| T-108 | [✓] | feat: bookmark and regenerate wiring  | ChatBubble'da bookmark + yeniden üret aksiyonları           | Soru 9 değeri                  | Buton çalışıyor (component test)                 |
+| T-109 | [✓] | test: chat history repo red           | (Red) chat_messages şema + repo testi                       | Geçmiş saklama                 | Test kırmızı                                     |
+| T-110 | [✓] | feat: chat history repo green         | (Green) chat_messages şema + repo + kalıcılık               | Sohbet geçmişi                 | T-109 yeşil                                      |
+| T-111 | [✓] | test: saved screen red                | (Red) Kaydedilenler ekranı testi                            | Bookmark erişimi               | Test kırmızı                                     |
+| T-112 | [✓] | feat: saved screen green              | (Green) Kaydedilenler ekranı                                | "Gününü kurtaran" cevaba dönüş | T-111 yeşil                                      |
+| T-113 | [✓] | test: firestore sync adapter red      | (Red) FirestoreSync (push/pull, mock) testi                 | Cihazlar arası sync            | Test kırmızı                                     |
+| T-114 | [✓] | feat: firestore sync green            | (Green) FirestoreSync + basit çakışma (last-write-wins)     | Veri taşınabilirliği           | T-113 yeşil                                      |
+| T-115 | [✓] | feat: firestore security rules        | Deny-by-default + kullanıcıya-özel kapsam kuralları         | Veri güvenliği (kritik)        | Emülatörde başka kullanıcı verisine erişim reddi |
+| T-116 | [✓] | feat: sync on login                   | Girişte sync tetikleme                                      | Kesintisiz deneyim             | Girişte bookmark'lar çekiliyor                   |
+| T-117 | [✓] | feat: e2e signin bookmark persists    | Maestro: giriş -> bookmark -> yeniden aç -> kalıcı          | Tracer Bullet 4 kanıtı         | E2E akış yeşil                                   |
 
 
 ---

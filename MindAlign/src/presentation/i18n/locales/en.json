@@ -75,5 +75,22 @@
     "back": "Back",
     "next": "Next",
     "loading": "Loading…"
+  },
+  "auth": {
+    "title": "Save your progress",
+    "subtitle": "Sign in to sync bookmarks and chat history across devices, or continue as guest.",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
+    "signIn": "Sign in",
+    "continueGuest": "Continue as guest",
+    "errorGeneric": "Something went wrong. Try again.",
+    "errorSignIn": "Could not sign in. Check your credentials."
+  },
+  "saved": {
+    "title": "Saved responses",
+    "subtitle": "Coach replies that rescued your day",
+    "empty": "No saved responses yet.",
+    "remove": "Remove",
+    "link": "Saved"
   }
 }

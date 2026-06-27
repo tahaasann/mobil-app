@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useRouter, type Href } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -76,7 +76,7 @@ export default function OnboardingScreen() {
         notifFrequency: draft.notifFrequency,
         habitTitles: draft.habitTitles,
       });
-      router.replace('/(tabs)');
+      router.replace('/auth' as Href);
     } finally {
       setIsSaving(false);
     }

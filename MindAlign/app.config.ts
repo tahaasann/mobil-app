@@ -49,6 +49,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       'expo-dev-client',
       '@react-native-firebase/app',
       '@react-native-firebase/app-check',
+      '@react-native-firebase/auth',
+      '@react-native-firebase/firestore',
       [
         'expo-build-properties',
         {

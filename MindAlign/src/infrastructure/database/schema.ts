@@ -60,3 +60,23 @@ export const userProfile = sqliteTable('user_profile', {
   notifFrequency: integer('notif_frequency'),
   updatedAt: text('updated_at').notNull(),
 });
+
+export const bookmarks = sqliteTable('bookmarks', {
+  id: text('id').primaryKey().notNull(),
+  habitId: text('habit_id'),
+  habitTitle: text('habit_title'),
+  content: text('content').notNull(),
+  barrierLabel: text('barrier_label'),
+  microTask: text('micro_task'),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+
+export const chatMessages = sqliteTable('chat_messages', {
+  id: text('id').primaryKey().notNull(),
+  habitId: text('habit_id'),
+  role: text('role').notNull(),
+  content: text('content').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});

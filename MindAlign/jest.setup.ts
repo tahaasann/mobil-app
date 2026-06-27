@@ -88,3 +88,44 @@ jest.mock('expo-glass-effect', () => {
     isGlassEffectAPIAvailable: () => false,
   };
 });
+
+jest.mock('@react-native-firebase/auth', () => {
+  const listeners = new Set<(mockUser: unknown) => void>();
+  const authInstance = {
+    currentUser: null,
+  };
+
+  return {
+    getAuth: jest.fn(() => authInstance),
+    signInAnonymously: jest.fn(async () => ({
+      user: { uid: 'mock-guest', email: null, isAnonymous: true, displayName: null },
+    })),
+    signInWithEmailAndPassword: jest.fn(async () => ({
+      user: {
+        uid: 'mock-user',
+        email: 'coach@example.com',
+        isAnonymous: false,
+        displayName: null,
+      },
+    })),
+    signOut: jest.fn(async () => {
+      authInstance.currentUser = null;
+      listeners.forEach((listener) => listener(null));
+    }),
+    onAuthStateChanged: jest.fn((_auth, callback) => {
+      listeners.add(callback);
+      callback(authInstance.currentUser);
+      return () => listeners.delete(callback);
+    }),
+  };
+});
+
+jest.mock('@react-native-firebase/firestore', () => ({
+  getFirestore: jest.fn(() => ({})),
+  collection: jest.fn(),
+  doc: jest.fn(),
+  setDoc: jest.fn(async () => undefined),
+  getDocs: jest.fn(async () => ({ docs: [] })),
+  query: jest.fn(),
+  where: jest.fn(),
+}));
