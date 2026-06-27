@@ -1,129 +1,39 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-import { useHealthCheck } from '@/presentation/hooks/use-health-check';
-
-function DbStatusBadge() {
-  const health = useHealthCheck();
-
-  if (health.status === 'loading') {
-    return (
-      <Text className="rounded-lg bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
-        Checking DB…
-      </Text>
-    );
-  }
-
-  const isOk = health.status === 'ok';
-  return (
-    <Text
-      accessibilityRole="text"
-      className={`rounded-lg px-3 py-1 text-sm font-medium ${
-        isOk ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
-      }`}
-    >
-      {health.message}
-    </Text>
-  );
-}
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import { AddHabitForm } from '@/presentation/components/add-habit-form';
+import { HabitCard } from '@/presentation/components/habit-card';
+import { useHabits } from '@/presentation/hooks/use-habits';
 
 export default function HomeScreen() {
+  const { habits, isLoading, createHabit, markDoneToday } = useHabits();
+
   return (
     <View className="flex-1 bg-ivory dark:bg-charcoal">
-      <ThemedView style={styles.container}>
-        <SafeAreaView style={styles.safeArea}>
-          <ThemedView style={styles.heroSection}>
-            <AnimatedIcon />
-            <ThemedText type="title" style={styles.title}>
-              Welcome to&nbsp;MindAlign
-            </ThemedText>
-          </ThemedView>
+      <SafeAreaView className="flex-1 px-4 py-6">
+        <Text className="mb-2 text-3xl font-semibold text-foreground dark:text-foreground-dark">
+          MindAlign
+        </Text>
+        <Text className="mb-6 text-base text-muted dark:text-muted-dark">
+          Bugünkü alışkanlıkların
+        </Text>
 
-          <ThemedText type="code" style={styles.code}>
-            get started
-          </ThemedText>
+        <AddHabitForm onSubmit={createHabit} />
 
-          <ThemedView type="backgroundElement" style={styles.stepContainer}>
-            <DbStatusBadge />
-            <Text className="rounded-lg bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-800">
-              NativeWind ready
+        <ScrollView className="mt-6" contentContainerClassName="gap-4 pb-8">
+          {isLoading ? (
+            <Text className="text-muted dark:text-muted-dark">Yükleniyor…</Text>
+          ) : habits.length === 0 ? (
+            <Text className="text-muted dark:text-muted-dark">
+              Henüz alışkanlık yok. Yukarıdan bir tane ekle.
             </Text>
-            <HintRow
-              title="Try editing"
-              hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-            />
-            <HintRow title="Dev tools" hint={getDevMenuHint()} />
-            <HintRow
-              title="Fresh start"
-              hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-            />
-          </ThemedView>
-
-          {Platform.OS === 'web' && <WebBadge />}
-        </SafeAreaView>
-      </ThemedView>
+          ) : (
+            habits.map((item) => (
+              <HabitCard key={item.habit.id} item={item} onMarkDone={markDoneToday} />
+            ))
+          )}
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-});
