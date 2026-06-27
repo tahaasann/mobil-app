@@ -1,0 +1,4 @@
+appId: com.tahaasann.mindalign
+---
+- launchApp
+- assertVisible: 'DB OK'
