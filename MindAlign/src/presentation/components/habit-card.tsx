@@ -58,7 +58,8 @@ export function HabitCard({ item, onMarkDone }: HabitCardProps) {
 
       <Text
         accessibilityRole="button"
-        className="rounded-lg bg-emerald-600 px-4 py-2 text-center text-sm font-semibold text-white"
+        accessibilityLabel={t('habit.markDone')}
+        className="rounded-lg bg-emerald-600 px-4 py-3 text-center text-sm font-semibold text-white"
         onPress={() => void handleMarkDone()}
       >
         {t('habit.markDone')}
@@ -66,7 +67,8 @@ export function HabitCard({ item, onMarkDone }: HabitCardProps) {
 
       <Text
         accessibilityRole="button"
-        className="mt-2 rounded-lg bg-amber-500 px-4 py-2 text-center text-sm font-semibold text-white"
+        accessibilityLabel={t('habit.couldntDo')}
+        className="mt-2 rounded-lg bg-amber-500 px-4 py-3 text-center text-sm font-semibold text-white"
         onPress={() =>
           router.push(
             `/excuse/${item.habit.id}?title=${encodeURIComponent(item.habit.title)}&streak=${item.streak}` as Href,

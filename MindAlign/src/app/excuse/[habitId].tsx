@@ -16,7 +16,7 @@ import { QuotaWall } from '@/presentation/components/quota-wall';
 export default function ExcuseChatScreen() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { bookmarkUseCase, saveChatMessageUseCase, getAppSettingsUseCase, getUserProfileUseCase, grantRewardedAdBonusUseCase } =
+  const { bookmarkUseCase, saveChatMessageUseCase, getAppSettingsUseCase, getUserProfileUseCase, grantRewardedAdBonusUseCase, requestReviewAfterRescueUseCase } =
     useAppContainer();
   const params = useLocalSearchParams<{ habitId: string; title?: string; streak?: string }>();
   const habitId = params.habitId ?? '';
@@ -118,6 +118,7 @@ export default function ExcuseChatScreen() {
       barrierLabel: coachResponse.barrier_label,
       rescueTaskText: coachResponse.micro_task,
     });
+    await requestReviewAfterRescueUseCase.execute();
     router.back();
   };
 

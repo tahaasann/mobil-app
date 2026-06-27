@@ -12,12 +12,14 @@ export function getWeekStartUtc(date: Date): string {
 export function resolveWeeklyQuotaLimit(input: {
   isPremium: boolean;
   bonusCount?: number;
+  freeWeeklyQuota?: number;
+  premiumWeeklyQuota?: number;
 }): number {
   if (input.isPremium) {
-    return PREMIUM_WEEKLY_AI_QUOTA;
+    return input.premiumWeeklyQuota ?? PREMIUM_WEEKLY_AI_QUOTA;
   }
 
-  return FREE_WEEKLY_AI_QUOTA + (input.bonusCount ?? 0);
+  return (input.freeWeeklyQuota ?? FREE_WEEKLY_AI_QUOTA) + (input.bonusCount ?? 0);
 }
 
 export function canConsumeAiQuota(currentCount: number, limit: number): boolean {

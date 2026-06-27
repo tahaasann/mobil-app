@@ -36,7 +36,16 @@ describe('premium gating in BustExcuseChatUseCase', () => {
       getEntitlement: jest.fn(async () => ({ isPremium: false })),
       onEntitlementChanged: jest.fn(() => () => undefined),
     };
-    useCase = new BustExcuseChatUseCase(aiCoach, aiUsageRepository, subscriptionPort);
+    const remoteConfigPort = {
+      configure: jest.fn(async () => undefined),
+      fetchAndActivate: jest.fn(async () => undefined),
+      getValues: jest.fn(async () => ({
+        freeWeeklyQuota: 3,
+        premiumWeeklyQuota: 60,
+        geminiModel: 'gemini-2.0-flash',
+      })),
+    };
+    useCase = new BustExcuseChatUseCase(aiCoach, aiUsageRepository, subscriptionPort, remoteConfigPort);
   });
 
   it('allows premium users beyond free weekly limit', async () => {

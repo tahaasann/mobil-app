@@ -29,8 +29,17 @@ import {
   PurchaseSubscriptionUseCase,
   RestorePurchasesUseCase,
 } from '@/application/use-cases/subscription.use-case';
+import {
+  ExportUserDataUseCase,
+  RequestReviewAfterRescueUseCase,
+  ResetUserDataUseCase,
+  UpdateAppSettingsUseCase,
+  UpdateUserProfileUseCase,
+} from '@/application/use-cases/settings.use-case';
 import { SyncOnLoginUseCase } from '@/application/use-cases/sync-on-login.use-case';
+import { usePlatformPorts } from '@/infrastructure/di/platform-container';
 import { useSubscriptionPorts } from '@/infrastructure/di/subscription-container';
+import { DrizzleAppMetaRepository } from '@/infrastructure/database/repositories/drizzle-app-meta.repository';
 import { useAppDatabase } from '@/infrastructure/database/database-provider';
 import { DrizzleAiUsageRepository } from '@/infrastructure/database/repositories/drizzle-ai-usage.repository';
 import { DrizzleAppSettingsRepository } from '@/infrastructure/database/repositories/drizzle-app-settings.repository';
@@ -39,12 +48,15 @@ import { DrizzleChatMessageRepository } from '@/infrastructure/database/reposito
 import { DrizzleHabitLogRepository } from '@/infrastructure/database/repositories/drizzle-habit-log.repository';
 import { DrizzleHabitRepository } from '@/infrastructure/database/repositories/drizzle-habit.repository';
 import { DrizzleUserProfileRepository } from '@/infrastructure/database/repositories/drizzle-user-profile.repository';
+import { DrizzleUserDataRepository } from '@/infrastructure/database/repositories/drizzle-user-data.repository';
 import { FirebaseAiCoachAdapter } from '@/infrastructure/firebase/firebase-ai-coach.adapter';
 import { FirestoreSyncAdapter } from '@/infrastructure/firebase/firestore-sync.adapter';
 import { InMemorySyncAdapter } from '@/infrastructure/firebase/in-memory-sync.adapter';
 import { MockAiCoachAdapter } from '@/infrastructure/firebase/mock-ai-coach.adapter';
 import { ExpoNotificationAdapter } from '@/infrastructure/notifications/expo-notification.adapter';
 import { MockNotificationAdapter } from '@/infrastructure/notifications/mock-notification.adapter';
+import { ExpoStoreReviewAdapter } from '@/infrastructure/reviews/expo-store-review.adapter';
+import { MockReviewAdapter } from '@/infrastructure/reviews/mock-review.adapter';
 
 export type AppContainer = {
   createHabitUseCase: CreateHabitUseCase;
@@ -66,6 +78,11 @@ export type AppContainer = {
   purchaseSubscriptionUseCase: PurchaseSubscriptionUseCase;
   restorePurchasesUseCase: RestorePurchasesUseCase;
   grantRewardedAdBonusUseCase: GrantRewardedAdBonusUseCase;
+  exportUserDataUseCase: ExportUserDataUseCase;
+  resetUserDataUseCase: ResetUserDataUseCase;
+  updateAppSettingsUseCase: UpdateAppSettingsUseCase;
+  updateUserProfileUseCase: UpdateUserProfileUseCase;
+  requestReviewAfterRescueUseCase: RequestReviewAfterRescueUseCase;
 };
 
 const AppContainerContext = createContext<AppContainer | null>(null);
@@ -91,9 +108,17 @@ function createNotificationPort(): NotificationPort {
   return new ExpoNotificationAdapter();
 }
 
+function createReviewPort() {
+  if (process.env.EXPO_PUBLIC_REVIEW_MOCK === 'true') {
+    return new MockReviewAdapter();
+  }
+  return new ExpoStoreReviewAdapter();
+}
+
 export function AppContainerProvider({ children }: { children: ReactNode }) {
   const db = useAppDatabase();
   const { subscriptionPort, adsPort } = useSubscriptionPorts();
+  const { remoteConfigPort } = usePlatformPorts();
   const container = useMemo<AppContainer>(() => {
     const habitRepository = new DrizzleHabitRepository(db);
     const habitLogRepository = new DrizzleHabitLogRepository(db);
@@ -102,6 +127,9 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
     const userProfileRepository = new DrizzleUserProfileRepository(db);
     const bookmarkRepository = new DrizzleBookmarkRepository(db);
     const chatMessageRepository = new DrizzleChatMessageRepository(db);
+    const appMetaRepository = new DrizzleAppMetaRepository(db);
+    const userDataRepository = new DrizzleUserDataRepository(db);
+    const reviewPort = createReviewPort();
     const syncPort = createSyncPort();
     const notificationPort = createNotificationPort();
     const aiCoach = createAiCoach();
@@ -114,7 +142,12 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
       createHabitUseCase,
       logHabitUseCase: new LogHabitUseCase(habitLogRepository),
       getDashboardUseCase: new GetDashboardUseCase(habitRepository, habitLogRepository),
-      bustExcuseChatUseCase: new BustExcuseChatUseCase(aiCoach, aiUsageRepository, subscriptionPort),
+      bustExcuseChatUseCase: new BustExcuseChatUseCase(
+        aiCoach,
+        aiUsageRepository,
+        subscriptionPort,
+        remoteConfigPort,
+      ),
       rescueStreakUseCase: new RescueStreakUseCase(habitLogRepository),
       failStreakUseCase: new FailStreakUseCase(habitLogRepository),
       saveOnboardingUseCase: new SaveOnboardingUseCase(
@@ -148,8 +181,16 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
         aiUsageRepository,
         subscriptionPort,
       ),
+      exportUserDataUseCase: new ExportUserDataUseCase(userDataRepository),
+      resetUserDataUseCase: new ResetUserDataUseCase(userDataRepository),
+      updateAppSettingsUseCase: new UpdateAppSettingsUseCase(appSettingsRepository),
+      updateUserProfileUseCase: new UpdateUserProfileUseCase(userProfileRepository),
+      requestReviewAfterRescueUseCase: new RequestReviewAfterRescueUseCase(
+        reviewPort,
+        appMetaRepository,
+      ),
     };
-  }, [db, subscriptionPort, adsPort]);
+  }, [db, subscriptionPort, adsPort, remoteConfigPort]);
 
   return <AppContainerContext.Provider value={container}>{children}</AppContainerContext.Provider>;
 }

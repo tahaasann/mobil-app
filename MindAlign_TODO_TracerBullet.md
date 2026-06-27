@@ -302,18 +302,18 @@ T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-1
 
 | ID    | ✓   | Commit Mesajı                       | Adım                                                     | Neden                      | Onay (Doğrulama)                       |
 | ----- | --- | ----------------------------------- | -------------------------------------------------------- | -------------------------- | -------------------------------------- |
-| T-142 | [ ] | test: breathing logic red+green     | Nefes egzersizi faz/zamanlama mantığı testi + kod        | Sükunet Odası (Soru 8)     | Test yeşil                             |
-| T-143 | [ ] | feat: breathing room ui             | BreathingOrb animasyon ekranı (sessiz)                   | Sükunet                    | Ekran çalışıyor (manuel)               |
-| T-144 | [ ] | test: data export usecase red+green | JSON export use-case testi + kod                         | Local-first güven          | Test yeşil; geçerli JSON üretiliyor    |
-| T-145 | [ ] | test: data delete reset red+green   | Veri silme/sıfırlama testi + kod                         | Gizlilik/uyum              | Test yeşil; veri siliniyor             |
-| T-146 | [ ] | feat: analytics adapter events      | Firebase Analytics (gizlilik dostu) olayları             | KPI ölçümü (PRD §18)       | Olaylar konsolda görünüyor             |
-| T-147 | [ ] | feat: crashlytics integration       | Crashlytics                                              | Stabilite izleme           | Test crash raporlanıyor                |
-| T-148 | [ ] | feat: remote config integration     | Remote Config (model/limit/kota/flag) okuma              | Uzaktan ayar/A-B (Soru 16) | Değer değişince uygulama uyum sağlıyor |
-| T-149 | [ ] | feat: in-app review prompt          | İlk "kurtarma" sonrası review istemi                     | ASO/yorum (PRD §14)        | İstem doğru anda tetikleniyor          |
-| T-150 | [ ] | feat: accessibility pass            | Etiketler, dinamik font, kontrast, dokunma hedefi        | Erişilebilirlik (PRD §11)  | Ekran okuyucu temel akışı geçiyor      |
-| T-151 | [ ] | feat: error empty loading states    | Tüm ekranlarda hata/boş/yükleniyor cilası                | Sağlamlık                  | Kenar durumlar düzgün                  |
-| T-152 | [ ] | feat: settings screen complete      | Ayarlar (mercek/dil/tema/bildirim/hesap/export/gizlilik) | Kontrol merkezi            | Tüm ayarlar çalışıyor                  |
-| T-153 | [ ] | test: e2e full regression           | Maestro: uçtan uca mutlu yol regresyon paketi            | Tracer Bullet 7 kanıtı     | Tüm E2E akışlar yeşil                  |
+| T-142 | [✓] | test: breathing logic red+green     | Nefes egzersizi faz/zamanlama mantığı testi + kod        | Sükunet Odası (Soru 8)     | Test yeşil                             |
+| T-143 | [✓] | feat: breathing room ui             | BreathingOrb animasyon ekranı (sessiz)                   | Sükunet                    | Ekran çalışıyor (manuel)               |
+| T-144 | [✓] | test: data export usecase red+green | JSON export use-case testi + kod                         | Local-first güven          | Test yeşil; geçerli JSON üretiliyor    |
+| T-145 | [✓] | test: data delete reset red+green   | Veri silme/sıfırlama testi + kod                         | Gizlilik/uyum              | Test yeşil; veri siliniyor             |
+| T-146 | [✓] | feat: analytics adapter events      | Firebase Analytics (gizlilik dostu) olayları             | KPI ölçümü (PRD §18)       | Olaylar konsolda görünüyor             |
+| T-147 | [✓] | feat: crashlytics integration       | Crashlytics                                              | Stabilite izleme           | Test crash raporlanıyor                |
+| T-148 | [✓] | feat: remote config integration     | Remote Config (model/limit/kota/flag) okuma              | Uzaktan ayar/A-B (Soru 16) | Değer değişince uygulama uyum sağlıyor |
+| T-149 | [✓] | feat: in-app review prompt          | İlk "kurtarma" sonrası review istemi                     | ASO/yorum (PRD §14)        | İstem doğru anda tetikleniyor          |
+| T-150 | [✓] | feat: accessibility pass            | Etiketler, dinamik font, kontrast, dokunma hedefi        | Erişilebilirlik (PRD §11)  | Ekran okuyucu temel akışı geçiyor      |
+| T-151 | [✓] | feat: error empty loading states    | Tüm ekranlarda hata/boş/yükleniyor cilası                | Sağlamlık                  | Kenar durumlar düzgün                  |
+| T-152 | [✓] | feat: settings screen complete      | Ayarlar (mercek/dil/tema/bildirim/hesap/export/gizlilik) | Kontrol merkezi            | Tüm ayarlar çalışıyor                  |
+| T-153 | [✓] | test: e2e full regression           | Maestro: uçtan uca mutlu yol regresyon paketi            | Tracer Bullet 7 kanıtı     | Tüm E2E akışlar yeşil                  |
 
 
 ---
