@@ -114,5 +114,40 @@
     "watchAd": "Kısa reklam izle (+1 sohbet)",
     "quotaTitle": "Haftalık ücretsiz sohbet hakkın bitti",
     "quotaSubtitle": "Sınırsız koçluk için yükselt veya bu hafta bir sohbet daha için nazik bir reklam izle."
+  },
+  "breathing": {
+    "title": "Nefes odası",
+    "subtitle": "Sessiz bir dakika. Küreyi takip et.",
+    "close": "Kapat",
+    "phase": {
+      "inhale": "Nefes al",
+      "hold": "Tut",
+      "exhale": "Ver",
+      "rest": "Dinlen"
+    }
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "link": "Ayarlar",
+    "approach": "Koç merceği",
+    "language": "Dil",
+    "themeTitle": "Tema",
+    "theme": {
+      "auto": "Otomatik",
+      "light": "Açık",
+      "dark": "Koyu"
+    },
+    "notifications": "Bildirim planını yenile",
+    "breathing": "Nefes odası",
+    "subscription": "MindAlign Plus",
+    "guestAccount": "Misafir hesap",
+    "signOut": "Çıkış yap",
+    "export": "Verilerimi dışa aktar",
+    "exportTitle": "MindAlign dışa aktarma",
+    "reset": "Tüm yerel veriyi sil",
+    "resetTitle": "Tüm veri silinsin mi?",
+    "resetConfirm": "Bu cihazdaki alışkanlık, sohbet ve bookmark'ları kaldırır.",
+    "resetAction": "Sil",
+    "privacyNote": "MindAlign tıbbi tavsiye değildir. Giriş yapmadıkça veriler cihazında kalır."
   }
 }

@@ -183,3 +183,37 @@ jest.mock('react-native-google-mobile-ads', () => {
     },
   };
 });
+
+jest.mock('@react-native-firebase/analytics', () => ({
+  getAnalytics: jest.fn(() => ({})),
+  logEvent: jest.fn(),
+  setUserProperty: jest.fn(),
+}));
+
+jest.mock('@react-native-firebase/crashlytics', () => ({
+  getCrashlytics: jest.fn(() => ({})),
+  log: jest.fn(),
+  recordError: jest.fn(),
+}));
+
+jest.mock('@react-native-firebase/remote-config', () => {
+  const config = {
+    setConfigSettings: jest.fn(async () => undefined),
+    setDefaults: jest.fn(async () => undefined),
+    fetchAndActivate: jest.fn(async () => true),
+    getValue: jest.fn(() => ({
+      asNumber: () => 3,
+      asString: () => 'gemini-2.0-flash',
+    })),
+  };
+
+  return {
+    __esModule: true,
+    default: jest.fn(() => config),
+  };
+});
+
+jest.mock('expo-store-review', () => ({
+  isAvailableAsync: jest.fn(async () => true),
+  requestReview: jest.fn(async () => undefined),
+}));

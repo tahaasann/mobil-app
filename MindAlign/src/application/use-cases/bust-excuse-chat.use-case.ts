@@ -6,6 +6,7 @@ import type {
   CoachStreamHandler,
 } from '@/application/ports/ai-coach.port';
 import type { AiUsageRepository } from '@/application/ports/ai-usage-repository.port';
+import type { RemoteConfigPort } from '@/application/ports/remote-config.port';
 import type { SubscriptionPort } from '@/application/ports/subscription.port';
 import {
   canConsumeAiQuota,
@@ -38,15 +39,22 @@ export class BustExcuseChatUseCase {
     private readonly aiCoach: AiCoachPort,
     private readonly aiUsageRepository: AiUsageRepository,
     private readonly subscriptionPort: SubscriptionPort,
+    private readonly remoteConfigPort: RemoteConfigPort,
   ) {}
 
   async execute(input: BustExcuseChatInput): Promise<BustExcuseChatResult> {
     const weekStart = getWeekStartUtc(new Date());
-    const [{ isPremium }, usage] = await Promise.all([
+    const [{ isPremium }, usage, remoteConfig] = await Promise.all([
       this.subscriptionPort.getEntitlement(),
       this.aiUsageRepository.getUsageForWeek(weekStart),
+      this.remoteConfigPort.getValues(),
     ]);
-    const limit = resolveWeeklyQuotaLimit({ isPremium, bonusCount: usage.bonusCount });
+    const limit = resolveWeeklyQuotaLimit({
+      isPremium,
+      bonusCount: usage.bonusCount,
+      freeWeeklyQuota: remoteConfig.freeWeeklyQuota,
+      premiumWeeklyQuota: remoteConfig.premiumWeeklyQuota,
+    });
 
     if (!canConsumeAiQuota(usage.count, limit)) {
       return {

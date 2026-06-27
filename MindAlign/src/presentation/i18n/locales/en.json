@@ -114,5 +114,40 @@
     "watchAd": "Watch a short ad for +1 chat",
     "quotaTitle": "Weekly free chats used",
     "quotaSubtitle": "Upgrade for unlimited coaching, or watch one gentle ad for one more chat this week."
+  },
+  "breathing": {
+    "title": "Breathing room",
+    "subtitle": "A quiet minute. Follow the orb.",
+    "close": "Close",
+    "phase": {
+      "inhale": "Inhale",
+      "hold": "Hold",
+      "exhale": "Exhale",
+      "rest": "Rest"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "link": "Settings",
+    "approach": "Coach lens",
+    "language": "Language",
+    "themeTitle": "Theme",
+    "theme": {
+      "auto": "Auto",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "notifications": "Refresh notification schedule",
+    "breathing": "Breathing room",
+    "subscription": "MindAlign Plus",
+    "guestAccount": "Guest account",
+    "signOut": "Sign out",
+    "export": "Export my data",
+    "exportTitle": "MindAlign export",
+    "reset": "Delete all local data",
+    "resetTitle": "Delete all data?",
+    "resetConfirm": "This removes habits, chats, and bookmarks from this device.",
+    "resetAction": "Delete",
+    "privacyNote": "MindAlign is not medical advice. Your data stays on-device unless you sign in to sync."
   }
 }

@@ -39,7 +39,16 @@ describe('BustExcuseChatUseCase', () => {
       getEntitlement: mockGetEntitlement,
       onEntitlementChanged: jest.fn(() => () => undefined),
     };
-    useCase = new BustExcuseChatUseCase(aiCoach, aiUsageRepository, subscriptionPort);
+    const remoteConfigPort = {
+      configure: jest.fn(async () => undefined),
+      fetchAndActivate: jest.fn(async () => undefined),
+      getValues: jest.fn(async () => ({
+        freeWeeklyQuota: 3,
+        premiumWeeklyQuota: 60,
+        geminiModel: 'gemini-2.0-flash',
+      })),
+    };
+    useCase = new BustExcuseChatUseCase(aiCoach, aiUsageRepository, subscriptionPort, remoteConfigPort);
   });
 
   it('returns coach response for on-topic excuse', async () => {

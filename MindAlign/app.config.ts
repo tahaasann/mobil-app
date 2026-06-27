@@ -51,6 +51,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       '@react-native-firebase/app-check',
       '@react-native-firebase/auth',
       '@react-native-firebase/firestore',
+      '@react-native-firebase/analytics',
+      '@react-native-firebase/crashlytics',
+      '@react-native-firebase/remote-config',
       [
         'expo-notifications',
         {

@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
 import { AddHabitForm } from '@/presentation/components/add-habit-form';
+import { EmptyState, LoadingState } from '@/presentation/components/screen-state';
 import { HabitCard } from '@/presentation/components/habit-card';
 import { useHabits } from '@/presentation/hooks/use-habits';
 
@@ -19,9 +20,14 @@ export default function HomeScreen() {
           <Text className="text-3xl font-semibold text-foreground dark:text-foreground-dark">
             {t('dashboard.title')}
           </Text>
-          <Pressable accessibilityRole="button" onPress={() => router.push('/(tabs)/saved' as Href)}>
-            <Text className="text-sm font-semibold text-accent">{t('saved.link')}</Text>
-          </Pressable>
+          <View className="flex-row gap-4">
+            <Pressable accessibilityRole="button" onPress={() => router.push('/(tabs)/saved' as Href)}>
+              <Text className="text-sm font-semibold text-accent">{t('saved.link')}</Text>
+            </Pressable>
+            <Pressable accessibilityRole="button" accessibilityLabel={t('settings.link')} onPress={() => router.push('/(tabs)/settings' as Href)}>
+              <Text className="text-sm font-semibold text-accent">{t('settings.link')}</Text>
+            </Pressable>
+          </View>
         </View>
         <Text className="mb-6 text-base text-muted dark:text-muted-dark">
           {t('dashboard.subtitle')}
@@ -31,9 +37,9 @@ export default function HomeScreen() {
 
         <ScrollView className="mt-6" contentContainerClassName="gap-4 pb-8">
           {isLoading ? (
-            <Text className="text-muted dark:text-muted-dark">{t('dashboard.loading')}</Text>
+            <LoadingState message={t('dashboard.loading')} />
           ) : habits.length === 0 ? (
-            <Text className="text-muted dark:text-muted-dark">{t('dashboard.empty')}</Text>
+            <EmptyState title={t('dashboard.empty')} />
           ) : (
             habits.map((item) => (
               <HabitCard key={item.habit.id} item={item} onMarkDone={markDoneToday} />
