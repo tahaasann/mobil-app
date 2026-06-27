@@ -256,14 +256,14 @@ T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-1
 
 | ID    | ✓   | Commit Mesajı                               | Adım                                                      | Neden                    | Onay (Doğrulama)                      |
 | ----- | --- | ------------------------------------------- | --------------------------------------------------------- | ------------------------ | ------------------------------------- |
-| T-118 | [ ] | feat: define notification port              | `NotificationPort` interface                              | DI sınırı                | Mock yazılabiliyor                    |
-| T-119 | [ ] | test: schedule logic red                    | (Red) Profil tercihleri -> bildirim zamanları (saf) testi | Yoklama mantığı (Soru 2) | Test kırmızı                          |
-| T-120 | [ ] | feat: schedule logic green                  | (Green) Zamanlama mantığı                                 | Doğru saatlerde yoklama  | T-119 yeşil                           |
-| T-121 | [ ] | feat: expo-notifications adapter            | İzin + zamanla + iptal (expo-notifications)               | Yerel bildirim           | İzin alınıp bildirim zamanlanıyor     |
-| T-122 | [ ] | feat: schedule on habit create update       | Habit oluştur/güncellede hatırlatma kur                   | Tutunma                  | Habit kurunca bildirim planlanıyor    |
-| T-123 | [ ] | test: notification deeplink red+green       | Bildirimden sohbete derin-link testi + kod                | Geri-getirme (Soru 5)    | Test yeşil; dokununca sohbet açılıyor |
-| T-124 | [ ] | feat: streak risk and checkin notifications | Streak-risk + "ne durumdasın?" yoklaması                  | Retention                | Gün sonu uyarısı geliyor (manuel)     |
-| T-125 | [ ] | feat: e2e notification opens chat           | Manuel/E2E: zamanlanan bildirime dokun -> sohbet          | Tracer Bullet 5 kanıtı   | Akış doğrulanıyor                     |
+| T-118 | [✓] | feat: define notification port              | `NotificationPort` interface                              | DI sınırı                | Mock yazılabiliyor                    |
+| T-119 | [✓] | test: schedule logic red                    | (Red) Profil tercihleri -> bildirim zamanları (saf) testi | Yoklama mantığı (Soru 2) | Test kırmızı                          |
+| T-120 | [✓] | feat: schedule logic green                  | (Green) Zamanlama mantığı                                 | Doğru saatlerde yoklama  | T-119 yeşil                           |
+| T-121 | [✓] | feat: expo-notifications adapter            | İzin + zamanla + iptal (expo-notifications)               | Yerel bildirim           | İzin alınıp bildirim zamanlanıyor     |
+| T-122 | [✓] | feat: schedule on habit create update       | Habit oluştur/güncellede hatırlatma kur                   | Tutunma                  | Habit kurunca bildirim planlanıyor    |
+| T-123 | [✓] | test: notification deeplink red+green       | Bildirimden sohbete derin-link testi + kod                | Geri-getirme (Soru 5)    | Test yeşil; dokununca sohbet açılıyor |
+| T-124 | [✓] | feat: streak risk and checkin notifications | Streak-risk + "ne durumdasın?" yoklaması                  | Retention                | Gün sonu uyarısı geliyor (manuel)     |
+| T-125 | [✓] | feat: e2e notification opens chat           | Manuel/E2E: zamanlanan bildirime dokun -> sohbet          | Tracer Bullet 5 kanıtı   | Akış doğrulanıyor                     |
 
 
 ---

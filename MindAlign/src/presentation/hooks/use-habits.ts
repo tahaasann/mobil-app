@@ -7,10 +7,19 @@ import { todayUtc } from '@/domain/utils/date';
 import { habits } from '@/infrastructure/database/schema';
 import { useAppDatabase } from '@/infrastructure/database/database-provider';
 import { useAppContainer } from '@/infrastructure/di/app-container';
+import { createNotificationContentBuilder } from '@/presentation/notifications/notification-content';
+import { useTranslation } from 'react-i18next';
 
 export function useHabits() {
   const db = useAppDatabase();
-  const { getDashboardUseCase, createHabitUseCase, logHabitUseCase } = useAppContainer();
+  const { t } = useTranslation();
+  const {
+    getDashboardUseCase,
+    createHabitUseCase,
+    logHabitUseCase,
+    getUserProfileUseCase,
+    scheduleHabitNotificationsUseCase,
+  } = useAppContainer();
   const [dashboard, setDashboard] = useState<DashboardHabit[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -40,7 +49,13 @@ export function useHabits() {
   const actions = useMemo(
     () => ({
       createHabit: async (title: string) => {
-        await createHabitUseCase.execute({ title });
+        const habit = await createHabitUseCase.execute({ title });
+        const profile = await getUserProfileUseCase.execute();
+        await scheduleHabitNotificationsUseCase.execute({
+          habit,
+          profile,
+          content: createNotificationContentBuilder(t),
+        });
         await refresh();
       },
       markDoneToday: async (habitId: string) => {
@@ -53,7 +68,7 @@ export function useHabits() {
       },
       refresh,
     }),
-    [createHabitUseCase, logHabitUseCase, refresh],
+    [createHabitUseCase, getUserProfileUseCase, logHabitUseCase, refresh, scheduleHabitNotificationsUseCase, t],
   );
 
   return {

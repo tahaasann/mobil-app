@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
 
 import type { AiCoachPort } from '@/application/ports/ai-coach.port';
+import type { NotificationPort } from '@/application/ports/notification.port';
 import type { SyncPort } from '@/application/ports/sync.port';
 import { BookmarkUseCase } from '@/application/use-cases/bookmark.use-case';
 import { BustExcuseChatUseCase } from '@/application/use-cases/bust-excuse-chat.use-case';
@@ -18,6 +19,11 @@ import {
   FailStreakUseCase,
   RescueStreakUseCase,
 } from '@/application/use-cases/rescue-streak.use-case';
+import {
+  RequestNotificationPermissionUseCase,
+  RescheduleAllNotificationsUseCase,
+  ScheduleHabitNotificationsUseCase,
+} from '@/application/use-cases/notification.use-case';
 import { SyncOnLoginUseCase } from '@/application/use-cases/sync-on-login.use-case';
 import { useAppDatabase } from '@/infrastructure/database/database-provider';
 import { DrizzleAiUsageRepository } from '@/infrastructure/database/repositories/drizzle-ai-usage.repository';
@@ -31,6 +37,8 @@ import { FirebaseAiCoachAdapter } from '@/infrastructure/firebase/firebase-ai-co
 import { FirestoreSyncAdapter } from '@/infrastructure/firebase/firestore-sync.adapter';
 import { InMemorySyncAdapter } from '@/infrastructure/firebase/in-memory-sync.adapter';
 import { MockAiCoachAdapter } from '@/infrastructure/firebase/mock-ai-coach.adapter';
+import { ExpoNotificationAdapter } from '@/infrastructure/notifications/expo-notification.adapter';
+import { MockNotificationAdapter } from '@/infrastructure/notifications/mock-notification.adapter';
 
 export type AppContainer = {
   createHabitUseCase: CreateHabitUseCase;
@@ -46,6 +54,9 @@ export type AppContainer = {
   saveChatMessageUseCase: SaveChatMessageUseCase;
   listChatMessagesUseCase: ListChatMessagesUseCase;
   syncOnLoginUseCase: SyncOnLoginUseCase;
+  scheduleHabitNotificationsUseCase: ScheduleHabitNotificationsUseCase;
+  rescheduleAllNotificationsUseCase: RescheduleAllNotificationsUseCase;
+  requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase;
 };
 
 const AppContainerContext = createContext<AppContainer | null>(null);
@@ -64,6 +75,13 @@ function createSyncPort(): SyncPort {
   return new FirestoreSyncAdapter();
 }
 
+function createNotificationPort(): NotificationPort {
+  if (process.env.EXPO_PUBLIC_NOTIFICATION_MOCK === 'true') {
+    return new MockNotificationAdapter();
+  }
+  return new ExpoNotificationAdapter();
+}
+
 export function AppContainerProvider({ children }: { children: ReactNode }) {
   const db = useAppDatabase();
   const container = useMemo<AppContainer>(() => {
@@ -75,8 +93,12 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
     const bookmarkRepository = new DrizzleBookmarkRepository(db);
     const chatMessageRepository = new DrizzleChatMessageRepository(db);
     const syncPort = createSyncPort();
+    const notificationPort = createNotificationPort();
     const aiCoach = createAiCoach();
     const createHabitUseCase = new CreateHabitUseCase(habitRepository);
+    const scheduleHabitNotificationsUseCase = new ScheduleHabitNotificationsUseCase(
+      notificationPort,
+    );
 
     return {
       createHabitUseCase,
@@ -99,6 +121,15 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
         syncPort,
         bookmarkRepository,
         chatMessageRepository,
+      ),
+      scheduleHabitNotificationsUseCase,
+      rescheduleAllNotificationsUseCase: new RescheduleAllNotificationsUseCase(
+        habitRepository,
+        userProfileRepository,
+        scheduleHabitNotificationsUseCase,
+      ),
+      requestNotificationPermissionUseCase: new RequestNotificationPermissionUseCase(
+        notificationPort,
       ),
     };
   }, [db]);

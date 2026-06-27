@@ -129,3 +129,18 @@ jest.mock('@react-native-firebase/firestore', () => ({
   query: jest.fn(),
   where: jest.fn(),
 }));
+
+jest.mock('expo-notifications', () => ({
+  setNotificationHandler: jest.fn(),
+  getPermissionsAsync: jest.fn(async () => ({ granted: true })),
+  requestPermissionsAsync: jest.fn(async () => ({ granted: true })),
+  setNotificationChannelAsync: jest.fn(async () => undefined),
+  scheduleNotificationAsync: jest.fn(async () => 'mock-notification-id'),
+  cancelScheduledNotificationAsync: jest.fn(async () => undefined),
+  cancelAllScheduledNotificationsAsync: jest.fn(async () => undefined),
+  getAllScheduledNotificationsAsync: jest.fn(async () => []),
+  addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+  getLastNotificationResponseAsync: jest.fn(async () => null),
+  AndroidImportance: { DEFAULT: 3 },
+  SchedulableTriggerInputTypes: { DAILY: 'daily' },
+}));

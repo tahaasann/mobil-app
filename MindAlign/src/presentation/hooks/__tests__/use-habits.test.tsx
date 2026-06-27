@@ -30,11 +30,19 @@ const mockGetDashboard = {
   }),
 };
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
 jest.mock('@/infrastructure/di/app-container', () => ({
   useAppContainer: () => ({
     getDashboardUseCase: mockGetDashboard,
     createHabitUseCase: { execute: jest.fn() },
     logHabitUseCase: { execute: jest.fn() },
+    getUserProfileUseCase: { execute: jest.fn().mockResolvedValue(null) },
+    scheduleHabitNotificationsUseCase: { execute: jest.fn() },
   }),
 }));
 

@@ -7,6 +7,7 @@ import { DatabaseProvider } from '@/infrastructure/database/database-provider';
 import { AppContainerProvider } from '@/infrastructure/di/app-container';
 import { AuthContainer } from '@/infrastructure/di/auth-container';
 import { FirebaseProvider } from '@/infrastructure/firebase/firebase-provider';
+import { NotificationResponseHandler } from '@/infrastructure/notifications/notification-response-handler';
 import { I18nProvider } from '@/presentation/i18n/i18n-provider';
 import { AppThemeProvider, useAppTheme } from '@/presentation/theme/theme-provider';
 
@@ -38,7 +39,9 @@ export default function RootLayout() {
           <AppThemeProvider>
             <AppContainerProvider>
               <AuthContainer>
-                <ThemedRootStack />
+                <NotificationResponseHandler>
+                  <ThemedRootStack />
+                </NotificationResponseHandler>
               </AuthContainer>
             </AppContainerProvider>
           </AppThemeProvider>
