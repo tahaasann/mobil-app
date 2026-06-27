@@ -24,9 +24,18 @@ export const habitLogs = sqliteTable(
       .references(() => habits.id),
     date: text('date').notNull(),
     status: text('status').notNull(),
+    excuseText: text('excuse_text'),
+    barrierLabel: text('barrier_label'),
+    rescueTaskText: text('rescue_task_text'),
     createdAt: text('created_at').notNull(),
   },
   (table) => ({
     habitDateUnique: uniqueIndex('habit_logs_habit_id_date_unique').on(table.habitId, table.date),
   }),
 );
+
+export const aiUsage = sqliteTable('ai_usage', {
+  weekStart: text('week_start').primaryKey().notNull(),
+  count: integer('count').notNull().default(0),
+  updatedAt: text('updated_at').notNull(),
+});

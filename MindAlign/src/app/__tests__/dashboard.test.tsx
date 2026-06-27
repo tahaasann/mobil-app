@@ -1,6 +1,10 @@
 import { render, screen } from '@testing-library/react-native';
 
-import HomeScreen from '@/app/index';
+import HomeScreen from '@/app/(tabs)/index';
+
+jest.mock('expo-router', () => ({
+  useRouter: () => ({ push: jest.fn(), back: jest.fn() }),
+}));
 
 jest.mock('@/presentation/hooks/use-habits', () => ({
   useHabits: () => ({

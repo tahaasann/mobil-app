@@ -4,6 +4,10 @@ import type { DashboardHabit } from '@/application/use-cases/get-dashboard.use-c
 import { createHabit } from '@/domain/entities/habit';
 import { HabitCard } from '@/presentation/components/habit-card';
 
+jest.mock('expo-router', () => ({
+  useRouter: () => ({ push: jest.fn(), back: jest.fn() }),
+}));
+
 const dashboardItem: DashboardHabit = {
   habit: createHabit({ title: 'Drink water' }),
   streak: 2,

@@ -17,6 +17,9 @@ export class DrizzleHabitLogRepository implements HabitLogRepository {
         .update(schema.habitLogs)
         .set({
           status: log.status,
+          excuseText: log.excuseText ?? null,
+          barrierLabel: log.barrierLabel ?? null,
+          rescueTaskText: log.rescueTaskText ?? null,
           createdAt: log.createdAt.toISOString(),
         })
         .where(eq(schema.habitLogs.id, existing.id));
@@ -28,6 +31,9 @@ export class DrizzleHabitLogRepository implements HabitLogRepository {
       habitId: log.habitId,
       date: log.date,
       status: log.status,
+      excuseText: log.excuseText ?? null,
+      barrierLabel: log.barrierLabel ?? null,
+      rescueTaskText: log.rescueTaskText ?? null,
       createdAt: log.createdAt.toISOString(),
     });
   }
@@ -64,6 +70,9 @@ function mapRowToLog(row: typeof schema.habitLogs.$inferSelect): HabitLog {
     habitId: row.habitId,
     date: row.date,
     status: row.status as HabitLog['status'],
+    excuseText: row.excuseText,
+    barrierLabel: row.barrierLabel,
+    rescueTaskText: row.rescueTaskText,
     createdAt: new Date(row.createdAt),
   };
 }

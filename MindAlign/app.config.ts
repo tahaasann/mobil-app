@@ -25,9 +25,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     ios: {
       bundleIdentifier: 'com.tahaasann.mindalign',
       icon: './assets/expo.icon',
+      googleServicesFile: './GoogleService-Info.plist',
     },
     android: {
       package: 'com.tahaasann.mindalign',
+      googleServicesFile: './google-services.json',
       adaptiveIcon: {
         backgroundColor: '#E6F4FE',
         foregroundImage: './assets/images/android-icon-foreground.png',
@@ -44,6 +46,18 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     plugins: [
       'expo-router',
       'expo-sqlite',
+      'expo-dev-client',
+      '@react-native-firebase/app',
+      '@react-native-firebase/app-check',
+      [
+        'expo-build-properties',
+        {
+          ios: {
+            useFrameworks: 'static',
+            forceStaticLinking: ['RNFBApp', 'RNFBAppCheck', 'RNFBAppCheckModule'],
+          },
+        },
+      ],
       [
         'expo-splash-screen',
         {

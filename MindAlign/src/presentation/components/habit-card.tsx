@@ -1,3 +1,4 @@
+import { useRouter, type Href } from 'expo-router';
 import { useState } from 'react';
 import { Text, View } from 'react-native';
 
@@ -16,13 +17,13 @@ const STATUS_CLASS: Record<'success' | 'rescued' | 'failed' | 'empty', string> =
 };
 
 export function HabitCard({ item, onMarkDone }: HabitCardProps) {
+  const router = useRouter();
   const [celebrating, setCelebrating] = useState(false);
 
   const handleMarkDone = async () => {
     await onMarkDone(item.habit.id);
     setCelebrating(true);
-    const timer = setTimeout(() => setCelebrating(false), 1200);
-    timer.unref?.();
+    setTimeout(() => setCelebrating(false), 1200);
   };
 
   return (
@@ -59,6 +60,18 @@ export function HabitCard({ item, onMarkDone }: HabitCardProps) {
         onPress={() => void handleMarkDone()}
       >
         Yaptım
+      </Text>
+
+      <Text
+        accessibilityRole="button"
+        className="mt-2 rounded-lg bg-amber-500 px-4 py-2 text-center text-sm font-semibold text-white"
+        onPress={() =>
+          router.push(
+            `/excuse/${item.habit.id}?title=${encodeURIComponent(item.habit.title)}&streak=${item.streak}` as Href,
+          )
+        }
+      >
+        Yapamadım
       </Text>
     </View>
   );

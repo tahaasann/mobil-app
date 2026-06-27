@@ -15,6 +15,13 @@
       "when": 1782548720562,
       "tag": "0001_sharp_kabuki",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1782553042581,
+      "tag": "0002_clumsy_ezekiel",
+      "breakpoints": true
     }
   ]
 }

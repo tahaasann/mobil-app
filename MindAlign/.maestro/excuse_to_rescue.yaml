@@ -1,0 +1,15 @@
+appId: com.tahaasann.mindalign
+env:
+  EXPO_PUBLIC_AI_MOCK: "true"
+---
+- launchApp
+- tapOn: "Yapamadım"
+- tapOn:
+    id: ".*"
+    optional: true
+- inputText: "Bugün çok yorgunum"
+- tapOn: "Gönder"
+- assertVisible: "2 dakika"
+- tapOn: "Yaptım (kurtar)"
+- back
+- assertVisible: "Streak"
