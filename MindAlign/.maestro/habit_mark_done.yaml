@@ -1,0 +1,11 @@
+appId: com.tahaasann.mindalign
+---
+- launchApp
+- tapOn: 'Yeni alışkanlık'
+- inputText: 'Morning walk'
+- tapOn: 'Ekle'
+- assertVisible: 'Morning walk'
+- tapOn: 'Yaptım'
+- stopApp
+- launchApp
+- assertVisible: 'Morning walk'
