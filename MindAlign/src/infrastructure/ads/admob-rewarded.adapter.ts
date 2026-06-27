@@ -1,9 +1,14 @@
-import { AdEventType, AdsConsent, RewardedAd, RewardedAdEventType } from 'react-native-google-mobile-ads';
-import mobileAds from 'react-native-google-mobile-ads';
+import mobileAds, {
+  AdEventType,
+  AdsConsent,
+  RewardedAd,
+  RewardedAdEventType,
+} from 'react-native-google-mobile-ads';
 
 import type { AdsPort, RewardedAdResult } from '@/application/ports/ads.port';
 
-const REWARDED_AD_UNIT_ID = process.env.EXPO_PUBLIC_ADMOB_REWARDED_UNIT_ID ?? 'ca-app-pub-3940256099942544/5224354917';
+const REWARDED_AD_UNIT_ID =
+  process.env.EXPO_PUBLIC_ADMOB_REWARDED_UNIT_ID ?? 'ca-app-pub-3940256099942544/5224354917';
 
 export class AdMobRewardedAdapter implements AdsPort {
   private rewardedAd: RewardedAd | null = null;

@@ -150,7 +150,9 @@ jest.mock('react-native-purchases', () => ({
   default: {
     configure: jest.fn(async () => undefined),
     getOfferings: jest.fn(async () => ({ current: null })),
-    purchasePackage: jest.fn(async () => ({ customerInfo: { entitlements: { active: { plus: {} } } } })),
+    purchasePackage: jest.fn(async () => ({
+      customerInfo: { entitlements: { active: { plus: {} } } },
+    })),
     restorePurchases: jest.fn(async () => ({ entitlements: { active: {} } })),
     getCustomerInfo: jest.fn(async () => ({ entitlements: { active: {} } })),
     addCustomerInfoUpdateListener: jest.fn(),

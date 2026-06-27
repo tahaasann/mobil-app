@@ -179,10 +179,7 @@
       "indexes": {
         "habit_logs_habit_id_date_unique": {
           "name": "habit_logs_habit_id_date_unique",
-          "columns": [
-            "habit_id",
-            "date"
-          ],
+          "columns": ["habit_id", "date"],
           "isUnique": true
         }
       },
@@ -191,12 +188,8 @@
           "name": "habit_logs_habit_id_habits_id_fk",
           "tableFrom": "habit_logs",
           "tableTo": "habits",
-          "columnsFrom": [
-            "habit_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["habit_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

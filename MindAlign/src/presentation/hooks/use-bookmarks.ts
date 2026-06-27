@@ -8,6 +8,21 @@ export function useBookmarks() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    void bookmarkUseCase.list().then((result) => {
+      if (!cancelled) {
+        setBookmarks(result);
+        setIsLoading(false);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [bookmarkUseCase]);
+
   const refresh = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -16,10 +31,6 @@ export function useBookmarks() {
       setIsLoading(false);
     }
   }, [bookmarkUseCase]);
-
-  useEffect(() => {
-    void refresh();
-  }, [refresh]);
 
   const removeBookmark = useCallback(
     async (id: string) => {

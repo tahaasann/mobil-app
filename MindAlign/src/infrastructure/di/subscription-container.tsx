@@ -1,4 +1,12 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
 
 import type { AdsPort } from '@/application/ports/ads.port';
 import type { SubscriptionOffering, SubscriptionPort } from '@/application/ports/subscription.port';
@@ -59,13 +67,23 @@ export function SubscriptionContainer({ children }: { children: ReactNode }) {
     });
   }, [ports.subscriptionPort]);
 
-  const refreshOfferings = async () => {
+  useEffect(() => {
+    let cancelled = false;
+
+    void ports.subscriptionPort.getOfferings().then((next) => {
+      if (!cancelled) {
+        setOfferings(next);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [ports.subscriptionPort]);
+
+  const refreshOfferings = useCallback(async () => {
     const next = await ports.subscriptionPort.getOfferings();
     setOfferings(next);
-  };
-
-  useEffect(() => {
-    void refreshOfferings();
   }, [ports.subscriptionPort]);
 
   const value = useMemo<SubscriptionContextValue>(
@@ -75,7 +93,7 @@ export function SubscriptionContainer({ children }: { children: ReactNode }) {
       offerings,
       refreshOfferings,
     }),
-    [ports, isPremium, offerings],
+    [ports, isPremium, offerings, refreshOfferings],
   );
 
   return (

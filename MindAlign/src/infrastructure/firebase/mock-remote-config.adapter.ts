@@ -1,7 +1,4 @@
-import {
-  FREE_WEEKLY_AI_QUOTA,
-  PREMIUM_WEEKLY_AI_QUOTA,
-} from '@/domain/ai/ai-quota';
+import { FREE_WEEKLY_AI_QUOTA, PREMIUM_WEEKLY_AI_QUOTA } from '@/domain/ai/ai-quota';
 import { GEMINI_MODEL } from '@/infrastructure/firebase/firebase-ai.constants';
 import type { RemoteConfigPort, RemoteConfigValues } from '@/application/ports/remote-config.port';
 

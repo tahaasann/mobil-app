@@ -3,10 +3,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import type { AnalyticsPort } from '@/application/ports/analytics.port';
 import type { CrashReportingPort } from '@/application/ports/crash-reporting.port';
 import type { RemoteConfigPort, RemoteConfigValues } from '@/application/ports/remote-config.port';
-import {
-  FREE_WEEKLY_AI_QUOTA,
-  PREMIUM_WEEKLY_AI_QUOTA,
-} from '@/domain/ai/ai-quota';
+import { FREE_WEEKLY_AI_QUOTA, PREMIUM_WEEKLY_AI_QUOTA } from '@/domain/ai/ai-quota';
 import { GEMINI_MODEL } from '@/infrastructure/firebase/firebase-ai.constants';
 import { FirebaseAnalyticsAdapter } from '@/infrastructure/firebase/firebase-analytics.adapter';
 import { FirebaseCrashlyticsAdapter } from '@/infrastructure/firebase/firebase-crashlytics.adapter';

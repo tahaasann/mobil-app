@@ -14,9 +14,7 @@ export function resolveTheme(
   return systemScheme === 'dark' ? 'dark' : 'light';
 }
 
-export function toNativeWindColorScheme(
-  preference: ThemePreference,
-): 'light' | 'dark' | 'system' {
+export function toNativeWindColorScheme(preference: ThemePreference): 'light' | 'dark' | 'system' {
   if (preference === 'auto') {
     return 'system';
   }

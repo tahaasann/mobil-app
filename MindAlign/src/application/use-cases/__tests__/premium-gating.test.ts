@@ -45,7 +45,12 @@ describe('premium gating in BustExcuseChatUseCase', () => {
         geminiModel: 'gemini-2.0-flash',
       })),
     };
-    useCase = new BustExcuseChatUseCase(aiCoach, aiUsageRepository, subscriptionPort, remoteConfigPort);
+    useCase = new BustExcuseChatUseCase(
+      aiCoach,
+      aiUsageRepository,
+      subscriptionPort,
+      remoteConfigPort,
+    );
   });
 
   it('allows premium users beyond free weekly limit', async () => {

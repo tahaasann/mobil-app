@@ -10,7 +10,9 @@ jest.mock('@/infrastructure/di/app-container', () => ({
   useAppContainer: () => ({
     bookmarkUseCase: { add: jest.fn() },
     saveChatMessageUseCase: { execute: jest.fn().mockResolvedValue(undefined) },
-    getAppSettingsUseCase: { execute: jest.fn().mockResolvedValue({ selectedApproach: 'universal' }) },
+    getAppSettingsUseCase: {
+      execute: jest.fn().mockResolvedValue({ selectedApproach: 'universal' }),
+    },
     getUserProfileUseCase: { execute: jest.fn().mockResolvedValue(null) },
     grantRewardedAdBonusUseCase: { execute: jest.fn().mockResolvedValue('rewarded') },
     requestReviewAfterRescueUseCase: { execute: jest.fn().mockResolvedValue('skipped') },

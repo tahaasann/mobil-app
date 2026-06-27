@@ -11,13 +11,13 @@ import type { Habit } from '@/domain/entities/habit';
 import type { UserProfile } from '@/domain/entities/user-profile';
 
 class InMemoryNotificationPort implements NotificationPort {
-  public scheduled: Array<{
+  public scheduled: {
     identifier: string;
     title: string;
     body: string;
     trigger: { type: 'daily'; hour: number; minute: number };
     data: Record<string, string>;
-  }> = [];
+  }[] = [];
 
   async requestPermissions(): Promise<'granted' | 'denied'> {
     return 'granted';

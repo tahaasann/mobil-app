@@ -35,9 +35,7 @@ export function buildCoachSystemPrompt(input: PromptBuildInput): string {
   const profileBlock = input.profile
     ? [
         'User profile context:',
-        input.profile.identityGoal
-          ? `- Identity goal: ${input.profile.identityGoal}`
-          : undefined,
+        input.profile.identityGoal ? `- Identity goal: ${input.profile.identityGoal}` : undefined,
         input.profile.commonBarrier
           ? `- Common barrier: ${input.profile.commonBarrier}`
           : undefined,

@@ -95,7 +95,10 @@ function createAiCoach(): AiCoachPort {
 }
 
 function createSyncPort(): SyncPort {
-  if (process.env.EXPO_PUBLIC_AUTH_MOCK === 'true' || process.env.EXPO_PUBLIC_SYNC_MOCK === 'true') {
+  if (
+    process.env.EXPO_PUBLIC_AUTH_MOCK === 'true' ||
+    process.env.EXPO_PUBLIC_SYNC_MOCK === 'true'
+  ) {
     return new InMemorySyncAdapter();
   }
   return new FirestoreSyncAdapter();

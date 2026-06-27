@@ -48,7 +48,12 @@ describe('BustExcuseChatUseCase', () => {
         geminiModel: 'gemini-2.0-flash',
       })),
     };
-    useCase = new BustExcuseChatUseCase(aiCoach, aiUsageRepository, subscriptionPort, remoteConfigPort);
+    useCase = new BustExcuseChatUseCase(
+      aiCoach,
+      aiUsageRepository,
+      subscriptionPort,
+      remoteConfigPort,
+    );
   });
 
   it('returns coach response for on-topic excuse', async () => {

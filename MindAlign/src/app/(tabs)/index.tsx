@@ -21,10 +21,17 @@ export default function HomeScreen() {
             {t('dashboard.title')}
           </Text>
           <View className="flex-row gap-4">
-            <Pressable accessibilityRole="button" onPress={() => router.push('/(tabs)/saved' as Href)}>
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => router.push('/(tabs)/saved' as Href)}
+            >
               <Text className="text-sm font-semibold text-accent">{t('saved.link')}</Text>
             </Pressable>
-            <Pressable accessibilityRole="button" accessibilityLabel={t('settings.link')} onPress={() => router.push('/(tabs)/settings' as Href)}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('settings.link')}
+              onPress={() => router.push('/(tabs)/settings' as Href)}
+            >
               <Text className="text-sm font-semibold text-accent">{t('settings.link')}</Text>
             </Pressable>
           </View>

@@ -8,11 +8,7 @@ import type {
 import type { AiUsageRepository } from '@/application/ports/ai-usage-repository.port';
 import type { RemoteConfigPort } from '@/application/ports/remote-config.port';
 import type { SubscriptionPort } from '@/application/ports/subscription.port';
-import {
-  canConsumeAiQuota,
-  getWeekStartUtc,
-  resolveWeeklyQuotaLimit,
-} from '@/domain/ai/ai-quota';
+import { canConsumeAiQuota, getWeekStartUtc, resolveWeeklyQuotaLimit } from '@/domain/ai/ai-quota';
 import { buildCrisisSupportResponse } from '@/domain/ai/crisis-guardrail';
 import { classifyExcuseText } from '@/domain/ai/preclassifier';
 

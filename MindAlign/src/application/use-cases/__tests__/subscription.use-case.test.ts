@@ -52,11 +52,7 @@ describe('subscription use cases', () => {
   });
 
   it('grants bonus quota after rewarded ad', async () => {
-    const useCase = new GrantRewardedAdBonusUseCase(
-      adsPort,
-      aiUsageRepository,
-      subscriptionPort,
-    );
+    const useCase = new GrantRewardedAdBonusUseCase(adsPort, aiUsageRepository, subscriptionPort);
 
     await expect(useCase.execute()).resolves.toBe('rewarded');
     expect(aiUsageRepository.addBonusForWeek).toHaveBeenCalled();
@@ -64,11 +60,7 @@ describe('subscription use cases', () => {
 
   it('skips rewarded ad grant for premium users', async () => {
     (subscriptionPort.getEntitlement as jest.Mock).mockResolvedValue({ isPremium: true });
-    const useCase = new GrantRewardedAdBonusUseCase(
-      adsPort,
-      aiUsageRepository,
-      subscriptionPort,
-    );
+    const useCase = new GrantRewardedAdBonusUseCase(adsPort, aiUsageRepository, subscriptionPort);
 
     await expect(useCase.execute()).resolves.toBe('premium');
     expect(adsPort.showRewardedAd).not.toHaveBeenCalled();

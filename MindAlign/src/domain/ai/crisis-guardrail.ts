@@ -19,8 +19,16 @@ export function buildCrisisSupportResponse(): CrisisSupportResponse {
   };
 }
 
+const CRISIS_PATTERNS = [
+  /\b(intihar|kendimi öldür|ölmek istiyorum|suicide|kill myself)\b/i,
+  /\b(kendime zarar|self[- ]harm|canıma kıy)\w*/i,
+];
+
 export function detectCrisis(text: string): boolean {
-  return /\b(intihar|kendimi öldür|ölmek istiyorum|suicide|kill myself|kendime zarar|self[- ]harm)\b/i.test(
-    text,
-  );
+  const normalized = text.trim();
+  if (!normalized) {
+    return false;
+  }
+
+  return CRISIS_PATTERNS.some((pattern) => pattern.test(normalized));
 }

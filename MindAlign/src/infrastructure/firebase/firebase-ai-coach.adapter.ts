@@ -8,7 +8,7 @@ import type {
 } from '@/application/ports/ai-coach.port';
 import { parseBarrierResponseJson } from '@/domain/ai/barrier-response';
 import { getIslamicPolicyRules } from '@/domain/ai/islamic-content-policy';
-import { classifyExcuseText } from '@/domain/ai/preclassifier';
+import { MAX_PRECLASSIFIER_INPUT_LENGTH, classifyExcuseText } from '@/domain/ai/preclassifier';
 import { buildCoachPrompt } from '@/domain/ai/prompt-builder';
 
 import {
@@ -90,8 +90,9 @@ export class FirebasePreclassifierAdapter {
       },
     });
 
+    const boundedText = text.trim().slice(0, MAX_PRECLASSIFIER_INPUT_LENGTH);
     const result = await model.generateContent(
-      `Classify this message for a habit-coaching app as on_topic, off_topic, or crisis. Message: ${text}`,
+      `Classify this message for a habit-coaching app as on_topic, off_topic, or crisis. Message: ${JSON.stringify(boundedText)}`,
     );
 
     try {

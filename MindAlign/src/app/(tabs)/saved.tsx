@@ -21,7 +21,9 @@ export default function SavedScreen() {
         <Text className="mb-2 text-3xl font-semibold text-foreground dark:text-foreground-dark">
           {t('saved.title')}
         </Text>
-        <Text className="mb-6 text-base text-muted dark:text-muted-dark">{t('saved.subtitle')}</Text>
+        <Text className="mb-6 text-base text-muted dark:text-muted-dark">
+          {t('saved.subtitle')}
+        </Text>
 
         <ScrollView contentContainerClassName="gap-3 pb-8">
           {isLoading ? (

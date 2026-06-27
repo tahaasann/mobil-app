@@ -18,7 +18,11 @@ export function BreathingOrb({ elapsedMs }: BreathingOrbProps) {
   const state = getBreathingPhaseAt(elapsedMs);
   const progress = state.phaseElapsedMs / state.phaseDurationMs;
   const targetScale =
-    state.phase === 'inhale' ? 0.6 + progress * 0.4 : state.phase === 'exhale' ? 1 - progress * 0.4 : 1;
+    state.phase === 'inhale'
+      ? 0.6 + progress * 0.4
+      : state.phase === 'exhale'
+        ? 1 - progress * 0.4
+        : 1;
 
   useEffect(() => {
     pulse.value = withRepeat(

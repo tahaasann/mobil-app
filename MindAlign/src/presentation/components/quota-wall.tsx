@@ -17,7 +17,9 @@ export function QuotaWall({ onUpgrade, onWatchAd, isBusy = false }: QuotaWallPro
       <Text className="text-base font-semibold text-foreground dark:text-foreground-dark">
         {t('paywall.quotaTitle')}
       </Text>
-      <Text className="mt-2 text-sm text-muted dark:text-muted-dark">{t('paywall.quotaSubtitle')}</Text>
+      <Text className="mt-2 text-sm text-muted dark:text-muted-dark">
+        {t('paywall.quotaSubtitle')}
+      </Text>
 
       <View className="mt-4 gap-3">
         <Pressable
@@ -26,7 +28,9 @@ export function QuotaWall({ onUpgrade, onWatchAd, isBusy = false }: QuotaWallPro
           disabled={isBusy}
           onPress={onUpgrade}
         >
-          <Text className="text-center text-base font-semibold text-white">{t('paywall.upgrade')}</Text>
+          <Text className="text-center text-base font-semibold text-white">
+            {t('paywall.upgrade')}
+          </Text>
         </Pressable>
 
         <Pressable
@@ -35,7 +39,9 @@ export function QuotaWall({ onUpgrade, onWatchAd, isBusy = false }: QuotaWallPro
           disabled={isBusy}
           onPress={onWatchAd}
         >
-          <Text className="text-center text-base font-semibold text-accent">{t('paywall.watchAd')}</Text>
+          <Text className="text-center text-base font-semibold text-accent">
+            {t('paywall.watchAd')}
+          </Text>
         </Pressable>
       </View>
     </GlassCard>

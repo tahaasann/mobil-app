@@ -37,11 +37,13 @@ export default function PaywallScreen() {
           showContinueFree={isOnboarding}
           isBusy={isBusy}
           onPurchase={(pkg) => void handlePurchase(pkg.identifier)}
-          onRestore={() => void subscriptionPort.restorePurchases().then((result) => {
-            if (result.isPremium) {
-              goNext();
-            }
-          })}
+          onRestore={() =>
+            void subscriptionPort.restorePurchases().then((result) => {
+              if (result.isPremium) {
+                goNext();
+              }
+            })
+          }
           onContinueFree={goNext}
         />
       </SafeAreaView>

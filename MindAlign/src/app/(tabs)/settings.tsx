@@ -105,7 +105,10 @@ export default function SettingsScreen() {
   return (
     <View className="flex-1 bg-ivory dark:bg-charcoal">
       <SafeAreaView className="flex-1 px-4 py-6">
-        <Text accessibilityRole="header" className="mb-6 text-3xl font-semibold text-foreground dark:text-foreground-dark">
+        <Text
+          accessibilityRole="header"
+          className="mb-6 text-3xl font-semibold text-foreground dark:text-foreground-dark"
+        >
           {t('settings.title')}
         </Text>
 
@@ -117,7 +120,9 @@ export default function SettingsScreen() {
             {APPROACHES.map((approach) => (
               <ChoiceChip
                 key={approach}
-                label={t(`onboarding.approach.${approach === 'spiritual' ? 'spiritual' : approach === 'scientific' ? 'scientific' : 'universal'}`)}
+                label={t(
+                  `onboarding.approach.${approach === 'spiritual' ? 'spiritual' : approach === 'scientific' ? 'scientific' : 'universal'}`,
+                )}
                 selected={settings?.selectedApproach === approach}
                 onPress={() => void saveSettings({ selectedApproach: approach })}
               />
@@ -153,13 +158,26 @@ export default function SettingsScreen() {
           </GlassCard>
 
           <GlassCard className="p-4 gap-3">
-            <Pressable accessibilityRole="button" className="py-2" disabled={isBusy} onPress={() => void handleNotifications()}>
+            <Pressable
+              accessibilityRole="button"
+              className="py-2"
+              disabled={isBusy}
+              onPress={() => void handleNotifications()}
+            >
               <Text className="text-base text-accent">{t('settings.notifications')}</Text>
             </Pressable>
-            <Pressable accessibilityRole="button" className="py-2" onPress={() => router.push('/breathing' as Href)}>
+            <Pressable
+              accessibilityRole="button"
+              className="py-2"
+              onPress={() => router.push('/breathing' as Href)}
+            >
               <Text className="text-base text-accent">{t('settings.breathing')}</Text>
             </Pressable>
-            <Pressable accessibilityRole="button" className="py-2" onPress={() => router.push('/paywall?source=settings' as Href)}>
+            <Pressable
+              accessibilityRole="button"
+              className="py-2"
+              onPress={() => router.push('/paywall?source=settings' as Href)}
+            >
               <Text className="text-base text-accent">{t('settings.subscription')}</Text>
             </Pressable>
           </GlassCard>
@@ -174,13 +192,25 @@ export default function SettingsScreen() {
           </GlassCard>
 
           <GlassCard className="p-4 gap-3">
-            <Pressable accessibilityRole="button" className="py-2" disabled={isBusy} onPress={() => void handleExport()}>
+            <Pressable
+              accessibilityRole="button"
+              className="py-2"
+              disabled={isBusy}
+              onPress={() => void handleExport()}
+            >
               <Text className="text-base text-accent">{t('settings.export')}</Text>
             </Pressable>
-            <Pressable accessibilityRole="button" className="py-2" disabled={isBusy} onPress={handleReset}>
+            <Pressable
+              accessibilityRole="button"
+              className="py-2"
+              disabled={isBusy}
+              onPress={handleReset}
+            >
               <Text className="text-base text-red-600">{t('settings.reset')}</Text>
             </Pressable>
-            <Text className="text-xs text-muted dark:text-muted-dark">{t('settings.privacyNote')}</Text>
+            <Text className="text-xs text-muted dark:text-muted-dark">
+              {t('settings.privacyNote')}
+            </Text>
           </GlassCard>
         </ScrollView>
       </SafeAreaView>
