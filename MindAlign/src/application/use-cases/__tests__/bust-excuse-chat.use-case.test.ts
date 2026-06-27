@@ -15,20 +15,31 @@ describe('BustExcuseChatUseCase', () => {
   let useCase: BustExcuseChatUseCase;
 
   let mockGenerateCoachResponse: jest.Mock;
-  let mockGetCountForWeek: jest.Mock;
+  let mockGetUsageForWeek: jest.Mock;
   let mockIncrementForWeek: jest.Mock;
+  let mockGetEntitlement: jest.Mock;
 
   beforeEach(() => {
     mockGenerateCoachResponse = jest.fn(async () => coachResponse);
-    mockGetCountForWeek = jest.fn(async () => 0);
+    mockGetUsageForWeek = jest.fn(async () => ({ count: 0, bonusCount: 0 }));
     mockIncrementForWeek = jest.fn(async () => 1);
+    mockGetEntitlement = jest.fn(async () => ({ isPremium: false }));
 
     aiCoach = { generateCoachResponse: mockGenerateCoachResponse };
     aiUsageRepository = {
-      getCountForWeek: mockGetCountForWeek,
+      getUsageForWeek: mockGetUsageForWeek,
       incrementForWeek: mockIncrementForWeek,
+      addBonusForWeek: jest.fn(async () => 1),
     };
-    useCase = new BustExcuseChatUseCase(aiCoach, aiUsageRepository);
+    const subscriptionPort = {
+      configure: jest.fn(async () => undefined),
+      getOfferings: jest.fn(async () => null),
+      purchase: jest.fn(async () => ({ isPremium: true })),
+      restorePurchases: jest.fn(async () => ({ isPremium: false })),
+      getEntitlement: mockGetEntitlement,
+      onEntitlementChanged: jest.fn(() => () => undefined),
+    };
+    useCase = new BustExcuseChatUseCase(aiCoach, aiUsageRepository, subscriptionPort);
   });
 
   it('returns coach response for on-topic excuse', async () => {
@@ -57,7 +68,7 @@ describe('BustExcuseChatUseCase', () => {
   });
 
   it('returns quota exceeded when weekly limit reached', async () => {
-    mockGetCountForWeek.mockResolvedValue(3);
+    mockGetUsageForWeek.mockResolvedValue({ count: 3, bonusCount: 0 });
 
     const result = await useCase.execute({
       habitTitle: 'Meditasyon',

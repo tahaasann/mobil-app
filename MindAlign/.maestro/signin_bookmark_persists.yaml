@@ -15,6 +15,8 @@ appId: com.tahaasann.mindalign
 - tapOn: "Gentle"
 - tapOn: "Next"
 - tapOn: "Finish setup"
+- assertVisible: "MindAlign Plus"
+- tapOn: "Continue for free"
 - assertVisible: "Save your progress"
 - tapOn: "Continue as guest"
 - assertVisible: "Your habits today"

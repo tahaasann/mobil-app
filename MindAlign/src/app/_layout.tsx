@@ -6,6 +6,7 @@ import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import { DatabaseProvider } from '@/infrastructure/database/database-provider';
 import { AppContainerProvider } from '@/infrastructure/di/app-container';
 import { AuthContainer } from '@/infrastructure/di/auth-container';
+import { SubscriptionContainer } from '@/infrastructure/di/subscription-container';
 import { FirebaseProvider } from '@/infrastructure/firebase/firebase-provider';
 import { NotificationResponseHandler } from '@/infrastructure/notifications/notification-response-handler';
 import { I18nProvider } from '@/presentation/i18n/i18n-provider';
@@ -20,6 +21,7 @@ function ThemedRootStack() {
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+        <Stack.Screen name="paywall" options={{ headerShown: false, presentation: 'modal' }} />
         <Stack.Screen name="auth" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
@@ -37,13 +39,15 @@ export default function RootLayout() {
       <FirebaseProvider>
         <I18nProvider>
           <AppThemeProvider>
-            <AppContainerProvider>
-              <AuthContainer>
-                <NotificationResponseHandler>
-                  <ThemedRootStack />
-                </NotificationResponseHandler>
-              </AuthContainer>
-            </AppContainerProvider>
+            <SubscriptionContainer>
+              <AppContainerProvider>
+                <AuthContainer>
+                  <NotificationResponseHandler>
+                    <ThemedRootStack />
+                  </NotificationResponseHandler>
+                </AuthContainer>
+              </AppContainerProvider>
+            </SubscriptionContainer>
           </AppThemeProvider>
         </I18nProvider>
       </FirebaseProvider>

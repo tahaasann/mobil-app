@@ -275,22 +275,22 @@ T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-1
 
 | ID    | ✓   | Commit Mesajı                           | Adım                                                                | Neden                         | Onay (Doğrulama)                              |
 | ----- | --- | --------------------------------------- | ------------------------------------------------------------------- | ----------------------------- | --------------------------------------------- |
-| T-126 | [ ] | feat: define subscription and ads ports | `SubscriptionPort` + `AdsPort` interface'leri                       | DI/test edilebilirlik         | Mock'lar yazılabiliyor                        |
-| T-127 | [ ] | chore: revenuecat products setup        | RevenueCat + store ürünleri (aylık/yıllık + trial)                  | Abonelik altyapısı            | Offerings konsolda görünüyor                  |
-| T-128 | [ ] | build: install react-native-purchases   | RevenueCat SDK + config plugin                                      | Satın alma                    | Dev build'de SDK init oluyor                  |
-| T-129 | [ ] | test: entitlement logic red             | (Red) Abonelik/entitlement use-case testi (mock)                    | Premium kapısı                | Test kırmızı                                  |
-| T-130 | [ ] | feat: revenuecat adapter green          | (Green) RevenueCat adapter (offerings/purchase/restore/entitlement) | Abonelik                      | T-129 yeşil                                   |
-| T-131 | [ ] | test: premium gating red                | (Red) Free 3/hafta vs premium (adil-kullanım tavanı) testi          | Kota+abuse                    | Test kırmızı                                  |
-| T-132 | [ ] | feat: gating in chat usecase green      | (Green) BustExcuseChatUseCase'e kapı entegrasyonu                   | Gelir + maliyet kontrolü      | T-131 yeşil                                   |
-| T-133 | [ ] | test: paywall sheet red                 | (Red) PaywallSheet (aylık/yıllık/trial) testi (mock)                | Satış ekranı                  | Test kırmızı                                  |
-| T-134 | [ ] | feat: paywall sheet green               | (Green) PaywallSheet (bölgesel fiyat RC)                            | Dönüşüm                       | T-133 yeşil                                   |
-| T-135 | [ ] | feat: soft paywall after onboarding     | Onboarding sonu soft paywall + "ücretsiz devam et"                  | Yüksek gelir noktası (Soru 4) | Onboarding sonrası paywall + atlama çalışıyor |
-| T-136 | [ ] | feat: quota wall paywall trigger        | Kota dolunca paywall tetikleme                                      | Dönüşüm anı                   | Kota bitince paywall açılıyor                 |
-| T-137 | [ ] | build: install admob and ump consent    | `react-native-google-mobile-ads` + UMP/ATT izin akışı               | Reklam + uyum                 | İzin akışı reklamdan önce çalışıyor           |
-| T-138 | [ ] | test: rewarded ad reward red            | (Red) Ödüllü reklam -> +1 kota mantığı (mock) testi                 | Free mekaniği (Soru 3)        | Test kırmızı                                  |
-| T-139 | [ ] | feat: rewarded ad adapter green         | (Green) AdMob ödüllü adapter                                        | Gelir + maliyet dengesi       | T-138 yeşil                                   |
-| T-140 | [ ] | feat: gentle ad offer at quota wall     | Kota duvarında nazik "reklam izle = +1" (hassas-an inceliği)        | Marka koruma (PRD §12)        | Reklam izleyince +1 kota                      |
-| T-141 | [ ] | feat: e2e quota upgrade or ad           | Maestro: kota bitti -> yükselt/reklam -> +1                         | Tracer Bullet 6 kanıtı        | E2E akış yeşil                                |
+| T-126 | [✓] | feat: define subscription and ads ports | `SubscriptionPort` + `AdsPort` interface'leri                       | DI/test edilebilirlik         | Mock'lar yazılabiliyor                        |
+| T-127 | [✓] | chore: revenuecat products setup        | RevenueCat + store ürünleri (aylık/yıllık + trial)                  | Abonelik altyapısı            | Offerings konsolda görünüyor                  |
+| T-128 | [✓] | build: install react-native-purchases   | RevenueCat SDK + config plugin                                      | Satın alma                    | Dev build'de SDK init oluyor                  |
+| T-129 | [✓] | test: entitlement logic red             | (Red) Abonelik/entitlement use-case testi (mock)                    | Premium kapısı                | Test kırmızı                                  |
+| T-130 | [✓] | feat: revenuecat adapter green          | (Green) RevenueCat adapter (offerings/purchase/restore/entitlement) | Abonelik                      | T-129 yeşil                                   |
+| T-131 | [✓] | test: premium gating red                | (Red) Free 3/hafta vs premium (adil-kullanım tavanı) testi          | Kota+abuse                    | Test kırmızı                                  |
+| T-132 | [✓] | feat: gating in chat usecase green      | (Green) BustExcuseChatUseCase'e kapı entegrasyonu                   | Gelir + maliyet kontrolü      | T-131 yeşil                                   |
+| T-133 | [✓] | test: paywall sheet red                 | (Red) PaywallSheet (aylık/yıllık/trial) testi (mock)                | Satış ekranı                  | Test kırmızı                                  |
+| T-134 | [✓] | feat: paywall sheet green               | (Green) PaywallSheet (bölgesel fiyat RC)                            | Dönüşüm                       | T-133 yeşil                                   |
+| T-135 | [✓] | feat: soft paywall after onboarding     | Onboarding sonu soft paywall + "ücretsiz devam et"                  | Yüksek gelir noktası (Soru 4) | Onboarding sonrası paywall + atlama çalışıyor |
+| T-136 | [✓] | feat: quota wall paywall trigger        | Kota dolunca paywall tetikleme                                      | Dönüşüm anı                   | Kota bitince paywall açılıyor                 |
+| T-137 | [✓] | build: install admob and ump consent    | `react-native-google-mobile-ads` + UMP/ATT izin akışı               | Reklam + uyum                 | İzin akışı reklamdan önce çalışıyor           |
+| T-138 | [✓] | test: rewarded ad reward red            | (Red) Ödüllü reklam -> +1 kota mantığı (mock) testi                 | Free mekaniği (Soru 3)        | Test kırmızı                                  |
+| T-139 | [✓] | feat: rewarded ad adapter green         | (Green) AdMob ödüllü adapter                                        | Gelir + maliyet dengesi       | T-138 yeşil                                   |
+| T-140 | [✓] | feat: gentle ad offer at quota wall     | Kota duvarında nazik "reklam izle = +1" (hassas-an inceliği)        | Marka koruma (PRD §12)        | Reklam izleyince +1 kota                      |
+| T-141 | [✓] | feat: e2e quota upgrade or ad           | Maestro: kota bitti -> yükselt/reklam -> +1                         | Tracer Bullet 6 kanıtı        | E2E akış yeşil                                |
 
 
 ---

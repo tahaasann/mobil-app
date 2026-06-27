@@ -1,0 +1,12 @@
+appId: com.tahaasann.mindalign
+---
+# Tracer Bullet 6: quota wall -> watch ad or upgrade
+- launchApp
+- runFlow:
+    file: onboarding_to_dashboard.yaml
+- tapOn: "Couldn't do it"
+- inputText: "Too tired"
+- tapOn: "Gönder"
+- assertVisible:
+    text: "paywall.quotaTitle"
+    optional: true

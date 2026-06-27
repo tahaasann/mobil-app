@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { ScrollView, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,11 +11,12 @@ import { ChatBubble } from '@/presentation/components/chat-bubble';
 import { MicroTaskCard } from '@/presentation/components/microtask-card';
 import { useExcuseChat } from '@/presentation/hooks/use-excuse-chat';
 import { speakCoachText } from '@/presentation/utils/speech';
+import { QuotaWall } from '@/presentation/components/quota-wall';
 
 export default function ExcuseChatScreen() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { bookmarkUseCase, saveChatMessageUseCase, getAppSettingsUseCase, getUserProfileUseCase } =
+  const { bookmarkUseCase, saveChatMessageUseCase, getAppSettingsUseCase, getUserProfileUseCase, grantRewardedAdBonusUseCase } =
     useAppContainer();
   const params = useLocalSearchParams<{ habitId: string; title?: string; streak?: string }>();
   const habitId = params.habitId ?? '';
@@ -25,6 +26,7 @@ export default function ExcuseChatScreen() {
   const { sendExcuse, rescue, giveUp, isLoading, streamingText } = useExcuseChat(habitId);
   const [excuse, setExcuse] = useState('');
   const [result, setResult] = useState<BustExcuseChatResult | null>(null);
+  const [isQuotaActionBusy, setIsQuotaActionBusy] = useState(false);
   const [submittedExcuse, setSubmittedExcuse] = useState('');
 
   const coachResponse = useMemo(
@@ -119,6 +121,23 @@ export default function ExcuseChatScreen() {
     router.back();
   };
 
+  const handleUpgrade = () => {
+    router.push('/paywall?source=quota' as Href);
+  };
+
+  const handleWatchAd = async () => {
+    setIsQuotaActionBusy(true);
+    try {
+      const result = await grantRewardedAdBonusUseCase.execute();
+      if (result === 'rewarded' && submittedExcuse) {
+        setResult(null);
+        await runCoachRequest(submittedExcuse);
+      }
+    } finally {
+      setIsQuotaActionBusy(false);
+    }
+  };
+
   const handleGiveUp = async () => {
     await giveUp({ date: todayUtc(), excuseText: submittedExcuse });
     router.back();
@@ -168,8 +187,19 @@ export default function ExcuseChatScreen() {
             </ChatBubble>
           ) : null}
 
-          {result?.kind === 'off_topic' || result?.kind === 'quota_exceeded' ? (
+          {result?.kind === 'off_topic' ? (
             <ChatBubble role="assistant">{result.message}</ChatBubble>
+          ) : null}
+
+          {result?.kind === 'quota_exceeded' ? (
+            <>
+              <ChatBubble role="assistant">{result.message}</ChatBubble>
+              <QuotaWall
+                isBusy={isQuotaActionBusy}
+                onUpgrade={handleUpgrade}
+                onWatchAd={() => void handleWatchAd()}
+              />
+            </>
           ) : null}
         </ScrollView>
 
