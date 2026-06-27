@@ -1,11 +1,6 @@
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
 
-import type {
-  AiCoachPort,
-  CoachContext,
-  CoachStreamHandler,
-} from '@/application/ports/ai-coach.port';
-import type { ParsedBarrierResponse } from '@/domain/ai/barrier-response';
+import type { AiCoachPort } from '@/application/ports/ai-coach.port';
 import { BustExcuseChatUseCase } from '@/application/use-cases/bust-excuse-chat.use-case';
 import { CreateHabitUseCase } from '@/application/use-cases/create-habit.use-case';
 import { GetDashboardUseCase } from '@/application/use-cases/get-dashboard.use-case';
