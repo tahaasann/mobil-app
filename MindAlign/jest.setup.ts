@@ -66,3 +66,25 @@ jest.mock('expo-speech', () => ({
 jest.mock('expo-localization', () => ({
   getLocales: () => [{ languageCode: 'en' }],
 }));
+
+jest.mock('nativewind', () => ({
+  useColorScheme: () => ({
+    setColorScheme: jest.fn(),
+    toggleColorScheme: jest.fn(),
+    colorScheme: 'light',
+  }),
+}));
+
+jest.mock('expo-blur', () => {
+  const { View } = require('react-native');
+  return { BlurView: View };
+});
+
+jest.mock('expo-glass-effect', () => {
+  const { View } = require('react-native');
+  return {
+    GlassView: View,
+    isLiquidGlassAvailable: () => false,
+    isGlassEffectAPIAvailable: () => false,
+  };
+});

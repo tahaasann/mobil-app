@@ -1,4 +1,6 @@
-export type TranslationTree = Record<string, string | TranslationTree>;
+export type TranslationTree = {
+  [key: string]: string | TranslationTree;
+};
 
 export function lookupTranslation(tree: TranslationTree, key: string): string | undefined {
   const parts = key.split('.');

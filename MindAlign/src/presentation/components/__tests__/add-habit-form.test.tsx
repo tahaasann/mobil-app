@@ -13,7 +13,7 @@ describe('AddHabitForm', () => {
     );
 
     const user = userEvent.setup();
-    await user.press(screen.getByText('Alışkanlık ekle'));
+    await user.press(await screen.findByText('Alışkanlık ekle'));
 
     expect(screen.getByText('Alışkanlık adı gerekli')).toBeOnTheScreen();
     expect(onSubmit).not.toHaveBeenCalled();

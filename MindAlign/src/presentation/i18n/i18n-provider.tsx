@@ -2,7 +2,7 @@ import { useEffect, type ReactNode } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { I18nManager } from 'react-native';
 
-import { initI18n, isRtlLocale } from '@/presentation/i18n';
+import { initI18n, isRtlLocale, type AppLocale } from '@/presentation/i18n';
 
 type I18nProviderProps = {
   children: ReactNode;

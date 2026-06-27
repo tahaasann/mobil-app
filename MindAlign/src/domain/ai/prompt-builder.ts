@@ -1,4 +1,7 @@
-import type { ApproachLens } from '@/application/ports/ai-coach.port';
+import type { ApproachLens, CoachProfileContext } from '@/application/ports/ai-coach.port';
+import type { CoachTone } from '@/domain/entities/user-profile';
+
+export type { CoachProfileContext };
 
 export type PromptBuildInput = {
   approach: ApproachLens;
@@ -6,6 +9,7 @@ export type PromptBuildInput = {
   excuse: string;
   streak?: number;
   islamicPolicyRules?: string[];
+  profile?: CoachProfileContext;
 };
 
 const LENS_INSTRUCTIONS: Record<ApproachLens, string> = {
@@ -17,16 +21,39 @@ const LENS_INSTRUCTIONS: Record<ApproachLens, string> = {
     'Use calm mindfulness language: normalize resistance, emphasize self-compassion and the next tiny step.',
 };
 
+const TONE_INSTRUCTIONS: Record<CoachTone, string> = {
+  gentle: 'Use a warm, validating tone. Acknowledge difficulty before suggesting action.',
+  direct: 'Use honest, concise coaching. Name the pattern clearly while staying respectful.',
+};
+
 export function buildCoachSystemPrompt(input: PromptBuildInput): string {
   const policyBlock =
     input.islamicPolicyRules && input.islamicPolicyRules.length > 0
       ? `\nIslamic content policy:\n${input.islamicPolicyRules.map((rule) => `- ${rule}`).join('\n')}\n`
       : '';
 
+  const profileBlock = input.profile
+    ? [
+        'User profile context:',
+        input.profile.identityGoal
+          ? `- Identity goal: ${input.profile.identityGoal}`
+          : undefined,
+        input.profile.commonBarrier
+          ? `- Common barrier: ${input.profile.commonBarrier}`
+          : undefined,
+        input.profile.defaultTone
+          ? `- Preferred tone: ${TONE_INSTRUCTIONS[input.profile.defaultTone]}`
+          : undefined,
+      ]
+        .filter(Boolean)
+        .join('\n')
+    : '';
+
   return [
     'You are MindAlign, a habit coach focused ONLY on the user habit, excuse, motivation, and wellbeing.',
     'Reject unrelated requests (code, homework, general trivia) by staying within the JSON schema.',
     LENS_INSTRUCTIONS[input.approach],
+    profileBlock,
     policyBlock,
     'Respond ONLY with JSON matching: barrier_label, reflection, micro_task, encouragement.',
     'micro_task must be completable in 5-10 minutes.',

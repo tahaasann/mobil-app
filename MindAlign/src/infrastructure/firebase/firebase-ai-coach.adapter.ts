@@ -38,6 +38,7 @@ export class FirebaseAiCoachAdapter implements AiCoachPort {
       habitTitle: context.habitTitle,
       excuse: context.excuse,
       streak: context.streak,
+      profile: context.profile,
       islamicPolicyRules: getIslamicPolicyRules(context.approach === 'spiritual'),
     });
 
