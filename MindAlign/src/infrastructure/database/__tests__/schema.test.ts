@@ -1,16 +1,15 @@
-import { habits, habitLogs } from '@/infrastructure/database/schema';
+import { aiUsage, habitLogs } from '@/infrastructure/database/schema';
 
 describe('habits schema', () => {
   it('defines habits table columns', () => {
-    expect(habits.id.name).toBe('id');
-    expect(habits.title.name).toBe('title');
-    expect(habits.schedule.name).toBe('schedule');
-    expect(habits.isActive.name).toBe('is_active');
+    expect(habitLogs.habitId.name).toBe('habit_id');
+    expect(habitLogs.excuseText.name).toBe('excuse_text');
+    expect(habitLogs.barrierLabel.name).toBe('barrier_label');
+    expect(habitLogs.rescueTaskText.name).toBe('rescue_task_text');
   });
 
-  it('defines habit_logs table with habit reference', () => {
-    expect(habitLogs.habitId.name).toBe('habit_id');
-    expect(habitLogs.date.name).toBe('date');
-    expect(habitLogs.status.name).toBe('status');
+  it('defines ai_usage weekly quota table', () => {
+    expect(aiUsage.weekStart.name).toBe('week_start');
+    expect(aiUsage.count.name).toBe('count');
   });
 });

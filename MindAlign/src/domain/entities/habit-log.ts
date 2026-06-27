@@ -12,6 +12,9 @@ export type HabitLog = {
   habitId: string;
   date: string;
   status: HabitLogStatus;
+  excuseText?: string | null;
+  barrierLabel?: string | null;
+  rescueTaskText?: string | null;
   createdAt: Date;
 };
 
@@ -19,6 +22,9 @@ export type CreateHabitLogInput = {
   habitId: string;
   date: string;
   status: HabitLogStatus;
+  excuseText?: string | null;
+  barrierLabel?: string | null;
+  rescueTaskText?: string | null;
 };
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
@@ -43,6 +49,9 @@ export function createHabitLog(input: CreateHabitLogInput): HabitLog {
     habitId: input.habitId,
     date: input.date,
     status: input.status,
+    excuseText: input.excuseText ?? null,
+    barrierLabel: input.barrierLabel ?? null,
+    rescueTaskText: input.rescueTaskText ?? null,
     createdAt: new Date(),
   };
 }

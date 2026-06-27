@@ -4,5 +4,7 @@ nodeLinker: hoisted
 
 # pnpm v10+ blocks postinstall scripts by default; unrs-resolver is used by eslint-config-expo.
 allowBuilds:
+  '@firebase/util': true
   esbuild: true
+  protobufjs: true
   unrs-resolver: true
