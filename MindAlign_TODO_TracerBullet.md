@@ -201,23 +201,23 @@ T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-1
 
 | ID    | ✓   | Commit Mesajı                               | Adım                                                                   | Neden                       | Onay (Doğrulama)                           |
 | ----- | --- | ------------------------------------------- | ---------------------------------------------------------------------- | --------------------------- | ------------------------------------------ |
-| T-085 | [ ] | test: i18n lookup and fallback red          | (Red) i18n anahtar/fallback testi                                      | Çok dillilik temeli         | Test kırmızı                               |
-| T-086 | [ ] | feat: i18n setup en tr green                | (Green) react-i18next + expo-localization (en, tr)                     | UI çevirisi                 | T-085 yeşil; dil değişince metin değişiyor |
-| T-087 | [ ] | feat: add locales ar ja fr scaffolding      | ar/ja/fr çeviri dosyaları + Arapça metin yönü                          | 5 dil lansman (12'ye hazır) | 5 dilde UI render; ar düzeni doğru         |
-| T-088 | [ ] | test: theme provider selection red          | (Red) auto/light/dark seçim mantığı testi                              | Tema sistemi                | Test kırmızı                               |
-| T-089 | [ ] | feat: theme provider green                  | (Green) Tema provider + token + NativeWind dark                        | Fildişi/dark (PRD §11)      | T-088 yeşil; tema değişiyor                |
-| T-090 | [ ] | test: glasscard fallback red                | (Red) GlassCard (BlurView + reduce-transparency fallback) testi        | Liquid-glass tutarlılığı    | Test kırmızı                               |
-| T-091 | [ ] | feat: glasscard green                       | (Green) GlassCard (expo-blur) + iOS26 glass-effect guard'lı            | Premium görünüm (Soru 7/13) | T-090 yeşil; tüm cihazda cam               |
-| T-092 | [ ] | test: user_profile entity and repo red      | (Red) user_profile entity + repo testi                                 | Kişiselleştirme verisi      | Test kırmızı                               |
-| T-093 | [ ] | feat: user_profile green                    | (Green) user_profile şema/migration + repo                             | Profil saklama              | T-092 yeşil                                |
-| T-094 | [ ] | test: save onboarding usecase red           | (Red) SaveOnboardingUseCase (mercek/kimlik/ton/bariyer/bildirim) testi | Onboarding mantığı          | Test kırmızı                               |
-| T-095 | [ ] | feat: save onboarding usecase green         | (Green) SaveOnboardingUseCase                                          | Profil kaydı                | T-094 yeşil                                |
-| T-096 | [ ] | test: approach selector red                 | (Red) ApproachSelector (önizleme kartları) testi                       | Mercek seçimi (Soru 1)      | Test kırmızı                               |
-| T-097 | [ ] | feat: approach selector green               | (Green) ApproachSelector bileşeni                                      | Kimlik değil ton tercihi    | T-096 yeşil                                |
-| T-098 | [ ] | feat: onboarding flow screens               | Çok adımlı onboarding ekranları (PRD §5.A)                             | İlk deneyim                 | Akış baştan sona geziliyor                 |
-| T-099 | [ ] | test: onboarding navigation state red+green | Onboarding navigasyon/state testi + implementasyon                     | Akış sağlamlığı             | Test yeşil; tamamlanınca dashboard         |
-| T-100 | [ ] | test: profile injected to prompt red+green  | Profilin prompt builder'a enjeksiyonu testi + kod                      | Çıktı kalitesi (Soru 7)     | Test yeşil; prompt profili içeriyor        |
-| T-101 | [ ] | feat: e2e onboarding to dashboard           | Maestro: onboarding tamamla -> ilk habit ile dashboard                 | Tracer Bullet 3 kanıtı      | E2E akış yeşil                             |
+| T-085 | [✓] | test: i18n lookup and fallback red          | (Red) i18n anahtar/fallback testi                                      | Çok dillilik temeli         | Test kırmızı                               |
+| T-086 | [✓] | feat: i18n setup en tr green                | (Green) react-i18next + expo-localization (en, tr)                     | UI çevirisi                 | T-085 yeşil; dil değişince metin değişiyor |
+| T-087 | [✓] | feat: add locales ar ja fr scaffolding      | ar/ja/fr çeviri dosyaları + Arapça metin yönü                          | 5 dil lansman (12'ye hazır) | 5 dilde UI render; ar düzeni doğru         |
+| T-088 | [✓] | test: theme provider selection red          | (Red) auto/light/dark seçim mantığı testi                              | Tema sistemi                | Test kırmızı                               |
+| T-089 | [✓] | feat: theme provider green                  | (Green) Tema provider + token + NativeWind dark                        | Fildişi/dark (PRD §11)      | T-088 yeşil; tema değişiyor                |
+| T-090 | [✓] | test: glasscard fallback red                | (Red) GlassCard (BlurView + reduce-transparency fallback) testi        | Liquid-glass tutarlılığı    | Test kırmızı                               |
+| T-091 | [✓] | feat: glasscard green                       | (Green) GlassCard (expo-blur) + iOS26 glass-effect guard'lı            | Premium görünüm (Soru 7/13) | T-090 yeşil; tüm cihazda cam               |
+| T-092 | [✓] | test: user_profile entity and repo red      | (Red) user_profile entity + repo testi                                 | Kişiselleştirme verisi      | Test kırmızı                               |
+| T-093 | [✓] | feat: user_profile green                    | (Green) user_profile şema/migration + repo                             | Profil saklama              | T-092 yeşil                                |
+| T-094 | [✓] | test: save onboarding usecase red           | (Red) SaveOnboardingUseCase (mercek/kimlik/ton/bariyer/bildirim) testi | Onboarding mantığı          | Test kırmızı                               |
+| T-095 | [✓] | feat: save onboarding usecase green         | (Green) SaveOnboardingUseCase                                          | Profil kaydı                | T-094 yeşil                                |
+| T-096 | [✓] | test: approach selector red                 | (Red) ApproachSelector (önizleme kartları) testi                       | Mercek seçimi (Soru 1)      | Test kırmızı                               |
+| T-097 | [✓] | feat: approach selector green               | (Green) ApproachSelector bileşeni                                      | Kimlik değil ton tercihi    | T-096 yeşil                                |
+| T-098 | [✓] | feat: onboarding flow screens               | Çok adımlı onboarding ekranları (PRD §5.A)                             | İlk deneyim                 | Akış baştan sona geziliyor                 |
+| T-099 | [✓] | test: onboarding navigation state red+green | Onboarding navigasyon/state testi + implementasyon                     | Akış sağlamlığı             | Test yeşil; tamamlanınca dashboard         |
+| T-100 | [✓] | test: profile injected to prompt red+green  | Profilin prompt builder'a enjeksiyonu testi + kod                      | Çıktı kalitesi (Soru 7)     | Test yeşil; prompt profili içeriyor        |
+| T-101 | [✓] | feat: e2e onboarding to dashboard           | Maestro: onboarding tamamla -> ilk habit ile dashboard                 | Tracer Bullet 3 kanıtı      | E2E akış yeşil                             |
 
 
 ---

@@ -2,6 +2,7 @@ import type {
   AiCoachPort,
   ApproachLens,
   BarrierResponse,
+  CoachProfileContext,
   CoachStreamHandler,
 } from '@/application/ports/ai-coach.port';
 import type { AiUsageRepository } from '@/application/ports/ai-usage-repository.port';
@@ -14,6 +15,7 @@ export type BustExcuseChatInput = {
   excuse: string;
   approach: ApproachLens;
   streak?: number;
+  profile?: CoachProfileContext;
   onPartial?: CoachStreamHandler;
 };
 
@@ -59,6 +61,7 @@ export class BustExcuseChatUseCase {
         excuse: input.excuse,
         approach: input.approach,
         streak: input.streak,
+        profile: input.profile,
       },
       input.onPartial,
     );

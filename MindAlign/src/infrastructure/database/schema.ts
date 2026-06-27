@@ -39,3 +39,24 @@ export const aiUsage = sqliteTable('ai_usage', {
   count: integer('count').notNull().default(0),
   updatedAt: text('updated_at').notNull(),
 });
+
+export const appSettings = sqliteTable('app_settings', {
+  id: text('id').primaryKey().notNull(),
+  selectedApproach: text('selected_approach').notNull().default('universal'),
+  language: text('language').notNull().default('en'),
+  theme: text('theme').notNull().default('auto'),
+  onboardingCompleted: integer('onboarding_completed', { mode: 'boolean' })
+    .notNull()
+    .default(false),
+  createdAt: text('created_at').notNull(),
+});
+
+export const userProfile = sqliteTable('user_profile', {
+  id: text('id').primaryKey().notNull(),
+  identityGoal: text('identity_goal'),
+  defaultTone: text('default_tone').notNull().default('gentle'),
+  commonBarrier: text('common_barrier'),
+  notifWindow: text('notif_window'),
+  notifFrequency: integer('notif_frequency'),
+  updatedAt: text('updated_at').notNull(),
+});

@@ -1,0 +1,77 @@
+{
+  "dashboard": {
+    "title": "MindAlign",
+    "subtitle": "今日の習慣",
+    "empty": "まだ習慣がありません。上から追加してください。",
+    "loading": "読み込み中…"
+  },
+  "habit": {
+    "markDone": "できた",
+    "couldntDo": "できなかった",
+    "streak": "連続 {{count}} 日"
+  },
+  "addHabit": {
+    "placeholder": "新しい習慣名",
+    "submit": "習慣を追加"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "MindAlign へようこそ",
+      "subtitle": "言い訳を崩す習慣コーチ",
+      "continue": "始める"
+    },
+    "approach": {
+      "title": "レンズを選ぶ",
+      "subtitle": "コーチのトーンを決めます — あなたのアイデンティティではありません",
+      "spiritual": "スピリチュアル / イスラム",
+      "spiritualHint": "意図と小さな一歩に根ざした思いやりのある枠組み",
+      "scientific": "科学的 / CBT",
+      "scientificHint": "エビデンスに基づく穏やかな認知の再枠組み",
+      "universal": "普遍的な静けさ",
+      "universalHint": "マインドフルで自己思いやりの言葉",
+      "previewLabel": "プレビュー"
+    },
+    "identity": {
+      "title": "どんな自分になりたいですか？",
+      "subtitle": "一文で十分です",
+      "placeholder": "例：毎日自分のために現れる人"
+    },
+    "habits": {
+      "title": "最初の習慣",
+      "subtitle": "始めるために1〜3個追加",
+      "placeholder": "習慣名",
+      "add": "追加",
+      "continue": "続ける"
+    },
+    "barrier": {
+      "title": "いつも何が止めますか？",
+      "subtitle": "これに合わせてレスキュータスクを調整します",
+      "tired": "疲れすぎ",
+      "noTime": "時間がない",
+      "forgot": "忘れる",
+      "overwhelmed": "圧倒される",
+      "other": "その他"
+    },
+    "tone": {
+      "title": "コーチのトーン",
+      "gentle": "優しく",
+      "direct": "率直に"
+    },
+    "notifications": {
+      "title": "チェックイン設定",
+      "subtitle": "いつリマインドしますか？",
+      "morning": "朝 (7–10)",
+      "afternoon": "午後 (12–15)",
+      "evening": "夕方 (18–21)",
+      "frequencyOnce": "1日1回",
+      "frequencyTwice": "1日2回",
+      "skip": "今はスキップ",
+      "finish": "設定を完了"
+    }
+  },
+  "common": {
+    "back": "戻る",
+    "next": "次へ",
+    "loading": "読み込み中…"
+  }
+}

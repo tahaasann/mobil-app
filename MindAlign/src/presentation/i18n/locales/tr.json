@@ -1,0 +1,79 @@
+{
+  "dashboard": {
+    "title": "MindAlign",
+    "subtitle": "Bugünkü alışkanlıkların",
+    "empty": "Henüz alışkanlık yok. Yukarıdan bir tane ekle.",
+    "loading": "Yükleniyor…"
+  },
+  "habit": {
+    "markDone": "Yaptım",
+    "couldntDo": "Yapamadım",
+    "streak": "Seri {{count}}"
+  },
+  "addHabit": {
+    "placeholder": "Yeni alışkanlık adı",
+    "submit": "Alışkanlık ekle",
+    "errorRequired": "Alışkanlık adı gerekli",
+    "errorFailed": "Alışkanlık eklenemedi"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "MindAlign'a hoş geldin",
+      "subtitle": "Bahane çürüten alışkanlık koçun",
+      "continue": "Başla"
+    },
+    "approach": {
+      "title": "Merceğini seç",
+      "subtitle": "Koçunun tonunu belirler — kimliğini değil",
+      "spiritual": "Manevi / İslami",
+      "spiritualHint": "Niyet ve küçük adımlarla şefkatli çerçeve",
+      "scientific": "Bilimsel / CBT",
+      "scientificHint": "Kanıta dayalı, nazik bilişsel yeniden çerçeveleme",
+      "universal": "Evrensel sükunet",
+      "universalHint": "Farkındalık ve öz-şefkat dili",
+      "previewLabel": "Önizleme"
+    },
+    "identity": {
+      "title": "Nasıl biri olmak istiyorsun?",
+      "subtitle": "Bir cümle yeter",
+      "placeholder": "Örn. Her gün kendim için ortaya çıkan biri"
+    },
+    "habits": {
+      "title": "İlk alışkanlıklar",
+      "subtitle": "Başlamak için 1–3 alışkanlık ekle",
+      "placeholder": "Alışkanlık adı",
+      "add": "Ekle",
+      "continue": "Devam"
+    },
+    "barrier": {
+      "title": "Seni genelde ne durduruyor?",
+      "subtitle": "Kurtarma görevlerini buna göre ayarlayacağız",
+      "tired": "Çok yorgunum",
+      "noTime": "Vaktim yok",
+      "forgot": "Unutuyorum",
+      "overwhelmed": "Bunaldım",
+      "other": "Başka bir şey"
+    },
+    "tone": {
+      "title": "Koç tonu",
+      "gentle": "Nazik",
+      "direct": "Dürüst & net"
+    },
+    "notifications": {
+      "title": "Yoklama tercihleri",
+      "subtitle": "Ne zaman hatırlatalım?",
+      "morning": "Sabah (7–10)",
+      "afternoon": "Öğleden sonra (12–15)",
+      "evening": "Akşam (18–21)",
+      "frequencyOnce": "Günde bir",
+      "frequencyTwice": "Günde iki",
+      "skip": "Şimdilik atla",
+      "finish": "Kurulumu bitir"
+    }
+  },
+  "common": {
+    "back": "Geri",
+    "next": "İleri",
+    "loading": "Yükleniyor…"
+  }
+}

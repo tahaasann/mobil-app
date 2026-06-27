@@ -28,4 +28,21 @@ describe('prompt builder', () => {
 
     expect(promptIncludesIslamicPolicyRules(system)).toBe(true);
   });
+
+  it('includes user profile context in the system prompt', () => {
+    const system = buildCoachSystemPrompt({
+      approach: 'universal',
+      habitTitle: 'Walk',
+      excuse: 'Too tired',
+      profile: {
+        identityGoal: 'An energized parent',
+        defaultTone: 'gentle',
+        commonBarrier: 'no_time',
+      },
+    });
+
+    expect(system).toContain('Identity goal: An energized parent');
+    expect(system).toContain('Common barrier: no_time');
+    expect(system).toContain('warm, validating tone');
+  });
 });

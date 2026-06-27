@@ -39,8 +39,8 @@ describe('ExcuseChatScreen', () => {
     const user = userEvent.setup();
     await render(<ExcuseChatScreen />);
 
-    await user.type(screen.getByPlaceholderText(/çok yorgunum/i), 'Bugün yorgunum');
-    await user.press(screen.getByText('Gönder'));
+    await user.type(await screen.findByPlaceholderText(/çok yorgunum/i), 'Bugün yorgunum');
+    await user.press(await screen.findByText('Gönder'));
 
     await waitFor(() => {
       expect(mockSendExcuse).toHaveBeenCalled();

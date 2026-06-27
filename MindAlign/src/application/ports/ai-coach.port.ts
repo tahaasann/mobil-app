@@ -7,11 +7,18 @@ export type BarrierResponse = {
   encouragement: string;
 };
 
+export type CoachProfileContext = {
+  identityGoal?: string | null;
+  defaultTone?: 'gentle' | 'direct';
+  commonBarrier?: string | null;
+};
+
 export type CoachContext = {
   habitTitle: string;
   excuse: string;
   approach: ApproachLens;
   streak?: number;
+  profile?: CoachProfileContext;
 };
 
 export type CoachStreamHandler = (partialText: string) => void;

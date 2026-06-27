@@ -3,6 +3,7 @@ import { render, screen, userEvent } from '@testing-library/react-native';
 import type { DashboardHabit } from '@/application/use-cases/get-dashboard.use-case';
 import { createHabit } from '@/domain/entities/habit';
 import { HabitCard } from '@/presentation/components/habit-card';
+import { I18nProvider } from '@/presentation/i18n/i18n-provider';
 
 jest.mock('expo-router', () => ({
   useRouter: () => ({ push: jest.fn(), back: jest.fn() }),
@@ -25,10 +26,14 @@ const dashboardItem: DashboardHabit = {
 describe('HabitCard', () => {
   it('renders title, streak, and mark done action', async () => {
     const onMarkDone = jest.fn().mockResolvedValue(undefined);
-    await render(<HabitCard item={dashboardItem} onMarkDone={onMarkDone} />);
+    await render(
+      <I18nProvider locale="tr">
+        <HabitCard item={dashboardItem} onMarkDone={onMarkDone} />
+      </I18nProvider>,
+    );
 
     expect(screen.getByText('Drink water')).toBeOnTheScreen();
-    expect(screen.getByText('Streak 2')).toBeOnTheScreen();
+    expect(screen.getByText('Seri 2')).toBeOnTheScreen();
 
     const user = userEvent.setup();
     await user.press(screen.getByText('Yaptım'));

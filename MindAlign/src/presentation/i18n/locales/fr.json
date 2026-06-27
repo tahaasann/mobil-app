@@ -1,0 +1,77 @@
+{
+  "dashboard": {
+    "title": "MindAlign",
+    "subtitle": "Vos habitudes aujourd'hui",
+    "empty": "Pas encore d'habitudes. Ajoutez-en une ci-dessus.",
+    "loading": "Chargement…"
+  },
+  "habit": {
+    "markDone": "Fait",
+    "couldntDo": "Pas fait",
+    "streak": "Série {{count}}"
+  },
+  "addHabit": {
+    "placeholder": "Nouvelle habitude",
+    "submit": "Ajouter"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Bienvenue sur MindAlign",
+      "subtitle": "Votre coach d'habitudes anti-excuses",
+      "continue": "Commencer"
+    },
+    "approach": {
+      "title": "Choisissez votre lentille",
+      "subtitle": "Cela définit le ton du coach — pas votre identité",
+      "spiritual": "Spirituel / Islamique",
+      "spiritualHint": "Cadre bienveillant ancré dans l'intention et les petits pas",
+      "scientific": "Scientifique / TCC",
+      "scientificHint": "Recadrage cognitif doux fondé sur les preuves",
+      "universal": "Calme universel",
+      "universalHint": "Langage mindful et bienveillant envers soi",
+      "previewLabel": "Aperçu"
+    },
+    "identity": {
+      "title": "Qui voulez-vous devenir ?",
+      "subtitle": "Une phrase suffit",
+      "placeholder": "Ex. Quelqu'un qui se présente chaque jour"
+    },
+    "habits": {
+      "title": "Premières habitudes",
+      "subtitle": "Ajoutez 1 à 3 habitudes pour commencer",
+      "placeholder": "Titre de l'habitude",
+      "add": "Ajouter",
+      "continue": "Continuer"
+    },
+    "barrier": {
+      "title": "Qu'est-ce qui vous arrête le plus ?",
+      "subtitle": "Nous adapterons les micro-tâches de secours",
+      "tired": "Trop fatigué",
+      "noTime": "Pas le temps",
+      "forgot": "J'oublie",
+      "overwhelmed": "Submergé",
+      "other": "Autre chose"
+    },
+    "tone": {
+      "title": "Ton du coach",
+      "gentle": "Doux",
+      "direct": "Direct et honnête"
+    },
+    "notifications": {
+      "title": "Préférences de rappel",
+      "subtitle": "Quand vous rappeler ?",
+      "morning": "Matin (7–10)",
+      "afternoon": "Après-midi (12–15)",
+      "evening": "Soir (18–21)",
+      "frequencyOnce": "Une fois par jour",
+      "frequencyTwice": "Deux fois par jour",
+      "skip": "Passer pour l'instant",
+      "finish": "Terminer"
+    }
+  },
+  "common": {
+    "back": "Retour",
+    "next": "Suivant",
+    "loading": "Chargement…"
+  }
+}
