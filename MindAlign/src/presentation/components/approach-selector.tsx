@@ -6,10 +6,7 @@ import { GlassCard } from '@/presentation/components/glass-card';
 
 const APPROACH_OPTIONS: ApproachLens[] = ['spiritual', 'scientific', 'universal'];
 
-const APPROACH_I18N: Record<
-  ApproachLens,
-  { title: string; hint: string; preview: string }
-> = {
+const APPROACH_I18N: Record<ApproachLens, { title: string; hint: string; preview: string }> = {
   spiritual: {
     title: 'onboarding.approach.spiritual',
     hint: 'onboarding.approach.spiritualHint',
@@ -48,17 +45,17 @@ export function ApproachSelector({ value, onChange }: ApproachSelectorProps) {
               accessibilityState={{ selected }}
               className={`p-4 ${selected ? 'border-accent' : ''}`}
             >
-            <Text className="text-base font-semibold text-foreground dark:text-foreground-dark">
-              {t(copy.title)}
-            </Text>
-            <Text className="mt-1 text-sm text-muted dark:text-muted-dark">{t(copy.hint)}</Text>
-            <Text className="mt-3 text-xs uppercase tracking-wide text-muted dark:text-muted-dark">
-              {t('onboarding.approach.previewLabel')}
-            </Text>
-            <Text className="mt-1 text-sm italic text-foreground dark:text-foreground-dark">
-              {t(copy.preview)}
-            </Text>
-          </GlassCard>
+              <Text className="text-base font-semibold text-foreground dark:text-foreground-dark">
+                {t(copy.title)}
+              </Text>
+              <Text className="mt-1 text-sm text-muted dark:text-muted-dark">{t(copy.hint)}</Text>
+              <Text className="mt-3 text-xs uppercase tracking-wide text-muted dark:text-muted-dark">
+                {t('onboarding.approach.previewLabel')}
+              </Text>
+              <Text className="mt-1 text-sm italic text-foreground dark:text-foreground-dark">
+                {t(copy.preview)}
+              </Text>
+            </GlassCard>
           </Pressable>
         );
       })}

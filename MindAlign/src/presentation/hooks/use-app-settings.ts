@@ -8,6 +8,28 @@ export function useAppSettings() {
   const [settings, setSettings] = useState<AppSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    void getAppSettingsUseCase.execute().then(
+      (result) => {
+        if (!cancelled) {
+          setSettings(result);
+          setIsLoading(false);
+        }
+      },
+      () => {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      },
+    );
+
+    return () => {
+      cancelled = true;
+    };
+  }, [getAppSettingsUseCase]);
+
   const refresh = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -16,10 +38,6 @@ export function useAppSettings() {
       setIsLoading(false);
     }
   }, [getAppSettingsUseCase]);
-
-  useEffect(() => {
-    void refresh();
-  }, [refresh]);
 
   return { settings, isLoading, refresh };
 }

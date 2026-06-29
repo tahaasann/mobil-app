@@ -19,6 +19,8 @@ export type CoachContext = {
   approach: ApproachLens;
   streak?: number;
   profile?: CoachProfileContext;
+  geminiModel?: string;
+  geminiLiteModel?: string;
 };
 
 export type CoachStreamHandler = (partialText: string) => void;

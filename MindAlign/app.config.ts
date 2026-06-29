@@ -13,6 +13,48 @@ function getAppEnv(): AppEnv {
 export default ({ config }: ConfigContext): ExpoConfig => {
   const appEnv = getAppEnv();
 
+  const plugins: ExpoConfig['plugins'] = [
+      'expo-router',
+      'expo-sqlite',
+      'expo-dev-client',
+      '@react-native-firebase/app',
+      '@react-native-firebase/app-check',
+      '@react-native-firebase/auth',
+      '@react-native-firebase/analytics',
+      '@react-native-firebase/crashlytics',
+      [
+        'expo-notifications',
+        {
+          icon: './assets/images/icon.png',
+          color: '#208AEF',
+        },
+      ],
+      // AdMob (react-native-google-mobile-ads) su an devre disi. Native baslangic
+      // crash'ini onlemek icin paket tamamen kaldirildi; ileride tekrar eklenecek.
+      [
+        'expo-build-properties',
+        {
+          android: {
+            kotlinVersion: '2.1.20',
+          },
+          ios: {
+            useFrameworks: 'static',
+            forceStaticLinking: ['RNFBApp', 'RNFBAppCheck', 'RNFBAppCheckModule'],
+          },
+        },
+      ],
+      [
+        'expo-splash-screen',
+        {
+          backgroundColor: '#208AEF',
+          android: {
+            image: './assets/images/splash-icon.png',
+            imageWidth: 76,
+          },
+        },
+      ],
+    ];
+
   return {
     ...config,
     name: 'MindAlign',
@@ -43,51 +85,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       favicon: './assets/images/favicon.png',
       bundler: 'metro',
     },
-    plugins: [
-      'expo-router',
-      'expo-sqlite',
-      'expo-dev-client',
-      '@react-native-firebase/app',
-      '@react-native-firebase/app-check',
-      '@react-native-firebase/auth',
-      '@react-native-firebase/firestore',
-      '@react-native-firebase/analytics',
-      '@react-native-firebase/crashlytics',
-      '@react-native-firebase/remote-config',
-      [
-        'expo-notifications',
-        {
-          icon: './assets/images/icon.png',
-          color: '#208AEF',
-        },
-      ],
-      [
-        'react-native-google-mobile-ads',
-        {
-          androidAppId: process.env.EXPO_PUBLIC_ADMOB_APP_ID_ANDROID ?? 'ca-app-pub-3940256099942544~3347511713',
-          iosAppId: process.env.EXPO_PUBLIC_ADMOB_APP_ID_IOS ?? 'ca-app-pub-3940256099942544~1458002511',
-        },
-      ],
-      [
-        'expo-build-properties',
-        {
-          ios: {
-            useFrameworks: 'static',
-            forceStaticLinking: ['RNFBApp', 'RNFBAppCheck', 'RNFBAppCheckModule'],
-          },
-        },
-      ],
-      [
-        'expo-splash-screen',
-        {
-          backgroundColor: '#208AEF',
-          android: {
-            image: './assets/images/splash-icon.png',
-            imageWidth: 76,
-          },
-        },
-      ],
-    ],
+    plugins,
     experiments: {
       typedRoutes: true,
       reactCompiler: true,

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 type ChatBubbleProps = {
   role: 'user' | 'assistant';
@@ -26,22 +26,14 @@ export function ChatBubble({ role, children, onBookmark, onRegenerate }: ChatBub
       {!isUser && (onBookmark || onRegenerate) ? (
         <View className="mt-2 flex-row gap-4">
           {onBookmark ? (
-            <Text
-              accessibilityRole="button"
-              className="text-xs font-semibold text-emerald-700"
-              onPress={onBookmark}
-            >
-              Kaydet
-            </Text>
+            <Pressable accessibilityRole="button" onPress={onBookmark}>
+              <Text className="text-xs font-semibold text-emerald-700">Kaydet</Text>
+            </Pressable>
           ) : null}
           {onRegenerate ? (
-            <Text
-              accessibilityRole="button"
-              className="text-xs font-semibold text-emerald-700"
-              onPress={onRegenerate}
-            >
-              Yeniden üret
-            </Text>
+            <Pressable accessibilityRole="button" onPress={onRegenerate}>
+              <Text className="text-xs font-semibold text-emerald-700">Yeniden üret</Text>
+            </Pressable>
           ) : null}
         </View>
       ) : null}

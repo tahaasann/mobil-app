@@ -1,9 +1,17 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
 
 import type { AdsPort } from '@/application/ports/ads.port';
 import type { SubscriptionOffering, SubscriptionPort } from '@/application/ports/subscription.port';
-import { AdMobRewardedAdapter } from '@/infrastructure/ads/admob-rewarded.adapter';
 import { MockAdsAdapter } from '@/infrastructure/ads/mock-ads.adapter';
+import { isProductionEnv } from '@/infrastructure/config/production-guard';
 import { MockSubscriptionAdapter } from '@/infrastructure/subscriptions/mock-subscription.adapter';
 import { RevenueCatSubscriptionAdapter } from '@/infrastructure/subscriptions/revenuecat-subscription.adapter';
 
@@ -22,20 +30,25 @@ const SubscriptionPortsContext = createContext<SubscriptionPorts | null>(null);
 const SubscriptionContext = createContext<SubscriptionContextValue | null>(null);
 
 function createSubscriptionPort(): SubscriptionPort {
-  if (
-    process.env.EXPO_PUBLIC_SUBSCRIPTION_MOCK === 'true' ||
-    !process.env.EXPO_PUBLIC_REVENUECAT_API_KEY
-  ) {
+  if (process.env.EXPO_PUBLIC_SUBSCRIPTION_MOCK === 'true') {
+    if (isProductionEnv()) {
+      throw new Error('EXPO_PUBLIC_SUBSCRIPTION_MOCK is not allowed in production');
+    }
+    return new MockSubscriptionAdapter();
+  }
+  if (!process.env.EXPO_PUBLIC_REVENUECAT_API_KEY) {
+    if (isProductionEnv()) {
+      throw new Error('EXPO_PUBLIC_REVENUECAT_API_KEY is required in production');
+    }
     return new MockSubscriptionAdapter();
   }
   return new RevenueCatSubscriptionAdapter();
 }
 
 function createAdsPort(): AdsPort {
-  if (process.env.EXPO_PUBLIC_ADS_MOCK === 'true') {
-    return new MockAdsAdapter();
-  }
-  return new AdMobRewardedAdapter();
+  // AdMob su an tamamen devre disi. Reklam entegrasyonu (react-native-google-mobile-ads)
+  // ileride tekrar eklenecek. Simdilik her zaman mock reklam adapteri kullaniliyor.
+  return new MockAdsAdapter();
 }
 
 export function SubscriptionContainer({ children }: { children: ReactNode }) {
@@ -59,13 +72,23 @@ export function SubscriptionContainer({ children }: { children: ReactNode }) {
     });
   }, [ports.subscriptionPort]);
 
-  const refreshOfferings = async () => {
+  useEffect(() => {
+    let cancelled = false;
+
+    void ports.subscriptionPort.getOfferings().then((next) => {
+      if (!cancelled) {
+        setOfferings(next);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [ports.subscriptionPort]);
+
+  const refreshOfferings = useCallback(async () => {
     const next = await ports.subscriptionPort.getOfferings();
     setOfferings(next);
-  };
-
-  useEffect(() => {
-    void refreshOfferings();
   }, [ports.subscriptionPort]);
 
   const value = useMemo<SubscriptionContextValue>(
@@ -75,7 +98,7 @@ export function SubscriptionContainer({ children }: { children: ReactNode }) {
       offerings,
       refreshOfferings,
     }),
-    [ports, isPremium, offerings],
+    [ports, isPremium, offerings, refreshOfferings],
   );
 
   return (

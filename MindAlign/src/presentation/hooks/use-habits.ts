@@ -68,7 +68,14 @@ export function useHabits() {
       },
       refresh,
     }),
-    [createHabitUseCase, getUserProfileUseCase, logHabitUseCase, refresh, scheduleHabitNotificationsUseCase, t],
+    [
+      createHabitUseCase,
+      getUserProfileUseCase,
+      logHabitUseCase,
+      refresh,
+      scheduleHabitNotificationsUseCase,
+      t,
+    ],
   );
 
   return {

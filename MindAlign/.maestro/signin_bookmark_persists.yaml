@@ -1,30 +1,30 @@
 appId: com.tahaasann.mindalign
 ---
 - launchApp
-- assertVisible: "Welcome to MindAlign"
-- tapOn: "Get started"
-- tapOn: "Universal calm"
-- tapOn: "Next"
-- inputText: "Calm walker"
-- tapOn: "Next"
-- inputText: "Morning walk"
-- tapOn: "Add"
-- tapOn: "Continue"
-- tapOn: "No time"
-- tapOn: "Next"
-- tapOn: "Gentle"
-- tapOn: "Next"
-- tapOn: "Finish setup"
-- assertVisible: "MindAlign Plus"
-- tapOn: "Continue for free"
-- assertVisible: "Save your progress"
-- tapOn: "Continue as guest"
-- assertVisible: "Your habits today"
+- assertVisible: 'Welcome to MindAlign'
+- tapOn: 'Get started'
+- tapOn: 'Universal calm'
+- tapOn: 'Next'
+- inputText: 'Calm walker'
+- tapOn: 'Next'
+- inputText: 'Morning walk'
+- tapOn: 'Add'
+- tapOn: 'Continue'
+- tapOn: 'No time'
+- tapOn: 'Next'
+- tapOn: 'Gentle'
+- tapOn: 'Next'
+- tapOn: 'Finish setup'
+- assertVisible: 'MindAlign Plus'
+- tapOn: 'Continue for free'
+- assertVisible: 'Save your progress'
+- tapOn: 'Continue as guest'
+- assertVisible: 'Your habits today'
 - tapOn: "Couldn't do it"
-- inputText: "Too tired today"
-- tapOn: "Gönder"
-- assertVisible: "Kaydet"
-- tapOn: "Kaydet"
+- inputText: 'Too tired today'
+- tapOn: 'Gönder'
+- assertVisible: 'Kaydet'
+- tapOn: 'Kaydet'
 - back
-- tapOn: "Saved"
-- assertVisible: "Saved responses"
+- tapOn: 'Saved'
+- assertVisible: 'Saved responses'

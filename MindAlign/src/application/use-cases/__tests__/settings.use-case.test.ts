@@ -25,6 +25,10 @@ class InMemoryUserDataPort implements UserDataPort {
     return snapshot;
   }
 
+  async clearSessionData(): Promise<void> {
+    this.resetCalled = true;
+  }
+
   async resetAll(): Promise<void> {
     this.resetCalled = true;
   }
@@ -42,12 +46,20 @@ describe('ExportUserDataUseCase', () => {
 });
 
 describe('ResetUserDataUseCase', () => {
-  it('clears local user data', async () => {
+  it('clears local user data and cancels notifications', async () => {
     const port = new InMemoryUserDataPort();
-    const useCase = new ResetUserDataUseCase(port);
+    const notificationPort = {
+      requestPermissions: jest.fn(),
+      schedule: jest.fn(),
+      cancel: jest.fn(),
+      cancelAllForHabit: jest.fn(),
+      cancelAll: jest.fn(async () => undefined),
+    };
+    const useCase = new ResetUserDataUseCase(port, notificationPort);
 
     await useCase.execute();
     expect(port.resetCalled).toBe(true);
+    expect(notificationPort.cancelAll).toHaveBeenCalled();
   });
 });
 

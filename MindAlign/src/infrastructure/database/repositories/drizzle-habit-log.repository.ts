@@ -38,6 +38,19 @@ export class DrizzleHabitLogRepository implements HabitLogRepository {
     });
   }
 
+  async findByHabitIds(habitIds: string[]): Promise<HabitLog[]> {
+    if (habitIds.length === 0) {
+      return [];
+    }
+
+    const rows = await this.db
+      .select()
+      .from(schema.habitLogs)
+      .where(inArray(schema.habitLogs.habitId, habitIds));
+
+    return rows.map(mapRowToLog);
+  }
+
   async findByHabitIdsAndDates(habitIds: string[], dates: string[]): Promise<HabitLog[]> {
     if (habitIds.length === 0 || dates.length === 0) {
       return [];

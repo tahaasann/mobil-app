@@ -9,10 +9,10 @@ Configure products in RevenueCat and the app stores before enabling live purchas
 
 ## Store products
 
-| Product ID | Type | Notes |
-|------------|------|--------|
+| Product ID               | Type                   | Notes                        |
+| ------------------------ | ---------------------- | ---------------------------- |
 | `mindalign_plus_monthly` | Auto-renewable monthly | 7-day free trial recommended |
-| `mindalign_plus_annual` | Auto-renewable annual | Best value tier |
+| `mindalign_plus_annual`  | Auto-renewable annual  | Best value tier              |
 
 ## RevenueCat offering
 

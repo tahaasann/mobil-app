@@ -1,4 +1,23 @@
 {
+  "tabs": {
+    "home": "Ana sayfa",
+    "chat": "Koç",
+    "saved": "Kaydedilenler",
+    "profile": "Profil"
+  },
+  "chat": {
+    "title": "Koç sohbeti",
+    "subtitle": "Bahanelerini konuş, mikro-görev al.",
+    "generalTopic": "Genel konuşma",
+    "topicPicker": "Konu seç",
+    "inputPlaceholder": "Örn. çok yorgunum, sonra yaparım…",
+    "send": "Gönder",
+    "thinking": "Düşünüyorum…"
+  },
+  "profile": {
+    "title": "Profil",
+    "subtitle": "Hesap, abonelik ve uygulama ayarları"
+  },
   "dashboard": {
     "title": "MindAlign",
     "subtitle": "Bugünkü alışkanlıkların",
@@ -78,7 +97,7 @@
   },
   "auth": {
     "title": "İlerlemeni kaydet",
-    "subtitle": "Bookmark ve sohbet geçmişini cihazlar arası senkronize etmek için giriş yap veya misafir devam et.",
+    "subtitle": "Bookmark ve sohbet senkronu için giriş yap. Misafir modu veriyi yalnızca bu cihazda tutar (bulut senkronu yok).",
     "emailPlaceholder": "E-posta",
     "passwordPlaceholder": "Şifre",
     "signIn": "Giriş yap",
@@ -105,15 +124,15 @@
   },
   "paywall": {
     "title": "MindAlign Plus",
-    "subtitle": "Sınırsız koç sohbeti, bookmark senkronu ve daha sakin bir deneyim.",
+    "subtitle": "Haftada 60 AI koç sohbeti, bookmark senkronu ve daha sakin bir deneyim.",
     "subscribe": "Abone ol",
-    "startTrial": "7 gün ücretsiz dene",
+    "startTrial": "Ücretsiz denemeyi başlat",
     "restore": "Satın alımları geri yükle",
     "continueFree": "Ücretsiz devam et",
     "upgrade": "Plus'a yükselt",
     "watchAd": "Kısa reklam izle (+1 sohbet)",
     "quotaTitle": "Haftalık ücretsiz sohbet hakkın bitti",
-    "quotaSubtitle": "Sınırsız koçluk için yükselt veya bu hafta bir sohbet daha için nazik bir reklam izle."
+    "quotaSubtitle": "Haftada 60 sohbet için yükselt veya bu hafta bir sohbet daha için nazik bir reklam izle."
   },
   "breathing": {
     "title": "Nefes odası",
@@ -144,10 +163,11 @@
     "signOut": "Çıkış yap",
     "export": "Verilerimi dışa aktar",
     "exportTitle": "MindAlign dışa aktarma",
+    "exportWarning": "Tüm yerel veriler düz JSON olarak paylaşılır. Yalnızca güvendiğin kişilerle paylaş.",
     "reset": "Tüm yerel veriyi sil",
     "resetTitle": "Tüm veri silinsin mi?",
     "resetConfirm": "Bu cihazdaki alışkanlık, sohbet ve bookmark'ları kaldırır.",
     "resetAction": "Sil",
-    "privacyNote": "MindAlign tıbbi tavsiye değildir. Giriş yapmadıkça veriler cihazında kalır."
+    "privacyNote": "MindAlign tıbbi tavsiye değildir. Misafir verisi cihazda kalır. Giriş yapan hesaplar bookmark ve sohbeti özel bulut alanına senkronlar."
   }
 }

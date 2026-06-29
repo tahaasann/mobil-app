@@ -29,14 +29,6 @@ export class SaveOnboardingUseCase {
   ) {}
 
   async execute(input: SaveOnboardingInput): Promise<void> {
-    const settings = upsertAppSettings(await this.settingsRepository.get(), {
-      selectedApproach: input.approach,
-      language: input.language,
-      theme: input.theme,
-      onboardingCompleted: true,
-    });
-    await this.settingsRepository.save(settings);
-
     const profile = upsertUserProfile(await this.userProfileRepository.get(), {
       identityGoal: input.identityGoal,
       defaultTone: input.defaultTone,
@@ -52,5 +44,13 @@ export class SaveOnboardingUseCase {
         await this.createHabitUseCase.execute({ title: trimmed });
       }
     }
+
+    const settings = upsertAppSettings(await this.settingsRepository.get(), {
+      selectedApproach: input.approach,
+      language: input.language,
+      theme: input.theme,
+      onboardingCompleted: true,
+    });
+    await this.settingsRepository.save(settings);
   }
 }

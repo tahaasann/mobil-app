@@ -32,21 +32,25 @@ export class GetDashboardUseCase {
 
   async execute(input: GetDashboardInput): Promise<DashboardResult> {
     const habits = await this.habitRepository.findAllActive();
-    const dates = getLastNDates(input.referenceDate, 7);
+    const heatmapDates = getLastNDates(input.referenceDate, 7);
     const habitIds = habits.map((habit) => habit.id);
-    const logs =
+
+    const [allLogs, heatmapLogs] = await Promise.all([
+      habitIds.length > 0 ? this.habitLogRepository.findByHabitIds(habitIds) : Promise.resolve([]),
       habitIds.length > 0
-        ? await this.habitLogRepository.findByHabitIdsAndDates(habitIds, dates)
-        : [];
+        ? this.habitLogRepository.findByHabitIdsAndDates(habitIds, heatmapDates)
+        : Promise.resolve([]),
+    ]);
 
     const dashboardHabits = habits.map((habit) => {
-      const habitLogs = logs.filter((log) => log.habitId === habit.id);
-      const logsByDate = new Map(habitLogs.map((log) => [log.date, log.status]));
+      const habitLogsForStreak = allLogs.filter((log) => log.habitId === habit.id);
+      const heatmapForHabit = heatmapLogs.filter((log) => log.habitId === habit.id);
+      const logsByDate = new Map(heatmapForHabit.map((log) => [log.date, log.status]));
 
       return {
         habit,
-        streak: calculateStreak(habitLogs, input.referenceDate),
-        days: dates.map((date) => ({
+        streak: calculateStreak(habitLogsForStreak, input.referenceDate),
+        days: heatmapDates.map((date) => ({
           date,
           status: logsByDate.get(date) ?? null,
         })),

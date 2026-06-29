@@ -12,4 +12,20 @@ module.exports = {
     '\\.(sql)$': '<rootDir>/__mocks__/sqlMock.js',
   },
   testMatch: ['**/__tests__/**/*.(spec|test).[jt]s?(x)'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/__tests__/**',
+    '!src/**/*.test.{ts,tsx}',
+    '!src/**/*.spec.{ts,tsx}',
+  ],
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text-summary', 'lcov'],
+  coverageThreshold: {
+    global: {
+      statements: 40,
+      branches: 40,
+      functions: 38,
+      lines: 40,
+    },
+  },
 };

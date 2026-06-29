@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react-native';
+import { render, screen, userEvent } from '@testing-library/react-native';
 
 import { QuotaWall } from '@/presentation/components/quota-wall';
 
@@ -21,12 +21,13 @@ describe('QuotaWall', () => {
   it('offers upgrade and rewarded ad actions', async () => {
     const onUpgrade = jest.fn();
     const onWatchAd = jest.fn();
+    const user = userEvent.setup();
 
     await render(<QuotaWall onUpgrade={onUpgrade} onWatchAd={onWatchAd} />);
 
     expect(screen.getByTestId('quota-wall')).toBeOnTheScreen();
-    fireEvent.press(screen.getByText('paywall.upgrade'));
-    fireEvent.press(screen.getByText('paywall.watchAd'));
+    await user.press(screen.getByText('paywall.upgrade'));
+    await user.press(screen.getByText('paywall.watchAd'));
     expect(onUpgrade).toHaveBeenCalled();
     expect(onWatchAd).toHaveBeenCalled();
   });

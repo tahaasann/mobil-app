@@ -1,5 +1,6 @@
 import type { AppMetaRepository } from '@/application/ports/app-meta-repository.port';
 import type { ReviewPort } from '@/application/ports/review.port';
+import type { NotificationPort } from '@/application/ports/notification.port';
 import type { UserDataPort } from '@/application/ports/user-data.port';
 import type { AppSettingsRepository } from '@/application/ports/app-settings-repository.port';
 import { upsertAppSettings } from '@/domain/entities/app-settings';
@@ -20,9 +21,13 @@ export class ExportUserDataUseCase {
 }
 
 export class ResetUserDataUseCase {
-  constructor(private readonly userDataPort: UserDataPort) {}
+  constructor(
+    private readonly userDataPort: UserDataPort,
+    private readonly notificationPort: NotificationPort,
+  ) {}
 
   async execute(): Promise<void> {
+    await this.notificationPort.cancelAll();
     await this.userDataPort.resetAll();
   }
 }

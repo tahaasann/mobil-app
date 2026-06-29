@@ -4,7 +4,7 @@ appId: com.tahaasann.mindalign
 # Requires a dev build with notifications enabled and a near-future test schedule.
 - launchApp
 - extendedWaitUntil:
-    visible: "MindAlign"
+    visible: 'MindAlign'
     timeout: 60000
 - tapOn:
     text: "Couldn't do it"

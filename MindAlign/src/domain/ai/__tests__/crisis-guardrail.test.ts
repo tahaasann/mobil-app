@@ -3,6 +3,7 @@ import { buildCrisisSupportResponse, detectCrisis } from '@/domain/ai/crisis-gua
 describe('crisis guardrail', () => {
   it('detects crisis phrases', () => {
     expect(detectCrisis('kendime zarar vermeyi düşünüyorum')).toBe(true);
+    expect(detectCrisis('canıma kıymak istiyorum')).toBe(true);
   });
 
   it('returns resources without coaching content', () => {

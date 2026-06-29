@@ -5,8 +5,8 @@ appId: com.tahaasann.mindalign
 - runFlow:
     file: onboarding_to_dashboard.yaml
 - tapOn: "Couldn't do it"
-- inputText: "Too tired"
-- tapOn: "Gönder"
+- inputText: 'Too tired'
+- tapOn: 'Gönder'
 - assertVisible:
-    text: "paywall.quotaTitle"
+    text: 'paywall.quotaTitle'
     optional: true

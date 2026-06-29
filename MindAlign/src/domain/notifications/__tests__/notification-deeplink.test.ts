@@ -15,14 +15,14 @@ describe('notification deeplink', () => {
   });
 
   it('parses explicit deeplink payload', () => {
-    expect(parseNotificationDeeplink({ deeplink: '/excuse/habit-xyz' })).toBe(
-      '/excuse/habit-xyz',
-    );
+    expect(parseNotificationDeeplink({ deeplink: '/excuse/habit-xyz' })).toBe('/excuse/habit-xyz');
   });
 
   it('returns null for invalid payload', () => {
     expect(parseNotificationDeeplink(undefined)).toBeNull();
     expect(parseNotificationDeeplink({})).toBeNull();
     expect(parseNotificationDeeplink({ deeplink: 'https://example.com' })).toBeNull();
+    expect(parseNotificationDeeplink({ habitId: '../../../etc/passwd' })).toBeNull();
+    expect(parseNotificationDeeplink({ habitId: 'a'.repeat(65) })).toBeNull();
   });
 });

@@ -1,4 +1,8 @@
+import { detectCrisis } from '@/domain/ai/crisis-guardrail';
+
 export type PreclassifierResult = 'on_topic' | 'off_topic' | 'crisis';
+
+export const MAX_PRECLASSIFIER_INPUT_LENGTH = 500;
 
 const OFF_TOPIC_PATTERNS = [
   /\b(kod yaz|python|javascript|html|css)\b/i,
@@ -8,18 +12,13 @@ const OFF_TOPIC_PATTERNS = [
   /\bönceki talimat/i,
 ];
 
-const CRISIS_PATTERNS = [
-  /\b(intihar|kendimi öldür|ölmek istiyorum|suicide|kill myself)\b/i,
-  /\b(kendime zarar|self[- ]harm|canıma kıy)\b/i,
-];
-
 export function classifyExcuseText(text: string): PreclassifierResult {
   const normalized = text.trim();
   if (!normalized) {
     return 'off_topic';
   }
 
-  if (CRISIS_PATTERNS.some((pattern) => pattern.test(normalized))) {
+  if (detectCrisis(normalized)) {
     return 'crisis';
   }
 

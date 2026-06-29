@@ -37,6 +37,7 @@ describe('BustExcuseChatUseCase', () => {
       purchase: jest.fn(async () => ({ isPremium: true })),
       restorePurchases: jest.fn(async () => ({ isPremium: false })),
       getEntitlement: mockGetEntitlement,
+      identifyUser: jest.fn(async () => undefined),
       onEntitlementChanged: jest.fn(() => () => undefined),
     };
     const remoteConfigPort = {
@@ -45,10 +46,16 @@ describe('BustExcuseChatUseCase', () => {
       getValues: jest.fn(async () => ({
         freeWeeklyQuota: 3,
         premiumWeeklyQuota: 60,
-        geminiModel: 'gemini-2.0-flash',
+        geminiModel: 'gemini-2.5-flash',
+        geminiLiteModel: 'gemini-2.5-flash-lite',
       })),
     };
-    useCase = new BustExcuseChatUseCase(aiCoach, aiUsageRepository, subscriptionPort, remoteConfigPort);
+    useCase = new BustExcuseChatUseCase(
+      aiCoach,
+      aiUsageRepository,
+      subscriptionPort,
+      remoteConfigPort,
+    );
   });
 
   it('returns coach response for on-topic excuse', async () => {
@@ -74,6 +81,20 @@ describe('BustExcuseChatUseCase', () => {
 
     expect(result.kind).toBe('off_topic');
     expect(mockGenerateCoachResponse).not.toHaveBeenCalled();
+  });
+
+  it('returns crisis support before quota check', async () => {
+    mockGetUsageForWeek.mockResolvedValue({ count: 99, bonusCount: 0 });
+
+    const result = await useCase.execute({
+      habitTitle: 'Meditasyon',
+      excuse: 'intihar etmek istiyorum',
+      approach: 'universal',
+    });
+
+    expect(result.kind).toBe('crisis');
+    expect(mockGenerateCoachResponse).not.toHaveBeenCalled();
+    expect(mockGetEntitlement).not.toHaveBeenCalled();
   });
 
   it('returns quota exceeded when weekly limit reached', async () => {

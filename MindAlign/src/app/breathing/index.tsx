@@ -37,10 +37,7 @@ export default function BreathingRoomScreen() {
 
         <BreathingOrb elapsedMs={elapsedMs} />
 
-        <Text
-          accessibilityLiveRegion="polite"
-          className="mt-10 text-xl font-medium text-accent"
-        >
+        <Text accessibilityLiveRegion="polite" className="mt-10 text-xl font-medium text-accent">
           {t(`breathing.phase.${phase.phase}`)}
         </Text>
 

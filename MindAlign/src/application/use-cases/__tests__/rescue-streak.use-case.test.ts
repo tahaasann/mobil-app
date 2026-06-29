@@ -9,6 +9,7 @@ describe('RescueStreakUseCase', () => {
     const upsert = jest.fn(async () => undefined);
     const repository: HabitLogRepository = {
       upsert,
+      findByHabitIds: jest.fn(),
       findByHabitIdsAndDates: jest.fn(),
       findByHabitIdAndDate: jest.fn(),
     };
@@ -33,6 +34,7 @@ describe('FailStreakUseCase', () => {
     const upsert = jest.fn(async () => undefined);
     const repository: HabitLogRepository = {
       upsert,
+      findByHabitIds: jest.fn(),
       findByHabitIdsAndDates: jest.fn(),
       findByHabitIdAndDate: jest.fn(),
     };

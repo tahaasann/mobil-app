@@ -52,9 +52,6 @@ export function buildNotificationSchedule(
   return [...checkins, { ...STREAK_RISK_SLOT, kind: 'streak_risk' }];
 }
 
-export function buildNotificationIdentifier(
-  habitId: string,
-  slot: NotificationTimeSlot,
-): string {
+export function buildNotificationIdentifier(habitId: string, slot: NotificationTimeSlot): string {
   return `${habitId}-${slot.kind}-${slot.hour}-${slot.minute}`;
 }

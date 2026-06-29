@@ -6,11 +6,31 @@ const mockSendExcuse = jest.fn();
 const mockRescue = jest.fn();
 const mockGiveUp = jest.fn();
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const map: Record<string, string> = {
+        'chat.inputPlaceholder': 'Örn. çok yorgunum…',
+        'chat.send': 'Gönder',
+        'chat.title': 'Koç',
+        'chat.back': 'Geri',
+        'chat.rescue': 'Kurtar',
+        'chat.giveUp': 'Vazgeç',
+        'chat.bookmark': 'Kaydet',
+        'chat.bookmarked': 'Kaydedildi',
+      };
+      return map[key] ?? key;
+    },
+  }),
+}));
+
 jest.mock('@/infrastructure/di/app-container', () => ({
   useAppContainer: () => ({
     bookmarkUseCase: { add: jest.fn() },
     saveChatMessageUseCase: { execute: jest.fn().mockResolvedValue(undefined) },
-    getAppSettingsUseCase: { execute: jest.fn().mockResolvedValue({ selectedApproach: 'universal' }) },
+    getAppSettingsUseCase: {
+      execute: jest.fn().mockResolvedValue({ selectedApproach: 'universal' }),
+    },
     getUserProfileUseCase: { execute: jest.fn().mockResolvedValue(null) },
     grantRewardedAdBonusUseCase: { execute: jest.fn().mockResolvedValue('rewarded') },
     requestReviewAfterRescueUseCase: { execute: jest.fn().mockResolvedValue('skipped') },

@@ -1,10 +1,7 @@
 import type { BookmarkRepository } from '@/application/ports/bookmark-repository.port';
 import type { ChatMessageRepository } from '@/application/ports/chat-message-repository.port';
 import type { SyncPort } from '@/application/ports/sync.port';
-import {
-  bookmarkFromSyncPayload,
-  bookmarkToSyncPayload,
-} from '@/domain/entities/bookmark';
+import { bookmarkFromSyncPayload, bookmarkToSyncPayload } from '@/domain/entities/bookmark';
 import {
   chatMessageFromSyncPayload,
   chatMessageToSyncPayload,

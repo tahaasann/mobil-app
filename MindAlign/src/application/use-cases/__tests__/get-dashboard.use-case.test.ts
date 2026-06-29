@@ -27,6 +27,10 @@ class FakeHabitLogRepository implements HabitLogRepository {
 
   async upsert(): Promise<void> {}
 
+  async findByHabitIds(habitIds: string[]) {
+    return this.logs.filter((log) => habitIds.includes(log.habitId));
+  }
+
   async findByHabitIdsAndDates(habitIds: string[], dates: string[]) {
     return this.logs.filter((log) => habitIds.includes(log.habitId) && dates.includes(log.date));
   }

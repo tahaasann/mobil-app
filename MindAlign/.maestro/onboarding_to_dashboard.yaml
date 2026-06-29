@@ -1,29 +1,29 @@
 appId: com.tahaasann.mindalign
 ---
 - launchApp
-- assertVisible: "Welcome to MindAlign"
-- tapOn: "Get started"
-- assertVisible: "Choose your lens"
-- tapOn: "Universal calm"
-- tapOn: "Next"
-- assertVisible: "Who do you want to become?"
-- inputText: "Calm daily walker"
-- tapOn: "Next"
-- assertVisible: "First habits"
-- inputText: "Morning walk"
-- tapOn: "Add"
-- tapOn: "Continue"
-- assertVisible: "What usually stops you?"
-- tapOn: "No time"
-- tapOn: "Next"
-- assertVisible: "Coach tone"
-- tapOn: "Gentle"
-- tapOn: "Next"
-- assertVisible: "Check-in preferences"
-- tapOn: "Finish setup"
-- assertVisible: "MindAlign Plus"
-- tapOn: "Continue for free"
-- assertVisible: "Save your progress"
-- tapOn: "Continue as guest"
-- assertVisible: "Your habits today"
-- assertVisible: "Morning walk"
+- assertVisible: 'Welcome to MindAlign'
+- tapOn: 'Get started'
+- assertVisible: 'Choose your lens'
+- tapOn: 'Universal calm'
+- tapOn: 'Next'
+- assertVisible: 'Who do you want to become?'
+- inputText: 'Calm daily walker'
+- tapOn: 'Next'
+- assertVisible: 'First habits'
+- inputText: 'Morning walk'
+- tapOn: 'Add'
+- tapOn: 'Continue'
+- assertVisible: 'What usually stops you?'
+- tapOn: 'No time'
+- tapOn: 'Next'
+- assertVisible: 'Coach tone'
+- tapOn: 'Gentle'
+- tapOn: 'Next'
+- assertVisible: 'Check-in preferences'
+- tapOn: 'Finish setup'
+- assertVisible: 'MindAlign Plus'
+- tapOn: 'Continue for free'
+- assertVisible: 'Save your progress'
+- tapOn: 'Continue as guest'
+- assertVisible: 'Your habits today'
+- assertVisible: 'Morning walk'

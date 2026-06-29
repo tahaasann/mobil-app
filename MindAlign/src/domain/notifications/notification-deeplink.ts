@@ -1,5 +1,15 @@
+const SAFE_HABIT_ID_PATTERN = /^[a-zA-Z0-9-]{1,64}$/;
+
+function isSafeHabitId(habitId: string): boolean {
+  return SAFE_HABIT_ID_PATTERN.test(habitId);
+}
+
 export function buildExcuseDeeplink(habitId: string): string {
-  return `/excuse/${habitId}`;
+  if (!isSafeHabitId(habitId)) {
+    throw new Error('Invalid habit id for deeplink');
+  }
+
+  return `/excuse/${encodeURIComponent(habitId)}`;
 }
 
 export function parseNotificationDeeplink(
@@ -10,12 +20,21 @@ export function parseNotificationDeeplink(
   }
 
   const habitId = data.habitId;
-  if (typeof habitId === 'string' && habitId.length > 0) {
+  if (typeof habitId === 'string' && isSafeHabitId(habitId)) {
     return buildExcuseDeeplink(habitId);
   }
 
   const deeplink = data.deeplink;
   if (typeof deeplink === 'string' && deeplink.startsWith('/excuse/')) {
+    const rawId = deeplink.slice('/excuse/'.length);
+    try {
+      if (!rawId || !isSafeHabitId(decodeURIComponent(rawId))) {
+        return null;
+      }
+    } catch {
+      return null;
+    }
+
     return deeplink;
   }
 

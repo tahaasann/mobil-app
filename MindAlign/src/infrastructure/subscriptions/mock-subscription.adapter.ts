@@ -33,6 +33,8 @@ export class MockSubscriptionAdapter implements SubscriptionPort {
 
   async configure(): Promise<void> {}
 
+  async identifyUser(_userId: string | null): Promise<void> {}
+
   async getOfferings(): Promise<SubscriptionOffering | null> {
     return MOCK_OFFERING;
   }
@@ -59,7 +61,7 @@ export class MockSubscriptionAdapter implements SubscriptionPort {
 
   onEntitlementChanged(callback: (status: EntitlementStatus) => void): () => void {
     this.listeners.add(callback);
-    callback({ isPremium: this.isPremium });
+    void Promise.resolve().then(() => callback({ isPremium: this.isPremium }));
     return () => this.listeners.delete(callback);
   }
 

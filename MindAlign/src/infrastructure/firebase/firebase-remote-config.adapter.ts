@@ -1,11 +1,8 @@
 import remoteConfig from '@react-native-firebase/remote-config';
 
 import type { RemoteConfigPort, RemoteConfigValues } from '@/application/ports/remote-config.port';
-import {
-  FREE_WEEKLY_AI_QUOTA,
-  PREMIUM_WEEKLY_AI_QUOTA,
-} from '@/domain/ai/ai-quota';
-import { GEMINI_MODEL } from '@/infrastructure/firebase/firebase-ai.constants';
+import { FREE_WEEKLY_AI_QUOTA, PREMIUM_WEEKLY_AI_QUOTA } from '@/domain/ai/ai-quota';
+import { GEMINI_LITE_MODEL, GEMINI_MODEL } from '@/infrastructure/firebase/firebase-ai.constants';
 
 export class FirebaseRemoteConfigAdapter implements RemoteConfigPort {
   async configure(): Promise<void> {
@@ -16,6 +13,7 @@ export class FirebaseRemoteConfigAdapter implements RemoteConfigPort {
       free_weekly_quota: FREE_WEEKLY_AI_QUOTA,
       premium_weekly_quota: PREMIUM_WEEKLY_AI_QUOTA,
       gemini_model: GEMINI_MODEL,
+      gemini_lite_model: GEMINI_LITE_MODEL,
     });
   }
 
@@ -30,6 +28,7 @@ export class FirebaseRemoteConfigAdapter implements RemoteConfigPort {
       freeWeeklyQuota: config.getValue('free_weekly_quota').asNumber(),
       premiumWeeklyQuota: config.getValue('premium_weekly_quota').asNumber(),
       geminiModel: config.getValue('gemini_model').asString(),
+      geminiLiteModel: config.getValue('gemini_lite_model').asString(),
     };
   }
 }

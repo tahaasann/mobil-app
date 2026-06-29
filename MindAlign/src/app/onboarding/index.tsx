@@ -23,8 +23,11 @@ const NOTIF_WINDOWS = ['morning', 'afternoon', 'evening'] as const;
 export default function OnboardingScreen() {
   const router = useRouter();
   const { t, i18n } = useTranslation();
-  const { saveOnboardingUseCase, requestNotificationPermissionUseCase, rescheduleAllNotificationsUseCase } =
-    useAppContainer();
+  const {
+    saveOnboardingUseCase,
+    requestNotificationPermissionUseCase,
+    rescheduleAllNotificationsUseCase,
+  } = useAppContainer();
   const [step, setStep] = useState<OnboardingStep>('welcome');
   const [draft, setDraft] = useState<OnboardingDraft>(() => ({
     ...createOnboardingDraft(),
@@ -87,7 +90,7 @@ export default function OnboardingScreen() {
         content: createNotificationContentBuilder(t),
       });
 
-      router.replace('/paywall?source=onboarding' as Href);
+      router.replace('/auth' as Href);
     } finally {
       setIsSaving(false);
     }
@@ -228,9 +231,7 @@ export default function OnboardingScreen() {
               <NavRow
                 onBack={goBack}
                 onNext={() => void finish()}
-                nextLabel={
-                  isSaving ? t('common.loading') : t('onboarding.notifications.finish')
-                }
+                nextLabel={isSaving ? t('common.loading') : t('onboarding.notifications.finish')}
                 nextDisabled={isSaving}
               />
               <Pressable onPress={() => void finish()}>

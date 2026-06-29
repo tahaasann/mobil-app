@@ -37,6 +37,10 @@ import {
   UpdateUserProfileUseCase,
 } from '@/application/use-cases/settings.use-case';
 import { SyncOnLoginUseCase } from '@/application/use-cases/sync-on-login.use-case';
+import {
+  HandleAuthSessionUseCase,
+  SignOutSessionUseCase,
+} from '@/application/use-cases/auth-session.use-case';
 import { usePlatformPorts } from '@/infrastructure/di/platform-container';
 import { useSubscriptionPorts } from '@/infrastructure/di/subscription-container';
 import { DrizzleAppMetaRepository } from '@/infrastructure/database/repositories/drizzle-app-meta.repository';
@@ -72,6 +76,8 @@ export type AppContainer = {
   saveChatMessageUseCase: SaveChatMessageUseCase;
   listChatMessagesUseCase: ListChatMessagesUseCase;
   syncOnLoginUseCase: SyncOnLoginUseCase;
+  handleAuthSessionUseCase: HandleAuthSessionUseCase;
+  signOutSessionUseCase: SignOutSessionUseCase;
   scheduleHabitNotificationsUseCase: ScheduleHabitNotificationsUseCase;
   rescheduleAllNotificationsUseCase: RescheduleAllNotificationsUseCase;
   requestNotificationPermissionUseCase: RequestNotificationPermissionUseCase;
@@ -95,7 +101,10 @@ function createAiCoach(): AiCoachPort {
 }
 
 function createSyncPort(): SyncPort {
-  if (process.env.EXPO_PUBLIC_AUTH_MOCK === 'true' || process.env.EXPO_PUBLIC_SYNC_MOCK === 'true') {
+  if (
+    process.env.EXPO_PUBLIC_AUTH_MOCK === 'true' ||
+    process.env.EXPO_PUBLIC_SYNC_MOCK === 'true'
+  ) {
     return new InMemorySyncAdapter();
   }
   return new FirestoreSyncAdapter();
@@ -138,6 +147,12 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
       notificationPort,
     );
 
+    const syncOnLoginUseCase = new SyncOnLoginUseCase(
+      syncPort,
+      bookmarkRepository,
+      chatMessageRepository,
+    );
+
     return {
       createHabitUseCase,
       logHabitUseCase: new LogHabitUseCase(habitLogRepository),
@@ -160,10 +175,19 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
       bookmarkUseCase: new BookmarkUseCase(bookmarkRepository),
       saveChatMessageUseCase: new SaveChatMessageUseCase(chatMessageRepository),
       listChatMessagesUseCase: new ListChatMessagesUseCase(chatMessageRepository),
-      syncOnLoginUseCase: new SyncOnLoginUseCase(
-        syncPort,
-        bookmarkRepository,
-        chatMessageRepository,
+      syncOnLoginUseCase,
+      handleAuthSessionUseCase: new HandleAuthSessionUseCase(
+        appMetaRepository,
+        userDataRepository,
+        notificationPort,
+        syncOnLoginUseCase,
+        subscriptionPort,
+      ),
+      signOutSessionUseCase: new SignOutSessionUseCase(
+        userDataRepository,
+        notificationPort,
+        subscriptionPort,
+        appMetaRepository,
       ),
       scheduleHabitNotificationsUseCase,
       rescheduleAllNotificationsUseCase: new RescheduleAllNotificationsUseCase(
@@ -182,7 +206,7 @@ export function AppContainerProvider({ children }: { children: ReactNode }) {
         subscriptionPort,
       ),
       exportUserDataUseCase: new ExportUserDataUseCase(userDataRepository),
-      resetUserDataUseCase: new ResetUserDataUseCase(userDataRepository),
+      resetUserDataUseCase: new ResetUserDataUseCase(userDataRepository, notificationPort),
       updateAppSettingsUseCase: new UpdateAppSettingsUseCase(appSettingsRepository),
       updateUserProfileUseCase: new UpdateUserProfileUseCase(userProfileRepository),
       requestReviewAfterRescueUseCase: new RequestReviewAfterRescueUseCase(

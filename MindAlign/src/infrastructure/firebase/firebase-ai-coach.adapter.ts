@@ -8,7 +8,7 @@ import type {
 } from '@/application/ports/ai-coach.port';
 import { parseBarrierResponseJson } from '@/domain/ai/barrier-response';
 import { getIslamicPolicyRules } from '@/domain/ai/islamic-content-policy';
-import { classifyExcuseText } from '@/domain/ai/preclassifier';
+import { MAX_PRECLASSIFIER_INPUT_LENGTH, classifyExcuseText } from '@/domain/ai/preclassifier';
 import { buildCoachPrompt } from '@/domain/ai/prompt-builder';
 
 import {
@@ -42,8 +42,10 @@ export class FirebaseAiCoachAdapter implements AiCoachPort {
       islamicPolicyRules: getIslamicPolicyRules(context.approach === 'spiritual'),
     });
 
+    const modelName = context.geminiModel?.trim() || GEMINI_MODEL;
+
     const model = getGenerativeModel(ai, {
-      model: GEMINI_MODEL,
+      model: modelName,
       systemInstruction: prompt.system,
       generationConfig: {
         maxOutputTokens: MAX_OUTPUT_TOKENS,
@@ -77,8 +79,9 @@ export class FirebasePreclassifierAdapter {
 
     const app = getApp();
     const ai = getAI(app);
+    const liteModelName = GEMINI_LITE_MODEL;
     const model = getGenerativeModel(ai, {
-      model: GEMINI_LITE_MODEL,
+      model: liteModelName,
       generationConfig: {
         maxOutputTokens: 16,
         responseMimeType: 'application/json',
@@ -90,8 +93,9 @@ export class FirebasePreclassifierAdapter {
       },
     });
 
+    const boundedText = text.trim().slice(0, MAX_PRECLASSIFIER_INPUT_LENGTH);
     const result = await model.generateContent(
-      `Classify this message for a habit-coaching app as on_topic, off_topic, or crisis. Message: ${text}`,
+      `Classify this message for a habit-coaching app as on_topic, off_topic, or crisis. Message: ${JSON.stringify(boundedText)}`,
     );
 
     try {

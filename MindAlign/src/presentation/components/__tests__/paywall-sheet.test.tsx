@@ -1,5 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react-native';
-import { Text } from 'react-native';
+import { render, screen, userEvent } from '@testing-library/react-native';
 
 import type { SubscriptionOffering } from '@/application/ports/subscription.port';
 import { PaywallSheet } from '@/presentation/components/paywall-sheet';
@@ -41,6 +40,7 @@ describe('PaywallSheet', () => {
   it('renders packages and continue free action', async () => {
     const onPurchase = jest.fn();
     const onContinueFree = jest.fn();
+    const user = userEvent.setup();
 
     await render(
       <PaywallSheet
@@ -53,9 +53,9 @@ describe('PaywallSheet', () => {
     );
 
     expect(screen.getByTestId('paywall-sheet')).toBeOnTheScreen();
-    fireEvent.press(screen.getByText('paywall.startTrial'));
+    await user.press(screen.getByText('paywall.startTrial'));
     expect(onPurchase).toHaveBeenCalledWith(offering.monthly);
-    fireEvent.press(screen.getByText('paywall.continueFree'));
+    await user.press(screen.getByText('paywall.continueFree'));
     expect(onContinueFree).toHaveBeenCalled();
   });
 });

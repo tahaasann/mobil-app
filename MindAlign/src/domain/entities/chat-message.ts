@@ -17,8 +17,7 @@ export type CreateChatMessageInput = {
 
 function createId(): string {
   return (
-    globalThis.crypto?.randomUUID?.() ??
-    `chat-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    globalThis.crypto?.randomUUID?.() ?? `chat-${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
 }
 

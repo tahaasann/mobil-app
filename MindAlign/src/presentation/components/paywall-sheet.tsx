@@ -1,7 +1,10 @@
 import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import type { SubscriptionOffering, SubscriptionPackage } from '@/application/ports/subscription.port';
+import type {
+  SubscriptionOffering,
+  SubscriptionPackage,
+} from '@/application/ports/subscription.port';
 import { GlassCard } from '@/presentation/components/glass-card';
 
 type PaywallSheetProps = {
@@ -56,7 +59,9 @@ export function PaywallSheet({
       <Text className="text-2xl font-semibold text-foreground dark:text-foreground-dark">
         {t('paywall.title')}
       </Text>
-      <Text className="mt-2 text-base text-muted dark:text-muted-dark">{t('paywall.subtitle')}</Text>
+      <Text className="mt-2 text-base text-muted dark:text-muted-dark">
+        {t('paywall.subtitle')}
+      </Text>
 
       <View className="mt-6 gap-3">
         {offering?.annual ? (
@@ -75,7 +80,12 @@ export function PaywallSheet({
         ) : null}
       </View>
 
-      <Pressable accessibilityRole="button" className="mt-4 py-2" disabled={isBusy} onPress={onRestore}>
+      <Pressable
+        accessibilityRole="button"
+        className="mt-4 py-2"
+        disabled={isBusy}
+        onPress={onRestore}
+      >
         <Text className="text-center text-sm text-accent">{t('paywall.restore')}</Text>
       </Pressable>
 

@@ -32,14 +32,17 @@ export class DrizzleUserDataRepository implements UserDataPort {
     };
   }
 
-  async resetAll(): Promise<void> {
+  async clearSessionData(): Promise<void> {
     await this.db.delete(schema.chatMessages);
     await this.db.delete(schema.bookmarks);
     await this.db.delete(schema.habitLogs);
     await this.db.delete(schema.habits);
     await this.db.delete(schema.aiUsage);
     await this.db.delete(schema.userProfile);
+  }
 
+  async resetAll(): Promise<void> {
+    await this.clearSessionData();
     const defaults = createDefaultAppSettings();
     await this.db.delete(schema.appSettings);
     await this.db.insert(schema.appSettings).values({

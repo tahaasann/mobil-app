@@ -24,10 +24,7 @@ type AppThemeProviderProps = {
   initialPreference?: ThemePreference;
 };
 
-export function AppThemeProvider({
-  children,
-  initialPreference = 'auto',
-}: AppThemeProviderProps) {
+export function AppThemeProvider({ children, initialPreference = 'auto' }: AppThemeProviderProps) {
   const systemScheme = useSystemColorScheme();
   const { setColorScheme } = useNativeWindColorScheme();
   const [preference, setPreference] = useState<ThemePreference>(initialPreference);
