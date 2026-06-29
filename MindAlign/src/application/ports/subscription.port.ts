@@ -18,6 +18,7 @@ export type EntitlementStatus = {
 
 export type SubscriptionPort = {
   configure(): Promise<void>;
+  identifyUser(userId: string | null): Promise<void>;
   getOfferings(): Promise<SubscriptionOffering | null>;
   purchase(packageIdentifier: string): Promise<EntitlementStatus>;
   restorePurchases(): Promise<EntitlementStatus>;

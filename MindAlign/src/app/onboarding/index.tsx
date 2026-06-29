@@ -90,7 +90,7 @@ export default function OnboardingScreen() {
         content: createNotificationContentBuilder(t),
       });
 
-      router.replace('/paywall?source=onboarding' as Href);
+      router.replace('/auth' as Href);
     } finally {
       setIsSaving(false);
     }

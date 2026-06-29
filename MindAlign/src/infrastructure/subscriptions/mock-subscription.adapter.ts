@@ -33,6 +33,8 @@ export class MockSubscriptionAdapter implements SubscriptionPort {
 
   async configure(): Promise<void> {}
 
+  async identifyUser(_userId: string | null): Promise<void> {}
+
   async getOfferings(): Promise<SubscriptionOffering | null> {
     return MOCK_OFFERING;
   }

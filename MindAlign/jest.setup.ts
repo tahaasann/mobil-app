@@ -159,33 +159,6 @@ jest.mock('react-native-purchases', () => ({
   },
 }));
 
-jest.mock('react-native-google-mobile-ads', () => {
-  const ad = {
-    loaded: true,
-    load: jest.fn(async () => undefined),
-    show: jest.fn(async () => undefined),
-    addAdEventListener: jest.fn(() => jest.fn()),
-  };
-
-  return {
-    __esModule: true,
-    default: jest.fn(() => ({
-      initialize: jest.fn(async () => undefined),
-    })),
-    AdsConsent: {
-      requestInfoUpdate: jest.fn(async () => ({ isConsentFormAvailable: false })),
-      showForm: jest.fn(async () => undefined),
-    },
-    RewardedAd: {
-      createForAdRequest: jest.fn(() => ad),
-    },
-    RewardedAdEventType: {
-      EARNED_REWARD: 'earned_reward',
-      CLOSED: 'closed',
-    },
-  };
-});
-
 jest.mock('@react-native-firebase/analytics', () => ({
   getAnalytics: jest.fn(() => ({})),
   logEvent: jest.fn(),

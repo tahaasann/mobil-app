@@ -42,8 +42,10 @@ export class FirebaseAiCoachAdapter implements AiCoachPort {
       islamicPolicyRules: getIslamicPolicyRules(context.approach === 'spiritual'),
     });
 
+    const modelName = context.geminiModel?.trim() || GEMINI_MODEL;
+
     const model = getGenerativeModel(ai, {
-      model: GEMINI_MODEL,
+      model: modelName,
       systemInstruction: prompt.system,
       generationConfig: {
         maxOutputTokens: MAX_OUTPUT_TOKENS,
@@ -77,8 +79,9 @@ export class FirebasePreclassifierAdapter {
 
     const app = getApp();
     const ai = getAI(app);
+    const liteModelName = GEMINI_LITE_MODEL;
     const model = getGenerativeModel(ai, {
-      model: GEMINI_LITE_MODEL,
+      model: liteModelName,
       generationConfig: {
         maxOutputTokens: 16,
         responseMimeType: 'application/json',

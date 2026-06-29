@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { render, screen, userEvent } from '@testing-library/react-native';
 
 import { MicroTaskCard } from '@/presentation/components/microtask-card';
 
@@ -6,6 +6,7 @@ describe('MicroTaskCard', () => {
   it('calls rescue and give up handlers', async () => {
     const onComplete = jest.fn();
     const onGiveUp = jest.fn();
+    const user = userEvent.setup();
 
     await render(
       <MicroTaskCard
@@ -17,8 +18,8 @@ describe('MicroTaskCard', () => {
       />,
     );
 
-    fireEvent.press(screen.getByText(/Yaptım \(kurtar\)/i));
-    fireEvent.press(screen.getByText(/Vazgeçtim/i));
+    await user.press(screen.getByText(/Yaptım \(kurtar\)/i));
+    await user.press(screen.getByText(/Vazgeçtim/i));
 
     expect(onComplete).toHaveBeenCalled();
     expect(onGiveUp).toHaveBeenCalled();

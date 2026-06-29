@@ -39,6 +39,16 @@ export class BustExcuseChatUseCase {
   ) {}
 
   async execute(input: BustExcuseChatInput): Promise<BustExcuseChatResult> {
+    const classification = classifyExcuseText(input.excuse);
+    if (classification === 'crisis') {
+      const crisis = buildCrisisSupportResponse();
+      return { kind: 'crisis', message: crisis.message, resources: crisis.resources };
+    }
+
+    if (classification === 'off_topic') {
+      return { kind: 'off_topic', message: OFF_TOPIC_MESSAGE };
+    }
+
     const weekStart = getWeekStartUtc(new Date());
     const [{ isPremium }, usage, remoteConfig] = await Promise.all([
       this.subscriptionPort.getEntitlement(),
@@ -59,16 +69,6 @@ export class BustExcuseChatUseCase {
       };
     }
 
-    const classification = classifyExcuseText(input.excuse);
-    if (classification === 'crisis') {
-      const crisis = buildCrisisSupportResponse();
-      return { kind: 'crisis', message: crisis.message, resources: crisis.resources };
-    }
-
-    if (classification === 'off_topic') {
-      return { kind: 'off_topic', message: OFF_TOPIC_MESSAGE };
-    }
-
     const response = await this.aiCoach.generateCoachResponse(
       {
         habitTitle: input.habitTitle,
@@ -76,6 +76,8 @@ export class BustExcuseChatUseCase {
         approach: input.approach,
         streak: input.streak,
         profile: input.profile,
+        geminiModel: remoteConfig.geminiModel,
+        geminiLiteModel: remoteConfig.geminiLiteModel,
       },
       input.onPartial,
     );

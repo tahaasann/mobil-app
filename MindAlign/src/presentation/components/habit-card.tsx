@@ -1,6 +1,6 @@
 import { useRouter, type Href } from 'expo-router';
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import type { DashboardHabit } from '@/application/use-cases/get-dashboard.use-case';
@@ -56,27 +56,29 @@ export function HabitCard({ item, onMarkDone }: HabitCardProps) {
         <Text className="mb-2 text-center text-sm font-semibold text-emerald-700">Harika!</Text>
       ) : null}
 
-      <Text
+      <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('habit.markDone')}
-        className="rounded-lg bg-emerald-600 px-4 py-3 text-center text-sm font-semibold text-white"
+        className="rounded-lg bg-emerald-600 px-4 py-3"
         onPress={() => void handleMarkDone()}
       >
-        {t('habit.markDone')}
-      </Text>
+        <Text className="text-center text-sm font-semibold text-white">{t('habit.markDone')}</Text>
+      </Pressable>
 
-      <Text
+      <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('habit.couldntDo')}
-        className="mt-2 rounded-lg bg-amber-500 px-4 py-3 text-center text-sm font-semibold text-white"
+        className="mt-2 rounded-lg bg-amber-500 px-4 py-3"
         onPress={() =>
           router.push(
             `/excuse/${item.habit.id}?title=${encodeURIComponent(item.habit.title)}&streak=${item.streak}` as Href,
           )
         }
       >
-        {t('habit.couldntDo')}
-      </Text>
+        <Text className="text-center text-sm font-semibold text-white">
+          {t('habit.couldntDo')}
+        </Text>
+      </Pressable>
     </View>
   );
 }

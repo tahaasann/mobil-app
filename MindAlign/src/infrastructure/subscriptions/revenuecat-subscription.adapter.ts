@@ -27,8 +27,23 @@ function isPremiumFromCustomerInfo(info: CustomerInfo): boolean {
 
 export class RevenueCatSubscriptionAdapter implements SubscriptionPort {
   private listeners = new Set<(status: EntitlementStatus) => void>();
+  private configurePromise: Promise<void> | null = null;
+
+  private async ensureConfigured(): Promise<void> {
+    if (this.configurePromise) {
+      await this.configurePromise;
+      return;
+    }
+
+    this.configurePromise = this.configureInternal();
+    await this.configurePromise;
+  }
 
   async configure(): Promise<void> {
+    await this.ensureConfigured();
+  }
+
+  private async configureInternal(): Promise<void> {
     const apiKey = process.env.EXPO_PUBLIC_REVENUECAT_API_KEY;
     if (!apiKey) {
       return;
@@ -41,7 +56,23 @@ export class RevenueCatSubscriptionAdapter implements SubscriptionPort {
     await Purchases.configure({ apiKey });
   }
 
+  async identifyUser(userId: string | null): Promise<void> {
+    await this.ensureConfigured();
+    const apiKey = process.env.EXPO_PUBLIC_REVENUECAT_API_KEY;
+    if (!apiKey) {
+      return;
+    }
+
+    if (userId) {
+      await Purchases.logIn(userId);
+      return;
+    }
+
+    await Purchases.logOut();
+  }
+
   async getOfferings(): Promise<SubscriptionOffering | null> {
+    await this.ensureConfigured();
     const offerings = await Purchases.getOfferings();
     const current = offerings.current;
     if (!current) {
@@ -59,6 +90,7 @@ export class RevenueCatSubscriptionAdapter implements SubscriptionPort {
   }
 
   async purchase(packageIdentifier: string): Promise<EntitlementStatus> {
+    await this.ensureConfigured();
     const offerings = await Purchases.getOfferings();
     const packages = [
       offerings.current?.monthly,
@@ -78,6 +110,7 @@ export class RevenueCatSubscriptionAdapter implements SubscriptionPort {
   }
 
   async restorePurchases(): Promise<EntitlementStatus> {
+    await this.ensureConfigured();
     const customerInfo = await Purchases.restorePurchases();
     const status = { isPremium: isPremiumFromCustomerInfo(customerInfo) };
     this.notify(status);
@@ -85,6 +118,7 @@ export class RevenueCatSubscriptionAdapter implements SubscriptionPort {
   }
 
   async getEntitlement(): Promise<EntitlementStatus> {
+    await this.ensureConfigured();
     const customerInfo = await Purchases.getCustomerInfo();
     return { isPremium: isPremiumFromCustomerInfo(customerInfo) };
   }

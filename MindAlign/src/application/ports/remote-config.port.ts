@@ -2,6 +2,7 @@ export type RemoteConfigValues = {
   freeWeeklyQuota: number;
   premiumWeeklyQuota: number;
   geminiModel: string;
+  geminiLiteModel: string;
 };
 
 export type RemoteConfigPort = {

@@ -8,6 +8,7 @@ import { AppContainerProvider } from '@/infrastructure/di/app-container';
 import { AuthContainer } from '@/infrastructure/di/auth-container';
 import { PlatformContainer } from '@/infrastructure/di/platform-container';
 import { SubscriptionContainer } from '@/infrastructure/di/subscription-container';
+import { assertProductionConfig } from '@/infrastructure/config/production-guard';
 import { FirebaseProvider } from '@/infrastructure/firebase/firebase-provider';
 import { NotificationResponseHandler } from '@/infrastructure/notifications/notification-response-handler';
 import { I18nProvider } from '@/presentation/i18n/i18n-provider';
@@ -36,6 +37,8 @@ function ThemedRootStack() {
 }
 
 export default function RootLayout() {
+  assertProductionConfig();
+
   return (
     <DatabaseProvider>
       <FirebaseProvider>

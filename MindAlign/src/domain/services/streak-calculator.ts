@@ -4,9 +4,16 @@ export type StreakLogEntry = {
 };
 
 function subtractDays(date: string, days: number): string {
-  const value = new Date(`${date}T00:00:00.000Z`);
-  value.setUTCDate(value.getUTCDate() - days);
-  return value.toISOString().slice(0, 10);
+  const [year, month, day] = date.split('-').map(Number);
+  if (!year || !month || !day) {
+    return date;
+  }
+  const value = new Date(year, month - 1, day);
+  value.setDate(value.getDate() - days);
+  const y = value.getFullYear();
+  const m = String(value.getMonth() + 1).padStart(2, '0');
+  const d = String(value.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 }
 
 export function calculateStreak(logs: StreakLogEntry[], referenceDate: string): number {

@@ -20,6 +20,7 @@ describe('subscription use cases', () => {
       purchase: jest.fn(async () => ({ isPremium: true })),
       restorePurchases: jest.fn(async () => ({ isPremium: false })),
       getEntitlement: jest.fn(async () => ({ isPremium: false })),
+      identifyUser: jest.fn(async () => undefined),
       onEntitlementChanged: jest.fn(() => () => undefined),
     };
 

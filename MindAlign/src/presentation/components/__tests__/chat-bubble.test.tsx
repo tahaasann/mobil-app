@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { render, screen, userEvent } from '@testing-library/react-native';
 
 import { ChatBubble } from '@/presentation/components/chat-bubble';
 
@@ -18,6 +18,7 @@ describe('ChatBubble', () => {
   it('shows bookmark and regenerate actions for assistant', async () => {
     const onBookmark = jest.fn();
     const onRegenerate = jest.fn();
+    const user = userEvent.setup();
 
     await render(
       <ChatBubble role="assistant" onBookmark={onBookmark} onRegenerate={onRegenerate}>
@@ -25,8 +26,8 @@ describe('ChatBubble', () => {
       </ChatBubble>,
     );
 
-    fireEvent.press(screen.getByText('Kaydet'));
-    fireEvent.press(screen.getByText('Yeniden üret'));
+    await user.press(screen.getByText('Kaydet'));
+    await user.press(screen.getByText('Yeniden üret'));
 
     expect(onBookmark).toHaveBeenCalled();
     expect(onRegenerate).toHaveBeenCalled();

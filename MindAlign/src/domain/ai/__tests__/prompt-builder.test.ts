@@ -41,8 +41,8 @@ describe('prompt builder', () => {
       },
     });
 
-    expect(system).toContain('Identity goal: An energized parent');
-    expect(system).toContain('Common barrier: no_time');
+    expect(system).toContain('Identity goal: "An energized parent"');
+    expect(system).toContain('Common barrier: "no_time"');
     expect(system).toContain('warm, validating tone');
   });
 });

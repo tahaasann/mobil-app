@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 type MicroTaskCardProps = {
   barrierLabel: string;
@@ -26,20 +26,22 @@ export function MicroTaskCard({
       <Text className="mb-4 text-sm text-muted dark:text-muted-dark">{encouragement}</Text>
 
       <View className="flex-row gap-3">
-        <Text
+        <Pressable
           accessibilityRole="button"
-          className="flex-1 rounded-lg bg-amber-500 px-3 py-2 text-center text-sm font-semibold text-white"
+          className="flex-1 rounded-lg bg-amber-500 px-3 py-2"
           onPress={onComplete}
         >
-          Yaptım (kurtar)
-        </Text>
-        <Text
+          <Text className="text-center text-sm font-semibold text-white">Yaptım (kurtar)</Text>
+        </Pressable>
+        <Pressable
           accessibilityRole="button"
-          className="flex-1 rounded-lg bg-gray-300 px-3 py-2 text-center text-sm font-semibold text-gray-800 dark:bg-gray-700 dark:text-gray-100"
+          className="flex-1 rounded-lg bg-gray-300 px-3 py-2 dark:bg-gray-700"
           onPress={onGiveUp}
         >
-          Vazgeçtim
-        </Text>
+          <Text className="text-center text-sm font-semibold text-gray-800 dark:text-gray-100">
+            Vazgeçtim
+          </Text>
+        </Pressable>
       </View>
     </View>
   );

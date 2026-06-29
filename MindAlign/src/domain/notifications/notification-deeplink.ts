@@ -27,7 +27,11 @@ export function parseNotificationDeeplink(
   const deeplink = data.deeplink;
   if (typeof deeplink === 'string' && deeplink.startsWith('/excuse/')) {
     const rawId = deeplink.slice('/excuse/'.length);
-    if (!rawId || !isSafeHabitId(decodeURIComponent(rawId))) {
+    try {
+      if (!rawId || !isSafeHabitId(decodeURIComponent(rawId))) {
+        return null;
+      }
+    } catch {
       return null;
     }
 

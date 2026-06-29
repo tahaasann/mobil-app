@@ -34,6 +34,7 @@ describe('premium gating in BustExcuseChatUseCase', () => {
       purchase: jest.fn(async () => ({ isPremium: true })),
       restorePurchases: jest.fn(async () => ({ isPremium: false })),
       getEntitlement: jest.fn(async () => ({ isPremium: false })),
+      identifyUser: jest.fn(async () => undefined),
       onEntitlementChanged: jest.fn(() => () => undefined),
     };
     const remoteConfigPort = {
@@ -42,7 +43,8 @@ describe('premium gating in BustExcuseChatUseCase', () => {
       getValues: jest.fn(async () => ({
         freeWeeklyQuota: 3,
         premiumWeeklyQuota: 60,
-        geminiModel: 'gemini-2.0-flash',
+        geminiModel: 'gemini-2.5-flash',
+        geminiLiteModel: 'gemini-2.5-flash-lite',
       })),
     };
     useCase = new BustExcuseChatUseCase(

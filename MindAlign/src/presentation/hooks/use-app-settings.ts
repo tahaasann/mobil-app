@@ -11,12 +11,19 @@ export function useAppSettings() {
   useEffect(() => {
     let cancelled = false;
 
-    void getAppSettingsUseCase.execute().then((result) => {
-      if (!cancelled) {
-        setSettings(result);
-        setIsLoading(false);
-      }
-    });
+    void getAppSettingsUseCase.execute().then(
+      (result) => {
+        if (!cancelled) {
+          setSettings(result);
+          setIsLoading(false);
+        }
+      },
+      () => {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      },
+    );
 
     return () => {
       cancelled = true;

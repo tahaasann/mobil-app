@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { Pressable, Text, TextInput, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 type AddHabitFormProps = {
@@ -37,13 +37,13 @@ export function AddHabitForm({ onSubmit }: AddHabitFormProps) {
         onChangeText={setTitle}
       />
       {error ? <Text className="text-sm text-red-600">{error}</Text> : null}
-      <Text
+      <Pressable
         accessibilityRole="button"
-        className="rounded-lg bg-accent px-4 py-2 text-center text-sm font-semibold text-white"
+        className="rounded-lg bg-accent px-4 py-2"
         onPress={() => void handleSubmit()}
       >
-        {t('addHabit.submit')}
-      </Text>
+        <Text className="text-center text-sm font-semibold text-white">{t('addHabit.submit')}</Text>
+      </Pressable>
     </View>
   );
 }

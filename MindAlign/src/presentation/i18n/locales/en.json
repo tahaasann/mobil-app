@@ -1,4 +1,23 @@
 {
+  "tabs": {
+    "home": "Home",
+    "chat": "Coach",
+    "saved": "Saved",
+    "profile": "Profile"
+  },
+  "chat": {
+    "title": "Coach chat",
+    "subtitle": "Talk through excuses and get a micro-task.",
+    "generalTopic": "General conversation",
+    "topicPicker": "Choose topic",
+    "inputPlaceholder": "E.g. I'm too tired, I'll do it later…",
+    "send": "Send",
+    "thinking": "Thinking…"
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Account, subscription, and app settings"
+  },
   "dashboard": {
     "title": "MindAlign",
     "subtitle": "Your habits today",
@@ -78,7 +97,7 @@
   },
   "auth": {
     "title": "Save your progress",
-    "subtitle": "Sign in to sync bookmarks and chat history across devices, or continue as guest.",
+    "subtitle": "Sign in to sync bookmarks and chat across devices. Guest mode keeps data on this device only (no cloud sync).",
     "emailPlaceholder": "Email",
     "passwordPlaceholder": "Password",
     "signIn": "Sign in",
@@ -105,15 +124,15 @@
   },
   "paywall": {
     "title": "MindAlign Plus",
-    "subtitle": "Unlimited coach chats, bookmarks sync, and a calmer experience.",
+    "subtitle": "Up to 60 AI coach chats per week, bookmark sync, and a calmer experience.",
     "subscribe": "Subscribe",
-    "startTrial": "Start 7-day free trial",
+    "startTrial": "Start free trial",
     "restore": "Restore purchases",
     "continueFree": "Continue for free",
     "upgrade": "Upgrade to Plus",
     "watchAd": "Watch a short ad for +1 chat",
     "quotaTitle": "Weekly free chats used",
-    "quotaSubtitle": "Upgrade for unlimited coaching, or watch one gentle ad for one more chat this week."
+    "quotaSubtitle": "Upgrade for up to 60 weekly coach chats, or watch one gentle ad for one more chat this week."
   },
   "breathing": {
     "title": "Breathing room",
@@ -144,10 +163,11 @@
     "signOut": "Sign out",
     "export": "Export my data",
     "exportTitle": "MindAlign export",
+    "exportWarning": "This exports all local data as plain JSON. Only share with people you trust.",
     "reset": "Delete all local data",
     "resetTitle": "Delete all data?",
     "resetConfirm": "This removes habits, chats, and bookmarks from this device.",
     "resetAction": "Delete",
-    "privacyNote": "MindAlign is not medical advice. Your data stays on-device unless you sign in to sync."
+    "privacyNote": "MindAlign is not medical advice. Guest data stays on-device. Signed-in accounts sync bookmarks and chat to your private cloud space."
   }
 }

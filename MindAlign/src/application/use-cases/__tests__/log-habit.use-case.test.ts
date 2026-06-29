@@ -16,6 +16,10 @@ class InMemoryHabitLogRepository implements HabitLogRepository {
     this.items.push(log);
   }
 
+  async findByHabitIds(habitIds: string[]): Promise<HabitLog[]> {
+    return this.items.filter((item) => habitIds.includes(item.habitId));
+  }
+
   async findByHabitIdsAndDates(habitIds: string[], dates: string[]): Promise<HabitLog[]> {
     return this.items.filter(
       (item) => habitIds.includes(item.habitId) && dates.includes(item.date),

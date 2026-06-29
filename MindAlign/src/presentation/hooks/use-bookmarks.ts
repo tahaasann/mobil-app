@@ -11,12 +11,19 @@ export function useBookmarks() {
   useEffect(() => {
     let cancelled = false;
 
-    void bookmarkUseCase.list().then((result) => {
-      if (!cancelled) {
-        setBookmarks(result);
-        setIsLoading(false);
-      }
-    });
+    void bookmarkUseCase.list().then(
+      (result) => {
+        if (!cancelled) {
+          setBookmarks(result);
+          setIsLoading(false);
+        }
+      },
+      () => {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      },
+    );
 
     return () => {
       cancelled = true;

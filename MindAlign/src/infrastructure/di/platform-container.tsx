@@ -4,7 +4,7 @@ import type { AnalyticsPort } from '@/application/ports/analytics.port';
 import type { CrashReportingPort } from '@/application/ports/crash-reporting.port';
 import type { RemoteConfigPort, RemoteConfigValues } from '@/application/ports/remote-config.port';
 import { FREE_WEEKLY_AI_QUOTA, PREMIUM_WEEKLY_AI_QUOTA } from '@/domain/ai/ai-quota';
-import { GEMINI_MODEL } from '@/infrastructure/firebase/firebase-ai.constants';
+import { GEMINI_LITE_MODEL, GEMINI_MODEL } from '@/infrastructure/firebase/firebase-ai.constants';
 import { FirebaseAnalyticsAdapter } from '@/infrastructure/firebase/firebase-analytics.adapter';
 import { FirebaseCrashlyticsAdapter } from '@/infrastructure/firebase/firebase-crashlytics.adapter';
 import { FirebaseRemoteConfigAdapter } from '@/infrastructure/firebase/firebase-remote-config.adapter';
@@ -23,6 +23,7 @@ const DEFAULT_REMOTE_CONFIG: RemoteConfigValues = {
   freeWeeklyQuota: FREE_WEEKLY_AI_QUOTA,
   premiumWeeklyQuota: PREMIUM_WEEKLY_AI_QUOTA,
   geminiModel: GEMINI_MODEL,
+  geminiLiteModel: GEMINI_LITE_MODEL,
 };
 
 const PlatformContext = createContext<PlatformPorts | null>(null);

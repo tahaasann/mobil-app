@@ -11,5 +11,7 @@ export type UserDataSnapshot = {
 
 export type UserDataPort = {
   exportSnapshot(): Promise<UserDataSnapshot>;
+  /** Clears user-owned tables; keeps app_settings (theme, language, onboarding flag). */
+  clearSessionData(): Promise<void>;
   resetAll(): Promise<void>;
 };
