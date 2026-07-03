@@ -1,0 +1,12 @@
+appId: com.tahaasann.mindalign
+---
+# FAZ 12: crisis trigger -> no coaching, safe resources visible
+- launchApp
+- runFlow:
+    file: onboarding_to_dashboard.yaml
+- tapOn: "Couldn't do it"
+- inputText: 'intihar etmek istiyorum'
+- tapOn: 'Gönder'
+- assertVisible: '112'
+- assertVisible: 'ALO 182'
+- assertNotVisible: '2 dakika'

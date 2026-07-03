@@ -3,11 +3,13 @@ import { useLiveQuery } from 'drizzle-orm/expo-sqlite';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { DashboardHabit } from '@/application/use-cases/get-dashboard.use-case';
+import { habitAccentToSortOrder } from '@/domain/entities/habit-accent';
 import { todayUtc } from '@/domain/utils/date';
 import { habits } from '@/infrastructure/database/schema';
 import { useAppDatabase } from '@/infrastructure/database/database-provider';
 import { useAppContainer } from '@/infrastructure/di/app-container';
 import { createNotificationContentBuilder } from '@/presentation/notifications/notification-content';
+import type { CreateHabitFormInput } from '@/presentation/habits/create-habit-form.types';
 import { useTranslation } from 'react-i18next';
 
 export function useHabits() {
@@ -48,14 +50,25 @@ export function useHabits() {
 
   const actions = useMemo(
     () => ({
-      createHabit: async (title: string) => {
-        const habit = await createHabitUseCase.execute({ title });
-        const profile = await getUserProfileUseCase.execute();
-        await scheduleHabitNotificationsUseCase.execute({
-          habit,
-          profile,
-          content: createNotificationContentBuilder(t),
+      createHabit: async (input: CreateHabitFormInput | string) => {
+        const payload: CreateHabitFormInput =
+          typeof input === 'string' ? { title: input } : input;
+
+        const habit = await createHabitUseCase.execute({
+          title: payload.title,
+          description: payload.description,
+          sortOrder: habitAccentToSortOrder(payload.accent ?? 'neutral'),
         });
+
+        if (payload.enableReminders !== false) {
+          const profile = await getUserProfileUseCase.execute();
+          await scheduleHabitNotificationsUseCase.execute({
+            habit,
+            profile,
+            content: createNotificationContentBuilder(t),
+          });
+        }
+
         await refresh();
       },
       markDoneToday: async (habitId: string) => {

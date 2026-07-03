@@ -1,6 +1,7 @@
 import {
   buildNotificationIdentifier,
   buildNotificationSchedule,
+  countScheduledNotifications,
 } from '@/domain/notifications/notification-schedule';
 
 describe('buildNotificationSchedule', () => {
@@ -29,6 +30,16 @@ describe('buildNotificationSchedule', () => {
       { kind: 'checkin', hour: 16, minute: 30 },
       { kind: 'streak_risk', hour: 21, minute: 30 },
     ]);
+  });
+});
+
+describe('countScheduledNotifications (T-240)', () => {
+  it('matches once-daily label to two scheduled notifications', () => {
+    expect(countScheduledNotifications({ notifWindow: 'morning', notifFrequency: 1 })).toBe(2);
+  });
+
+  it('matches twice-daily label to three scheduled notifications', () => {
+    expect(countScheduledNotifications({ notifWindow: 'evening', notifFrequency: 2 })).toBe(3);
   });
 });
 

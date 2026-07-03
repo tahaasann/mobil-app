@@ -7,6 +7,8 @@ const DEFAULTS: RemoteConfigValues = {
   premiumWeeklyQuota: PREMIUM_WEEKLY_AI_QUOTA,
   geminiModel: GEMINI_MODEL,
   geminiLiteModel: GEMINI_LITE_MODEL,
+  aiEnabled: true,
+  serverAiQuotaEnabled: false,
 };
 
 export class MockRemoteConfigAdapter implements RemoteConfigPort {

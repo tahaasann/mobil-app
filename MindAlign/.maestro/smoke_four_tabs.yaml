@@ -1,0 +1,14 @@
+appId: com.tahaasann.mindalign
+---
+# Smoke: onboarding -> habit -> navigate all 4 tabs (T-265)
+- runFlow:
+    file: onboarding_to_dashboard.yaml
+- assertVisible: 'Home'
+- tapOn: 'Chat'
+- assertVisible: 'Coach chat'
+- tapOn: 'Saved'
+- assertVisible: 'Saved responses'
+- tapOn: 'Profile'
+- assertVisible: 'Profile'
+- tapOn: 'Home'
+- assertVisible: 'Your habits today'

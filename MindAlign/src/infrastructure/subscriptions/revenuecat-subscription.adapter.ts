@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import Purchases, { type CustomerInfo, type PurchasesPackage } from 'react-native-purchases';
 
 import type {
@@ -6,8 +7,22 @@ import type {
   SubscriptionPackage,
   SubscriptionPort,
 } from '@/application/ports/subscription.port';
+import { resolveRevenueCatApiKey } from '@/infrastructure/subscriptions/resolve-revenuecat-api-key';
+import { mapIntroPriceToTrialFlag } from '@/infrastructure/subscriptions/subscription-package-mapper';
 
 const ENTITLEMENT_ID = 'plus';
+
+function getRevenueCatApiKey(): string | undefined {
+  if (Platform.OS === 'android') {
+    return resolveRevenueCatApiKey('android');
+  }
+
+  if (Platform.OS === 'ios') {
+    return resolveRevenueCatApiKey('ios');
+  }
+
+  return resolveRevenueCatApiKey('default');
+}
 
 function mapPackage(pkg: PurchasesPackage): SubscriptionPackage {
   const period = pkg.packageType === 'ANNUAL' ? 'annual' : 'monthly';
@@ -17,7 +32,7 @@ function mapPackage(pkg: PurchasesPackage): SubscriptionPackage {
     title: pkg.product.title,
     price: pkg.product.priceString,
     period,
-    hasTrial: pkg.product.introPrice !== null,
+    hasTrial: mapIntroPriceToTrialFlag(pkg.product.introPrice),
   };
 }
 
@@ -44,7 +59,7 @@ export class RevenueCatSubscriptionAdapter implements SubscriptionPort {
   }
 
   private async configureInternal(): Promise<void> {
-    const apiKey = process.env.EXPO_PUBLIC_REVENUECAT_API_KEY;
+    const apiKey = getRevenueCatApiKey();
     if (!apiKey) {
       return;
     }
@@ -58,7 +73,7 @@ export class RevenueCatSubscriptionAdapter implements SubscriptionPort {
 
   async identifyUser(userId: string | null): Promise<void> {
     await this.ensureConfigured();
-    const apiKey = process.env.EXPO_PUBLIC_REVENUECAT_API_KEY;
+    const apiKey = getRevenueCatApiKey();
     if (!apiKey) {
       return;
     }

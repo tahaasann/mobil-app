@@ -3,14 +3,6 @@ import type { SubscriptionPort } from '@/application/ports/subscription.port';
 import { getWeekStartUtc } from '@/domain/ai/ai-quota';
 import type { AiUsageRepository } from '@/application/ports/ai-usage-repository.port';
 
-export class GetEntitlementUseCase {
-  constructor(private readonly subscriptionPort: SubscriptionPort) {}
-
-  execute() {
-    return this.subscriptionPort.getEntitlement();
-  }
-}
-
 export class PurchaseSubscriptionUseCase {
   constructor(private readonly subscriptionPort: SubscriptionPort) {}
 
@@ -34,7 +26,11 @@ export class GrantRewardedAdBonusUseCase {
     private readonly subscriptionPort: SubscriptionPort,
   ) {}
 
-  async execute(): Promise<'rewarded' | 'dismissed' | 'failed' | 'premium'> {
+  async execute(): Promise<'rewarded' | 'dismissed' | 'failed' | 'premium' | 'unavailable'> {
+    if (!this.adsPort.isAvailable()) {
+      return 'unavailable';
+    }
+
     const entitlement = await this.subscriptionPort.getEntitlement();
     if (entitlement.isPremium) {
       return 'premium';

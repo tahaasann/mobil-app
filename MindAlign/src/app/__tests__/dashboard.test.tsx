@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react-native';
+import { screen } from '@testing-library/react-native';
 
 import HomeScreen from '@/app/(tabs)/index';
-import { I18nProvider } from '@/presentation/i18n/i18n-provider';
+import { renderWithProviders } from '../../../__tests__/utils/render-with-providers';
 
 jest.mock('expo-router', () => ({
   useRouter: () => ({ push: jest.fn(), back: jest.fn() }),
@@ -19,11 +19,7 @@ jest.mock('@/presentation/hooks/use-habits', () => ({
 
 describe('HomeScreen dashboard', () => {
   it('shows empty state when there are no habits', async () => {
-    await render(
-      <I18nProvider locale="tr">
-        <HomeScreen />
-      </I18nProvider>,
-    );
+    await renderWithProviders(<HomeScreen />, { locale: 'tr' });
     expect(screen.getByText(/Henüz alışkanlık yok/i)).toBeOnTheScreen();
   });
 });

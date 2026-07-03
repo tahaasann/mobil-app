@@ -16,6 +16,20 @@ class InMemoryHabitRepository implements HabitRepository {
   async findById(id: string): Promise<Habit | null> {
     return this.items.find((item) => item.id === id) ?? null;
   }
+
+  async update(habit: Habit): Promise<void> {
+    const index = this.items.findIndex((item) => item.id === habit.id);
+    if (index >= 0) {
+      this.items[index] = habit;
+    }
+  }
+
+  async archive(id: string): Promise<void> {
+    const habit = this.items.find((item) => item.id === id);
+    if (habit) {
+      habit.isActive = false;
+    }
+  }
 }
 
 describe('CreateHabitUseCase', () => {

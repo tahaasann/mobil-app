@@ -1,15 +1,17 @@
 import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { useSubscription } from '@/infrastructure/di/subscription-container';
 import { PaywallSheet } from '@/presentation/components/paywall-sheet';
 
 export default function PaywallScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const params = useLocalSearchParams<{ source?: string }>();
-  const { offerings, subscriptionPort } = useSubscription();
+  const { offerings, offeringsLoadState, subscriptionPort, refreshOfferings } = useSubscription();
   const [isBusy, setIsBusy] = useState(false);
   const isOnboarding = params.source === 'onboarding';
 
@@ -24,6 +26,8 @@ export default function PaywallScreen() {
       if (result.isPremium) {
         goNext();
       }
+    } catch {
+      Alert.alert(t('paywall.title'), t('paywall.purchaseError'));
     } finally {
       setIsBusy(false);
     }
@@ -34,6 +38,7 @@ export default function PaywallScreen() {
       <SafeAreaView className="flex-1 justify-center px-4 py-6">
         <PaywallSheet
           offering={offerings}
+          loadState={offeringsLoadState}
           showContinueFree={isOnboarding}
           isBusy={isBusy}
           onPurchase={(pkg) => void handlePurchase(pkg.identifier)}
@@ -45,6 +50,7 @@ export default function PaywallScreen() {
             })
           }
           onContinueFree={goNext}
+          onRetry={() => void refreshOfferings()}
         />
       </SafeAreaView>
     </View>

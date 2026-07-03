@@ -32,6 +32,23 @@ export class DrizzleHabitRepository implements HabitRepository {
     const row = rows[0];
     return row ? mapRowToHabit(row) : null;
   }
+
+  async update(habit: Habit): Promise<void> {
+    await this.db
+      .update(schema.habits)
+      .set({
+        title: habit.title,
+        description: habit.description,
+        schedule: habit.schedule,
+        isActive: habit.isActive,
+        sortOrder: habit.sortOrder,
+      })
+      .where(eq(schema.habits.id, habit.id));
+  }
+
+  async archive(id: string): Promise<void> {
+    await this.db.update(schema.habits).set({ isActive: false }).where(eq(schema.habits.id, id));
+  }
 }
 
 function mapRowToHabit(row: typeof schema.habits.$inferSelect): Habit {

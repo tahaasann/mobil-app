@@ -7,9 +7,15 @@ type QuotaWallProps = {
   onUpgrade: () => void;
   onWatchAd: () => void;
   isBusy?: boolean;
+  watchAdEnabled?: boolean;
 };
 
-export function QuotaWall({ onUpgrade, onWatchAd, isBusy = false }: QuotaWallProps) {
+export function QuotaWall({
+  onUpgrade,
+  onWatchAd,
+  isBusy = false,
+  watchAdEnabled = false,
+}: QuotaWallProps) {
   const { t } = useTranslation();
 
   return (
@@ -33,16 +39,18 @@ export function QuotaWall({ onUpgrade, onWatchAd, isBusy = false }: QuotaWallPro
           </Text>
         </Pressable>
 
-        <Pressable
-          accessibilityRole="button"
-          className={`rounded-xl border border-accent px-4 py-3 ${isBusy ? 'opacity-50' : ''}`}
-          disabled={isBusy}
-          onPress={onWatchAd}
-        >
-          <Text className="text-center text-base font-semibold text-accent">
-            {t('paywall.watchAd')}
-          </Text>
-        </Pressable>
+        {watchAdEnabled ? (
+          <Pressable
+            accessibilityRole="button"
+            className={`rounded-xl border border-accent px-4 py-3 ${isBusy ? 'opacity-50' : ''}`}
+            disabled={isBusy}
+            onPress={onWatchAd}
+          >
+            <Text className="text-center text-base font-semibold text-accent">
+              {t('paywall.watchAd')}
+            </Text>
+          </Pressable>
+        ) : null}
       </View>
     </GlassCard>
   );

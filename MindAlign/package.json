@@ -3,7 +3,6 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
-    "@expo/ui": "~56.0.18",
     "@react-native-firebase/ai": "^25.1.0",
     "@react-native-firebase/analytics": "^25.1.0",
     "@react-native-firebase/app": "^25.1.0",
@@ -18,20 +17,16 @@
     "expo-build-properties": "~56.0.19",
     "expo-constants": "~56.0.18",
     "expo-dev-client": "~56.0.20",
-    "expo-device": "~56.0.4",
-    "expo-font": "~56.0.7",
     "expo-glass-effect": "~56.0.4",
+    "expo-haptics": "~56.0.3",
     "expo-image": "~56.0.11",
     "expo-linking": "~56.0.14",
     "expo-localization": "^56.0.6",
     "expo-notifications": "^56.0.18",
     "expo-router": "~56.2.11",
-    "expo-speech": "^56.0.3",
     "expo-splash-screen": "~56.0.10",
     "expo-sqlite": "~56.0.5",
-    "expo-status-bar": "~56.0.4",
     "expo-store-review": "^56.0.3",
-    "expo-system-ui": "~56.0.5",
     "i18next": "^26.3.3",
     "nativewind": "^4.2.6",
     "react": "19.2.3",
@@ -62,7 +57,6 @@
     "jest-expo": "~56.0.5",
     "prettier": "^3.8.4",
     "prettier-plugin-tailwindcss": "0.5.14",
-    "test-renderer": "~1.2.0",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -80,8 +74,10 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:ci": "jest --ci --coverage --coverageReporters=text-summary --coverageReporters=lcov",
+    "validate:production": "jest --ci src/infrastructure/config/__tests__/production-env-validation.test.ts",
     "db:generate": "drizzle-kit generate",
-    "test:e2e": "maestro test .maestro"
+    "test:e2e": "maestro test .maestro",
+    "test:e2e:validate": "node scripts/validate-maestro-flows.mjs"
   },
   "private": true
 }

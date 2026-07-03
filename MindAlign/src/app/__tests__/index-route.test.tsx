@@ -45,6 +45,28 @@ describe('IndexRoute', () => {
     expect(screen.getByTestId('redirect')).toHaveTextContent('/onboarding');
   });
 
+  it('redirects to onboarding when settings are missing', async () => {
+    mockUseAppSettings.mockReturnValue({
+      settings: null,
+      isLoading: false,
+    });
+    mockUseAuth.mockReturnValue({ user: { uid: 'user-1' }, isLoading: false });
+
+    await render(<IndexRoute />);
+    expect(screen.getByTestId('redirect')).toHaveTextContent('/onboarding');
+  });
+
+  it('shows loading while auth is still resolving', async () => {
+    mockUseAppSettings.mockReturnValue({
+      settings: { onboardingCompleted: true },
+      isLoading: false,
+    });
+    mockUseAuth.mockReturnValue({ user: null, isLoading: true });
+
+    await render(<IndexRoute />);
+    expect(screen.queryByTestId('redirect')).toBeNull();
+  });
+
   it('redirects to auth when onboarding is done but user is missing', async () => {
     mockUseAppSettings.mockReturnValue({
       settings: { onboardingCompleted: true },

@@ -5,12 +5,12 @@ import type { CrashReportingPort } from '@/application/ports/crash-reporting.por
 import type { RemoteConfigPort, RemoteConfigValues } from '@/application/ports/remote-config.port';
 import { FREE_WEEKLY_AI_QUOTA, PREMIUM_WEEKLY_AI_QUOTA } from '@/domain/ai/ai-quota';
 import { GEMINI_LITE_MODEL, GEMINI_MODEL } from '@/infrastructure/firebase/firebase-ai.constants';
-import { FirebaseAnalyticsAdapter } from '@/infrastructure/firebase/firebase-analytics.adapter';
-import { FirebaseCrashlyticsAdapter } from '@/infrastructure/firebase/firebase-crashlytics.adapter';
-import { FirebaseRemoteConfigAdapter } from '@/infrastructure/firebase/firebase-remote-config.adapter';
-import { MockAnalyticsAdapter } from '@/infrastructure/firebase/mock-analytics.adapter';
-import { MockCrashReportingAdapter } from '@/infrastructure/firebase/mock-crash-reporting.adapter';
-import { MockRemoteConfigAdapter } from '@/infrastructure/firebase/mock-remote-config.adapter';
+import {
+  createAnalyticsPort,
+  createCrashReportingPort,
+  createRemoteConfigPort,
+} from '@/infrastructure/di/create-platform-ports';
+import { installUnhandledRejectionHandler } from '@/infrastructure/observability/unhandled-rejection-handler';
 
 type PlatformPorts = {
   analyticsPort: AnalyticsPort;
@@ -24,30 +24,11 @@ const DEFAULT_REMOTE_CONFIG: RemoteConfigValues = {
   premiumWeeklyQuota: PREMIUM_WEEKLY_AI_QUOTA,
   geminiModel: GEMINI_MODEL,
   geminiLiteModel: GEMINI_LITE_MODEL,
+  aiEnabled: true,
+  serverAiQuotaEnabled: false,
 };
 
 const PlatformContext = createContext<PlatformPorts | null>(null);
-
-function createAnalyticsPort(): AnalyticsPort {
-  if (process.env.EXPO_PUBLIC_ANALYTICS_MOCK === 'true') {
-    return new MockAnalyticsAdapter();
-  }
-  return new FirebaseAnalyticsAdapter();
-}
-
-function createCrashReportingPort(): CrashReportingPort {
-  if (process.env.EXPO_PUBLIC_CRASHLYTICS_MOCK === 'true') {
-    return new MockCrashReportingAdapter();
-  }
-  return new FirebaseCrashlyticsAdapter();
-}
-
-function createRemoteConfigPort(): RemoteConfigPort {
-  if (process.env.EXPO_PUBLIC_REMOTE_CONFIG_MOCK === 'true') {
-    return new MockRemoteConfigAdapter();
-  }
-  return new FirebaseRemoteConfigAdapter();
-}
 
 export function PlatformContainer({ children }: { children: ReactNode }) {
   const analyticsPort = useMemo(() => createAnalyticsPort(), []);
@@ -55,6 +36,10 @@ export function PlatformContainer({ children }: { children: ReactNode }) {
   const remoteConfigPort = useMemo(() => createRemoteConfigPort(), []);
   const [remoteConfigValues, setRemoteConfigValues] =
     useState<RemoteConfigValues>(DEFAULT_REMOTE_CONFIG);
+
+  useEffect(() => {
+    return installUnhandledRejectionHandler(crashReportingPort);
+  }, [crashReportingPort]);
 
   useEffect(() => {
     void (async () => {

@@ -1,7 +1,10 @@
-import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
+import { Redirect, Tabs } from 'expo-router';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+
+import { useAuth } from '@/infrastructure/firebase/auth-provider';
+import { GlassTabBarBackground } from '@/presentation/components/glass-tab-bar-background';
 
 const TAB_ICONS: Record<'index' | 'chat' | 'saved' | 'profile', string> = {
   index: '⌂',
@@ -13,7 +16,20 @@ const TAB_ICONS: Record<'index' | 'chat' | 'saved' | 'profile', string> = {
 export default function TabsLayout() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const { user, isLoading } = useAuth();
   const tabBarHeight = 56 + insets.bottom;
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-ivory dark:bg-charcoal">
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
+  if (!user) {
+    return <Redirect href="/auth" />;
+  }
 
   return (
     <Tabs
@@ -22,9 +38,12 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: '#059669',
         tabBarInactiveTintColor: '#6b7280',
+        tabBarBackground: () => <GlassTabBarBackground />,
         tabBarStyle: {
-          borderTopWidth: 1,
-          borderTopColor: '#e5e7eb',
+          position: 'absolute',
+          borderTopWidth: 0,
+          backgroundColor: 'transparent',
+          elevation: 0,
           height: tabBarHeight,
           paddingBottom: insets.bottom,
           paddingTop: 6,
@@ -81,13 +100,6 @@ export default function TabsLayout() {
               {TAB_ICONS.profile}
             </Text>
           ),
-        }}
-      />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          href: null,
-          tabBarButton: () => null,
         }}
       />
     </Tabs>

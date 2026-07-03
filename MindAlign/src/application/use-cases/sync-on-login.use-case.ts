@@ -1,11 +1,12 @@
 import type { BookmarkRepository } from '@/application/ports/bookmark-repository.port';
 import type { ChatMessageRepository } from '@/application/ports/chat-message-repository.port';
 import type { SyncPort } from '@/application/ports/sync.port';
-import { bookmarkFromSyncPayload, bookmarkToSyncPayload } from '@/domain/entities/bookmark';
+import { bookmarkToSyncPayload } from '@/domain/entities/bookmark';
 import {
   chatMessageFromSyncPayload,
   chatMessageToSyncPayload,
 } from '@/domain/entities/chat-message';
+import { mergeBookmarksWithTombstones } from '@/domain/sync/merge-bookmarks';
 import { mergeRecordsLastWriteWins } from '@/domain/sync/merge-records';
 
 export class SyncOnLoginUseCase {
@@ -23,9 +24,7 @@ export class SyncOnLoginUseCase {
   private async syncBookmarks(userId: string): Promise<void> {
     const local = await this.bookmarkRepository.findAll();
     const remoteRecords = await this.syncPort.pull(userId, 'bookmarks');
-    const remote = remoteRecords.map((record) => bookmarkFromSyncPayload(record.payload));
-
-    const merged = mergeRecordsLastWriteWins(local, remote);
+    const merged = mergeBookmarksWithTombstones(local, remoteRecords);
     for (const bookmark of merged) {
       await this.bookmarkRepository.save(bookmark);
     }

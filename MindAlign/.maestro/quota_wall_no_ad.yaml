@@ -1,0 +1,15 @@
+appId: com.tahaasann.mindalign
+---
+# FAZ 10: quota wall must not show watch-ad when ads are disabled
+- launchApp
+- runFlow:
+    file: onboarding_to_dashboard.yaml
+- tapOn: "Couldn't do it"
+- inputText: 'Too tired today'
+- tapOn: 'Gönder'
+- runFlow:
+    when:
+      visible: 'paywall.quotaTitle'
+    commands:
+      - assertVisible: 'paywall.upgrade'
+      - assertNotVisible: 'paywall.watchAd'

@@ -1,6 +1,5 @@
 import type { SubscriptionPort } from '@/application/ports/subscription.port';
 import {
-  GetEntitlementUseCase,
   GrantRewardedAdBonusUseCase,
   PurchaseSubscriptionUseCase,
   RestorePurchasesUseCase,
@@ -25,6 +24,7 @@ describe('subscription use cases', () => {
     };
 
     adsPort = {
+      isAvailable: jest.fn(() => true),
       requestConsent: jest.fn(async () => undefined),
       isRewardedReady: jest.fn(async () => true),
       showRewardedAd: jest.fn(async () => 'rewarded' as const),
@@ -35,11 +35,6 @@ describe('subscription use cases', () => {
       incrementForWeek: jest.fn(async () => 4),
       addBonusForWeek: jest.fn(async () => 1),
     };
-  });
-
-  it('reads entitlement status', async () => {
-    const useCase = new GetEntitlementUseCase(subscriptionPort);
-    await expect(useCase.execute()).resolves.toEqual({ isPremium: false });
   });
 
   it('purchases a package', async () => {
@@ -64,6 +59,14 @@ describe('subscription use cases', () => {
     const useCase = new GrantRewardedAdBonusUseCase(adsPort, aiUsageRepository, subscriptionPort);
 
     await expect(useCase.execute()).resolves.toBe('premium');
+    expect(adsPort.showRewardedAd).not.toHaveBeenCalled();
+  });
+
+  it('fails with unavailable if ads are disabled', async () => {
+    (adsPort.isAvailable as jest.Mock).mockReturnValue(false);
+    const useCase = new GrantRewardedAdBonusUseCase(adsPort, aiUsageRepository, subscriptionPort);
+
+    await expect(useCase.execute()).resolves.toBe('unavailable');
     expect(adsPort.showRewardedAd).not.toHaveBeenCalled();
   });
 });

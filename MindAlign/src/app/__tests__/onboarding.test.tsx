@@ -40,11 +40,13 @@ describe('OnboardingScreen finish flow', () => {
     mockReplace.mockReset();
   });
 
-  it('redirects to auth after onboarding is saved', async () => {
+  it('redirects to auth after onboarding is saved (soft paywall — not in onboarding)', async () => {
     await renderWithProviders(<OnboardingScreen />);
 
     await finishOnboarding();
 
     expect(mockReplace).toHaveBeenCalledWith('/auth');
+    expect(mockReplace).not.toHaveBeenCalledWith('/paywall');
+    expect(mockReplace).not.toHaveBeenCalledWith('/paywall?source=onboarding');
   });
 });

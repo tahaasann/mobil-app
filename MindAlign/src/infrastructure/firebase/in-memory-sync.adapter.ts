@@ -25,4 +25,10 @@ export class InMemorySyncAdapter implements SyncPort {
     const bucket = this.bucket(userId, entity);
     return [...bucket.values()].filter((record) => !since || record.updatedAt > since);
   }
+
+  async deleteAllUserData(userId: string): Promise<void> {
+    for (const entity of ['bookmarks', 'chat_messages'] as SyncEntityType[]) {
+      this.store.delete(`${userId}:${entity}`);
+    }
+  }
 }

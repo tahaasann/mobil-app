@@ -48,6 +48,8 @@ describe('BustExcuseChatUseCase', () => {
         premiumWeeklyQuota: 60,
         geminiModel: 'gemini-2.5-flash',
         geminiLiteModel: 'gemini-2.5-flash-lite',
+        aiEnabled: true,
+        serverAiQuotaEnabled: false,
       })),
     };
     useCase = new BustExcuseChatUseCase(
@@ -101,6 +103,44 @@ describe('BustExcuseChatUseCase', () => {
     mockGetUsageForWeek.mockResolvedValue({ count: 3, bonusCount: 0 });
 
     const result = await useCase.execute({
+      habitTitle: 'Meditasyon',
+      excuse: 'Yorgunum',
+      approach: 'universal',
+    });
+
+    expect(result.kind).toBe('quota_exceeded');
+    expect(mockGenerateCoachResponse).not.toHaveBeenCalled();
+  });
+
+  it('returns safe message when ai is disabled via remote config', async () => {
+    const remoteConfigPort = {
+      configure: jest.fn(async () => undefined),
+      fetchAndActivate: jest.fn(async () => undefined),
+      getValues: jest.fn(async () => ({
+        freeWeeklyQuota: 3,
+        premiumWeeklyQuota: 60,
+        geminiModel: 'gemini-2.5-flash',
+        geminiLiteModel: 'gemini-2.5-flash-lite',
+        aiEnabled: false,
+        serverAiQuotaEnabled: false,
+      })),
+    };
+    const disabledUseCase = new BustExcuseChatUseCase(
+      aiCoach,
+      aiUsageRepository,
+      {
+        configure: jest.fn(async () => undefined),
+        getOfferings: jest.fn(async () => null),
+        purchase: jest.fn(async () => ({ isPremium: true })),
+        restorePurchases: jest.fn(async () => ({ isPremium: false })),
+        getEntitlement: mockGetEntitlement,
+        identifyUser: jest.fn(async () => undefined),
+        onEntitlementChanged: jest.fn(() => () => undefined),
+      },
+      remoteConfigPort,
+    );
+
+    const result = await disabledUseCase.execute({
       habitTitle: 'Meditasyon',
       excuse: 'Yorgunum',
       approach: 'universal',

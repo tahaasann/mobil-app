@@ -13,6 +13,11 @@ export type CoachProfileContext = {
   commonBarrier?: string | null;
 };
 
+export type CoachTurn = {
+  role: 'user' | 'assistant';
+  content: string;
+};
+
 export type CoachContext = {
   habitTitle: string;
   excuse: string;
@@ -21,6 +26,8 @@ export type CoachContext = {
   profile?: CoachProfileContext;
   geminiModel?: string;
   geminiLiteModel?: string;
+  responseLanguage?: 'en' | 'tr';
+  conversationHistory?: CoachTurn[];
 };
 
 export type CoachStreamHandler = (partialText: string) => void;

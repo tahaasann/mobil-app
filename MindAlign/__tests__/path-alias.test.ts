@@ -1,7 +1,7 @@
-import * as domain from '@/domain';
+import { createDefaultAppSettings } from '@/domain/entities/app-settings';
 
 describe('@/ path alias', () => {
   it('resolves domain layer imports', () => {
-    expect(domain).toBeDefined();
+    expect(createDefaultAppSettings().id).toBe('default');
   });
 });

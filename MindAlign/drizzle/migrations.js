@@ -7,6 +7,7 @@ import m0002 from './0002_clumsy_ezekiel.sql';
 import m0003 from './0003_romantic_hemingway.sql';
 import m0004 from './0004_ordinary_bruce_banner.sql';
 import m0005 from './0005_ai_usage_bonus.sql';
+import m0006 from './0006_habit_notes.sql';
 
 export default {
   journal,
@@ -17,5 +18,6 @@ export default {
     m0003,
     m0004,
     m0005,
+    m0006,
   },
 };

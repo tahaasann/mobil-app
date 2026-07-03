@@ -1,4 +1,3 @@
-import { eq } from 'drizzle-orm';
 import type { ExpoSQLiteDatabase } from 'drizzle-orm/expo-sqlite';
 
 import type { UserProfileRepository } from '@/application/ports/user-profile-repository.port';

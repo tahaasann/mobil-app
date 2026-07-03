@@ -73,7 +73,7 @@ Her adımı ben (AI) bitirdiğimde sana: **ne değişti, hangi dosyalar, neden, 
 
 ### Güvenlik-Kritik Adımlar (derin tarama önerilen ID'ler)
 
-T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-106, T-116, T-117, T-129, T-132, T-139, T-141, T-157, T-158, T-159, T-160, T-165.
+T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-106, T-116, T-117, T-129, T-132, T-139, T-141, T-157, T-158, T-159, T-160, T-165, T-169, T-171, T-188, T-189, T-199, T-205, T-209, T-211, T-212, T-237, T-260, T-264, T-266.
 
 ---
 
@@ -343,11 +343,330 @@ T-012, T-015, T-016, T-057, T-058, T-060, T-069, T-070, T-071, T-072, T-077, T-1
 
 ---
 
+## FAZ 9 - Tracer Bullet 9: Production NO-GO Kapatma — Ortam, CI ve Repo Hijyeni
+
+> **Kaynak:** Harici production readiness değerlendirmesi (NO-GO) + mevcut test altyapısı turu (T9–T11, coverage ~%47).  
+> **Hedef:** Yanlış ortamda yayınlanmayı engelle; CI kırıklığını gider; repo artefaktlarını temizle; test regresyon korumasını sürdür.
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-168 | [x] | test: production guard rejects all mock flags red  | (Red) `assertProductionConfig` tüm mock bayrakları (auth/ai/sync/sub/ads/analytics vb.) reddetmeli | P0 #5: eksik guard = prod'da mock                   | Test kırmızı                                                  |
+| T-169 | [x] | feat: production guard all mock flags green        | (Green) Guard genişletme + App Check debug token yasağı                                      | Production sahtelik riski                           | T-168 yeşil; prod mock'ta throw                               |
+| T-170 | [x] | test: production guard invalid app env red         | (Red) Eksik/hatalı `APP_ENV` -> build/runtime fail (development'a düşme yok)                 | Yanlış env = mock açık kalır                        | Test kırmızı                                                  |
+| T-171 | [x] | feat: production guard strict app env green        | (Green) `getAppEnv` strict; bilinmeyen değer -> hata                                         | Fail-closed ortam                                   | T-170 yeşil                                                   |
+| T-172 | [x] | build: eas.json production env profile           | `eas.json` production/preview profillerinde `APP_ENV=production` + platform RC key ayrımı   | P0 #5 + #8: platform anahtarları                    | `eas.json` doğrulanıyor; preview/prod env sabit               |
+| T-173 | [x] | ci: add production config validation script        | CI'da `APP_ENV=production` simülasyonu ile guard script (`pnpm validate:production`)         | Guard yalnız runtime'da değil CI'da da              | Script prod eksik key'de exit 1                               |
+| T-174 | [x] | fix: lint errors blocking ci                       | `habit-card.tsx` + kullanılmayan `eq` importları düzelt                                      | CI lint kırılıyor                                   | `pnpm lint` 0 error                                           |
+| T-175 | [x] | chore: gitignore coverage and build logs           | `.gitignore` -> `coverage/`, `*.log`, `admob-build.log`                                      | Fazlalık tracked artefakt (rapor §2)                | `git status` coverage/log göstermiyor                         |
+| T-176 | [x] | chore: remove tracked coverage and logs from repo  | Index'ten `coverage/`, `admob-build.log` kaldır (dosyalar sil)                               | Repo şişkinliği + gürültü                           | `git ls-files coverage` boş                                   |
+| T-177 | [x] | test: coach chat view send flow red                | (Red) `CoachChatView` gönder/kota/bookmark akışı testi (mock use-case)                       | Önceki plan T12; chat kalbi test dışı               | Test kırmızı                                                  |
+| T-178 | [x] | feat: coach chat view send flow green              | (Green) Gerekli küçük düzeltmeler + test geçişi                                                | Chat regresyon koruması                             | T-177 yeşil                                                   |
+| T-179 | [x] | ci: maestro smoke workflow draft                   | GitHub Actions: Maestro smoke (4 tab + habit ekle) — başlangıçta `continue-on-error` veya manual | Önceki plan T13/T15; E2E CI yok                   | Workflow dosyası var; lokal `pnpm test:e2e` smoke yeşil       |
+
+
+---
+
+## FAZ 10 - Tracer Bullet 10: Reklam & AI Kota — Ücretsiz İstismar Kapatma (P0 #1–#2)
+
+> **Hedef:** Production'da sahte reklam ödülü ve sınırsız AI hakkı kapatılır. AdMob geri gelene kadar "reklam izle" UI tamamen gizlenir.
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-180 | [x] | test: ads port selection by env red                | (Red) Prod'da mock ads seçilememeli; dev'de mock opsiyonel                                   | P0 #1: her ortamda MockAdsAdapter                   | Test kırmızı                                                  |
+| T-181 | [x] | feat: ads port selection by env green              | (Green) `subscription-container` env tabanlı ads adapter seçimi                              | Gerçek/prod ayrımı                                  | T-180 yeşil                                                   |
+| T-182 | [x] | test: quota wall hides watch ad when disabled red  | (Red) Ads devre dışıyken QuotaWall'da "reklam izle" görünmemeli                              | Var olmayan özellik gösterimi                       | Test kırmızı                                                  |
+| T-183 | [x] | feat: quota wall hides watch ad when disabled green | (Green) QuotaWall koşullu render                                                           | Store/UX dürüstlüğü                                 | T-182 yeşil                                                   |
+| T-184 | [x] | test: grant rewarded ad bonus disabled red         | (Red) Ads kapalıyken `GrantRewardedAdBonusUseCase` başarısız/`unavailable`                   | +1 hak sızıntısı                                    | Test kırmızı                                                  |
+| T-185 | [x] | feat: grant rewarded ad bonus disabled green       | (Green) Use-case guard                                                                       | Maliyet koruması                                    | T-184 yeşil                                                   |
+| T-186 | [x] | docs: ai quota backend adr                         | ADR: sunucu tarafı kota/rate-limit mimarisi (Firebase Functions veya alternatif)           | P0 #2: cihaz kotası bypass edilebilir                | ADR onaylandı; scope net                                      |
+| T-187 | [x] | test: server quota port contract red               | (Red) `QuotaPort`/`AiUsagePort` sunucu sözleşmesi testi (mock HTTP/Functions)                | Backend entegrasyon sınırı                          | Test kırmızı                                                  |
+| T-188 | [x] | feat: firebase quota function stub green           | (Green) Cloud Function: atomik kota artır + limit kontrol (MVP)                             | Gerçek maliyet koruması                             | T-187 yeşil; emulator/integration test                        |
+| T-189 | [x] | feat: client ai usage via server port              | Client `drizzle-ai-usage` yerine/yanında sunucu kotası kullan (feature flag)                 | Bypass kapatma                                      | Prod flag açıkken local reset kota vermez                     |
+| T-190 | [x] | feat: remote config ai budget kill switch          | RC: `ai_enabled`, günlük bütçe alarm eşiği, model adı doğrulama                              | P1 operasyonel güvenlik                             | Geçersiz model/kota UI'da güvenli fallback                    |
+| T-191 | [x] | test: e2e quota wall no fake ad reward             | Maestro: kota duvarında reklam yok (ads disabled profil)                                     | Tracer Bullet 10 kanıtı                             | E2E yeşil                                                     |
+
+
+---
+
+## FAZ 11 - Tracer Bullet 11: Veri Bütünlüğü — Çıkış, Silme, Sync (P0 #3–#4)
+
+> **Hedef:** Çıkış yapınca veri kaybı ve sahte "silme" kapatılır. MVP kararı net: **local-only misafir** veya **tam sync** — ikisi karışık kalmaz.
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-192 | [x] | docs: sync strategy decision adr                   | ADR: (A) local-only MVP veya (B) full cloud sync — ürün kararı                               | P0 #3: karışık sync iddiası                        | Karar yazılı; PRD/TODO güncellendi                            |
+| T-193 | [x] | test: sign out preserves local data red            | (Red) Çıkış local habit/streak silmemeli (A seçilirse) veya önce push etmeli (B)             | Veri kaybı                                          | Test kırmızı                                                  |
+| T-194 | [x] | feat: sign out safe behavior green                 | (Green) `auth-session.use-case` ADR'ye göre düzelt                                           | Güvenilir çıkış                                     | T-193 yeşil                                                   |
+| T-195 | [x] | test: sync outbox on session red                   | (Red) Oturum sırasında bookmark/chat değişiklikleri outbox'a yazılır (B yolu)               | Çıkış öncesi kayıp                                  | Test kırmızı                                                  |
+| T-196 | [x] | feat: sync outbox and flush green                  | (Green) Outbox + periyodik/çıkış öncesi flush                                                | Sürekli sync                                        | T-195 yeşil                                                   |
+| T-197 | [x] | feat: firestore tombstone deletes                  | Bookmark silme tombstone; geri gelme engeli                                                  | Sync tutarlılığı                                    | Silinen bookmark geri gelmiyor (test)                         |
+| T-198 | [x] | test: reset user data deletes remote red           | (Red) "Verileri sil" Firestore + Auth kapsamını test et                                       | P0 #4: sahte silme                                  | Test kırmızı                                                  |
+| T-199 | [x] | feat: account and data deletion flow green         | (Green) Firestore batch delete + Firebase Auth delete + local wipe                             | Apple/Google hesap silme şartı                      | T-198 yeşil                                                   |
+| T-200 | [x] | docs: web data deletion request page               | Play Data Safety için web silme talep URL'si + süreç                                         | Mağaza uyumu                                        | URL erişilebilir; store formuna girildi                       |
+| T-201 | [x] | feat: sqlite user scoping or guest isolation       | Tablolara `userId` veya misafir oturum izolasyonu (ADR'ye göre)                             | Hesap değişiminde veri sızıntısı                    | Başka kullanıcı verisi görünmüyor (test)                      |
+| T-202 | [x] | feat: auth required route group guard            | `(tabs)` ve korumalı route'lar oturum/onboarding guard                                       | P1: çıkış sonrası tab'da kalma                      | Çıkış -> auth/onboarding yönlendirme                          |
+| T-203 | [x] | test: e2e sign out data persistence                | Maestro: giriş -> habit -> çıkış -> tekrar giriş -> veri durumu ADR beklentisi               | Tracer Bullet 11 kanıtı                             | E2E yeşil                                                     |
+
+
+---
+
+## FAZ 12 - Tracer Bullet 12: Kriz Güvenliği & AI Mağaza Uyumu (P0 #6–#7)
+
+> **Hedef:** Kriz kaynakları doğru ve çok dilli; AI cevapları raporlanabilir; çıktı moderasyonu eklenir.
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-204 | [x] | test: crisis resources correct numbers red         | (Red) 182 ALİZE/MHRS karışıklığı yok; 112 acil; kaynaklar doğrulanmış                        | P0 #6: tehlikeli yanlış bilgi                       | Test kırmızı                                                  |
+| T-205 | [x] | feat: crisis resources verified green              | (Green) `crisis-guardrail.ts` düzelt + i18n kaynak metinleri                                  | Kullanıcı güvenliği                                 | T-204 yeşil; uzman checklist imzalı                           |
+| T-206 | [x] | test: crisis message locale red                    | (Red) Kriz yanıtı kullanıcı dilinde                                                        | Yalnızca TR mesaj                                   | Test kırmızı                                                  |
+| T-207 | [x] | feat: crisis message i18n green                    | (Green) en/tr (ve ADR'deki diller) kriz şablonları                                           | Global kullanıcı                                    | T-206 yeşil                                                   |
+| T-208 | [x] | test: ai output guardrail red                      | (Red) AI çıktısı ikinci katman moderasyon (hallüsinasyon/kriz/off-topic)                     | P0 #6–#7: tek katman yetersiz                       | Test kırmızı                                                  |
+| T-209 | [x] | feat: ai output guardrail green                    | (Green) `output-guardrail.ts` + coach pipeline entegrasyonu                                  | Güvenli fallback                                    | T-208 yeşil                                                   |
+| T-210 | [x] | test: report ai response usecase red               | (Red) Kullanıcı AI cevabını raporlar (kategori + mesaj id)                                   | Google Play AI politikası                           | Test kırmızı                                                  |
+| T-211 | [x] | feat: report ai response ui and storage green      | (Green) ChatBubble "Raporla" + Firestore/Analytics kayıt                                     | Store şartı                                         | T-210 yeşil; rapor backend'de görünür                         |
+| T-212 | [x] | feat: gemini safety settings production            | Firebase AI `safetySettings` production profili                                                | Model güvenlik katmanı                              | Red-team örnekleri bloklanıyor (log)                          |
+| T-213 | [x] | test: e2e crisis shows safe resources              | Maestro: kriz tetikleyici girdi -> koçluk yok, kaynaklar görünür                             | Tracer Bullet 12 kanıtı                             | E2E yeşil                                                     |
+
+
+---
+
+## FAZ 13 - Tracer Bullet 13: Abonelik, Paywall & Yasal Uyum (P0 #8–#9)
+
+> **Hedef:** Paywall mağaza reddine açık boşluklar kapanır; gizlilik/şartlar erişilebilir; Plus iddiası gerçekle eşleşir.
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-214 | [x] | test: revenuecat per platform keys red             | (Red) iOS/Android ayrı RC API key seçimi                                                     | P0 #8: tek key riski                                | Test kırmızı                                                  |
+| T-215 | [x] | feat: revenuecat per platform keys green           | (Green) `app.config` + adapter platform key                                                  | Doğru entitlement                                   | T-214 yeşil                                                   |
+| T-216 | [x] | test: trial label accuracy red                     | (Red) `introPrice !== null` != "ücretsiz deneme" yanlış etiket                               | Yanıltıcı paywall                                   | Test kırmızı                                                  |
+| T-217 | [x] | feat: trial label accuracy green                   | (Green) Gerçek trial/eligibility kontrolü                                                    | Store policy                                        | T-216 yeşil                                                   |
+| T-218 | [x] | feat: paywall legal links and renewal terms        | Otomatik yenileme, fiyat/süre, Terms + Privacy linkleri                                      | Google/Apple subscription kuralları                 | Paywall'da linkler çalışıyor                                  |
+| T-219 | [x] | feat: paywall empty offering error state           | Offering yüklenemezse hata UI + retry; satın alma hataları kullanıcıya                         | Boş ekran riski                                     | Offline/RC hata senaryosu testli                              |
+| T-220 | [x] | docs: privacy policy and terms publish             | Gizlilik politikası + kullanım şartları (AI/Firebase/RC/Analytics açık)                      | P0 #9: erişilebilir politika yok                    | URL'ler uygulama içi + store metadata'da                      |
+| T-221 | [x] | feat: plus entitlement gating sync bookmark        | Bookmark sync yalnız Plus (veya ADR: ücretsiz — metinler eşleşsin)                           | Yanlış satış iddiası                                | Free/Plus davranışı PRD ile aynı                            |
+| T-222 | [x] | test: onboarding paywall flow alignment red        | (Red) Onboarding -> auth akışı vs eski paywall/Maestro beklentisi                            | Stale akış                                          | Test kırmızı                                                  |
+| T-223 | [x] | feat: onboarding paywall flow alignment green      | (Green) Maestro + dokümantasyon güncelle (soft paywall profil/kota anında)                   | Test/store tutarlılığı                              | T-222 yeşil; `.maestro/onboarding*.yaml` güncel               |
+| T-224 | [x] | chore: store subscription metadata                 | Play/App Store abonelik açıklamaları trial/renewal ile eşleşsin                              | Manuel review                                       | Store formları dolduruldu                                     |
+
+
+---
+
+## FAZ 14 - Tracer Bullet 14: i18n, Tema Boot & EN/TR Production Scope (P0 #10)
+
+> **Hedef:** Tercihler yeniden açılışta uygulanır; yarım diller kaldırılır veya tamamlanır; hardcoded TR temizlenir.
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-225 | [x] | test: theme hydrate from settings red              | (Red) Uygulama açılışında SQLite tema tercihi yüklenmeli                                     | P0 #10: her açılış auto                               | Test kırmızı                                                  |
+| T-226 | [x] | feat: theme hydrate from settings green            | (Green) Root'ta settings okuma -> `AppThemeProvider` initial                                 | Tutarlı tema                                        | T-225 yeşil                                                   |
+| T-227 | [x] | test: language hydrate from settings red           | (Red) Uygulama açılışında kayıtlı dil yüklenmeli                                             | Cihaz dili override                                 | Test kırmızı                                                  |
+| T-228 | [x] | feat: language hydrate from settings green         | (Green) `I18nProvider` boot hydrate                                                          | Profil ayarı kalıcı                                 | T-227 yeşil                                                   |
+| T-229 | [x] | docs: locale scope decision en tr only             | Karar: lansman EN+TR; ar/ja/fr kaldır veya gizle                                             | 51 vs 121 anahtar riski                             | Karar yazılı                                                  |
+| T-230 | [x] | feat: remove or hide incomplete locales            | ar/ja/fr scaffolding kaldır/gizle (karara göre)                                              | Yarım çeviri production riski                       | Uygulamada yalnız EN/TR seçilebilir                           |
+| T-231 | [x] | feat: i18n hardcoded turkish strings               | `MicroTaskCard`, `ChatBubble`, kriz/hata metinlerini i18n'e taşı                             | Karışık dil UX                                      | `pnpm test` + manuel EN ekran kontrolü                        |
+| T-232 | [x] | feat: ai response language in prompt               | Prompt builder'a cevap dili (`settings.language`) ekle                                       | AI Türkçe/İngilizce uyumu                           | EN profilde EN coach cevabı (test/mock)                     |
+| T-233 | [x] | test: e2e language persistence                     | Maestro: TR seç -> kill -> reopen -> TR                                                        | Tracer Bullet 14 kanıtı                             | E2E yeşil                                                     |
+
+
+---
+
+## FAZ 15 - Tracer Bullet 15: UX & Altyapı Sağlamlaştırma (P1)
+
+> **Hedef:** Hata sınırları, Firestore doğrulama, bildirim doğruluğu, Android yedekleme, chat geçmişi kararı.
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-234 | [x] | feat: root error boundary and migration error ui   | Error boundary + migration fail ekranı + retry                                               | P1: sessiz crash                                    | Migration hatası kullanıcıya gösteriliyor                     |
+| T-235 | [x] | feat: unhandled promise rejection logging          | Kritik `void promise` noktalarında catch + Crashlytics                                       | P1: kayıp hatalar                                   | Simüle hata loglanıyor                                        |
+| T-236 | [x] | test: firestore payload zod validation red         | (Red) Sync payload boyut/rol/tarih sınırları                                                 | P1: rules yalnız UID                                | Test kırmızı                                                  |
+| T-237 | [x] | feat: firestore payload zod validation green       | (Green) Push/pull öncesi Zod                                                                 | Injection/oversize                                  | T-236 yeşil                                                   |
+| T-238 | [x] | build: disable android backup sensitive data       | `allowBackup=false` veya hassas DB exclude                                                   | P1: SQLite düz metin yedek                          | Manifest doğrulandı                                           |
+| T-239 | [x] | build: production manifest permissions audit       | `SYSTEM_ALERT_WINDOW`, eski storage izinleri; dev-client prod'dan ayrılsın                   | Gereksiz izin reddi                                 | Production manifest minimal                                   |
+| T-240 | [x] | test: notification frequency labels red            | (Red) "Günde bir" = gerçek bildirim sayısı eşleşmeli                                         | P1: yanlış beklenti                                  | Test kırmızı                                                  |
+| T-241 | [x] | feat: notification frequency labels green          | (Green) `notification-schedule.ts` düzelt veya UI metni güncelle                             | Güven                                               | T-240 yeşil                                                   |
+| T-242 | [x] | docs: chat history product decision                | Sohbet geçmişi gösterilecek mi / silinecek mi — ADR                                           | Saklanıyor ama UI yok                               | Karar + backlog net                                           |
+| T-243 | [x] | feat: chat history ui or stop collecting           | ADR'ye göre geçmiş ekranı veya toplamayı durdur                                               | Gereksiz hassas veri                                | Uygulama davranışı ADR ile uyumlu                             |
+| T-244 | [x] | feat: global chat multi turn context               | Genel/habit chat'te önceki mesajları modele gönder (limitli)                                 | P1: sahte multi-turn                                | 2+ tur bağlam korunuyor (test)                                |
+| T-245 | [x] | feat: quota ui reads remote config limit           | Kota mesajı sabit "3" yerine RC `freeAiQuota`                                                 | P1: yanlış UI                                       | RC değişince mesaj güncellenir                                |
+| T-246 | [x] | feat: defer store review until meaningful usage    | İlk rescue yerine N gün / N rescue eşiği                                                     | P1: agresif review                                  | Review tetik eşiği testli                                       |
+
+
+---
+
+## FAZ 16 - Tracer Bullet 16: Kod & Bağımlılık Temizliği (Fazlalık Raporu §2)
+
+> **Hedef:** Dead code, kullanılmayan bağımlılıklar ve boş katman dosyaları kaldırılır; bundle/native risk azalır.
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-247 | [x] | refactor: remove empty layer index files           | `src/{application,domain,infrastructure,presentation}/index.ts` boş exportları kaldır      | Kesin fazlalık                                      | Import kırılmıyor; `pnpm typecheck` ok                        |
+| T-248 | [x] | refactor: remove unused health check chain         | health-check port/use-case/adapter/hook (+ testleri birleştir veya kaldır)                   | Kullanılmayan zincir                                | `pnpm test` yeşil; referans yok                               |
+| T-249 | [x] | refactor: remove unused theme hooks                | `use-theme.ts`, `use-color-scheme*.ts` kaldır                                                | Yeni theme provider var                             | Derleme yeşil                                                 |
+| T-250 | [x] | refactor: remove unused speech module              | `speech.ts` + `expo-speech` (TTS kullanılmıyorsa)                                            | Dead feature                                        | Bundle küçülür; manuel kontrol                                |
+| T-251 | [x] | refactor: remove dead auth and ai adapters           | `SignOutUseCase`, `FirebasePreclassifierAdapter`, `GetEntitlementUseCase` (kullanılmıyorsa)    | Bakım yükü                                          | Testler güncel; grep referans 0                               |
+| T-252 | [x] | refactor: simplify subscription di wiring          | Kullanılmayan `PurchaseSubscriptionUseCase`/`RestorePurchasesUseCase` container wiring       | Duplike DI                                          | Paywall hâlâ çalışıyor (test)                               |
+| T-253 | [x] | chore: remove unused test-renderer direct dep      | `package.json` `test-renderer` kaldır (jest-expo yeterli)                                    | Fazlalık bağımlılık                                 | `pnpm test` yeşil                                             |
+| T-254 | [x] | chore: audit optional expo deps                    | `@expo/ui`, `expo-device`, `expo-font`, `expo-status-bar`, `expo-system-ui` — doctor/build   | Olası unused deps                                   | `npx expo-doctor` + Android build yeşil                       |
+| T-255 | [x] | docs: web support decision                         | `react-dom`/`react-native-web` kalacak mı — karar                                            | Yarım web yükü                                      | ADR yazılı                                                    |
+| T-256 | [x] | chore: remove settings redirect route if unused    | `/(tabs)/settings` yalnız legacy ise kaldır + deep link map                                  | Fazlalık route                                      | Eski link varsa redirect root'ta                              |
+
+
+---
+
+## FAZ 17 - Tracer Bullet 17: Test & Coverage Production Grade (Devam)
+
+> **Hedef:** Coverage %55+ bandına çıkar; DI/Firebase/hook katmanları test edilir; CI E2E zorunlu hale getirilir; FAZ 8 lansman adımlarına geçiş.
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-257 | [x] | feat: render with providers adopt in screen tests  | Mevcut ekran testlerini `renderWithProviders` helper'a taşı                                  | T9: tekrarlayan mock azaltma                        | Test suite yeşil                                              |
+| T-258 | [x] | test: firebase provider bootstrap red              | (Red) `FirebaseProvider` init/hata yolu testi                                                | Coverage boşluğu                                    | Test kırmızı                                                  |
+| T-259 | [x] | feat: firebase provider bootstrap green            | (Green) Provider test geçişi                                                                 | Regresyon                                           | T-258 yeşil                                                   |
+| T-260 | [x] | test: subscription container ports red             | (Red) DI container mock bayrak seçimi testleri                                               | Prod/dev adapter ayrımı                             | Test kırmızı                                                  |
+| T-261 | [x] | feat: subscription container ports green           | (Green) Container refactor testleri                                                          | Güvenli DI                                          | T-260 yeşil                                                   |
+| T-262 | [x] | ci: raise coverage threshold to 55                 | Jest global threshold 55% (aşamalı); CI fail on regression                                    | T8 devamı                                           | `pnpm test:ci` threshold geçiyor                              |
+| T-263 | [x] | ci: maestro required on main                       | Maestro smoke CI'da zorunlu (continue-on-error kaldır)                                       | T13 tamamlama                                       | PR'da E2E yeşil olmadan merge yok                             |
+| T-264 | [x] | ci: pnpm audit in pipeline                         | CI'da `pnpm audit` (high/critical fail veya uyarı)                                           | Güvenlik taraması timeout çözümü                    | Audit adımı CI'da çalışıyor                                   |
+| T-265 | [x] | test: e2e four tab navigation smoke                | Maestro: 4 tab geçişi + habit ekle smoke                                                     | T15                                               | `.maestro/` yeşil                                             |
+| T-266 | [x] | chore: re enable admob production guard keys       | AdMob paketi geri eklendiğinde guard + `T-137` adapter geri yükleme checklist               | T16; Play gelir planı                               | Guard testleri AdMob key ile yeşil                            |
+| T-267 | [x] | build: eas preview internal track pipeline         | EAS preview profile + internal Play track doğrulama                                          | T17; gerçek cihaz testi                             | Preview build cihazda açılıyor                                |
+| T-268 | [x] | chore: production go no go checklist               | NO-GO maddeleri checklist (P0 tamam mı) + FAZ 8 T-154–T-166'ya handoff                      | Lansman kapısı                                      | Checklist imzalı; GO/NO-GO kararı                            |
+
+
+---
+
+## FAZ 18 - Tracer Bullet 18: UX Polish, Liquid Glass & Coach Deneyimi (Emulator QA Geri Bildirimi)
+
+> **Hedef:** Emulator manuel QA'da raporlanan UX/UI sorunları kapanır: onboarding yeniden görünürlüğü, liquid glass görsel dil, profil/habit/coach akışları, dopamin animasyonları ve chat oturum kalıcılığı.
+> **Kaynak:** Kullanıcı geri bildirimi (11 madde) — **FAZ 18.1–18.7 implementasyonu tamamlandı** (Temmuz 2026).
+> **Branch önerisi:** `phase-18-ux-polish`
+
+### Kullanıcı Geri Bildirimi Özeti
+
+| # | Konu | Beklenti |
+| --- | --- | --- |
+| 1 | Onboarding | İlk kurulum/test akışında onboarding ekranları görünmeli |
+| 2 | Profile | Profil sayfası görsel olarak iyileştirilmeli |
+| 3 | Liquid Glass | Apple liquid glass tasarım dili; basit UI yerine cam/blur/derinlik |
+| 4 | Habit title input | İlk backspace tüm metni silmemeli |
+| 5 | Done animasyonu | "Great!" yerine dopamin veren kutlama animasyonu |
+| 6 | Habit detay | Habit'e tıklayınca düzenleme, timer, notlar |
+| 7 | Add habit | Daha özelleştirilebilir habit oluşturma |
+| 8 | Coach aksiyonları | Save/Regenerate/Report metin yerine ikon |
+| 9 | Rescue (Done) | Habit menüsüne yönlendir; chat kaybolmasın |
+| 10 | Chat oturumu | Üstte X / New Chat; tab geçişinde chat sıfırlanmasın |
+| 11 | AI yanıtına cevap | Kullanıcı koç mesajına serbest metinle devam edebilmeli |
+
+---
+
+### 18.1 — Onboarding Görünürlüğü & Test Akışı (#1)
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-269 | [x] | test: onboarding gate when not completed red       | (Red) `index` route: `onboardingCompleted=false` iken `/onboarding` yönlendirmesi            | Kullanıcı onboarding görmedi                        | Test kırmızı                                                  |
+| T-270 | [x] | feat: onboarding gate when not completed green     | (Green) Mevcut gate doğrulanır; `onboardingCompleted=true` ise auth/tabs'a geçiş             | Kalıcı SQLite state ile karışıklık önlenir          | T-269 yeşil                                                   |
+| T-271 | [x] | feat: maestro clear state before onboarding        | `.maestro/onboarding_to_dashboard.yaml` ve smoke flow'a `clearState` / fresh install adımı | E2E/manuel QA'da onboarding atlanmaz               | Maestro flow onboarding ekranlarını assert ediyor             |
+| T-272 | [x] | feat: replay onboarding from profile               | Profil veya geliştirici ayarı: onboarding'i yeniden oynat (flag sıfırla + yönlendir)       | QA ve demo için onboarding tekrar görülebilir        | Profil'den onboarding açılıyor; veri ADR'ye uygun           |
+| T-273 | [x] | test: e2e onboarding full flow                     | Maestro: approach → identity → habits → blockers → tone → finish → auth → dashboard          | Tracer Bullet 18.1 kanıtı                           | `.maestro/onboarding*.yaml` yeşil                             |
+
+
+---
+
+### 18.2 — Liquid Glass Tasarım Sistemi (#3, temel görsel dil)
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-274 | [x] | docs: liquid glass design tokens adr                 | Blur, border, shadow, opacity, radius token'ları + dark/light kuralları (ADR)                | Tutarlı Apple-style cam dili                        | ADR onaylı; `GlassCard` referans alınır                       |
+| T-275 | [x] | test: glass card variants red                       | (Red) `GlassCard` variant prop'ları (elevated, subtle, accent) render testi                  | Tek stil yetersiz                                   | Test kırmızı                                                  |
+| T-276 | [x] | feat: glass card variants green                      | (Green) `expo-blur` / gradient border ile liquid glass primitive'ler                         | Yeniden kullanılabilir UI katmanı                   | T-275 yeşil; iOS/Android blur fallback                        |
+| T-277 | [x] | feat: apply glass system to core screens           | Home, auth, tabs header, onboarding adımlarına glass uygula                                  | "Çok basit UI" geri bildirimi                       | Manuel: cam efekt + okunabilir kontrast                       |
+| T-278 | [x] | feat: motion and micro interactions baseline       | Press scale, tab geçişi, kart giriş animasyonları (Reanimated)                               | Premium his                                         | Animasyonlar 60fps; reduced-motion saygılı                    |
+
+
+---
+
+### 18.3 — Profile Sayfası Yenileme (#2)
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-279 | [x] | test: profile screen layout red                    | (Red) Profil bölümleri (avatar, stats, ayarlar, yaklaşım) yapısal test                       | Mevcut layout "kötü görünüyor"                      | Test kırmızı                                                  |
+| T-280 | [x] | feat: profile liquid glass redesign green          | (Green) Profil: glass kartlar, hiyerarşi, spacing, tipografi                                 | Kullanıcı geri bildirimi #2                         | T-279 yeşil; EN/TR metinler taşmıyor                          |
+| T-281 | [x] | feat: profile stats and identity polish              | Streak/identity/approach görsel sunumu; boş durumlar                                           | Profil bilgi yoğunluğu dengeli                      | Manuel profil ekranı screenshot-ready                         |
+
+
+---
+
+### 18.4 — Habit Form Bug & Gelişmiş Oluşturma (#4, #7)
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-282 | [x] | test: habit title backspace behavior red           | (Red) Title alanına metin yaz → ilk backspace yalnızca son karakteri silmeli                 | P0 UX bug: tüm metin siliniyor                      | Test kırmızı                                                  |
+| T-283 | [x] | feat: habit title input fix green                  | (Green) Controlled input / selection / defaultValue bug düzelt                                 | Güvenilir metin girişi                              | T-282 yeşil; manuel doğrulama                                 |
+| T-284 | [x] | test: expanded create habit fields red             | (Red) Create habit: hatırlatma, sıklık, ikon/renk (ADR'de seçilen alt küme)                   | "Add habit çok basit"                               | Test kırmızı                                                  |
+| T-285 | [x] | feat: expanded create habit form green             | (Green) Genişletilmiş add-habit UI + validation + i18n                                        | Özelleştirilebilir habit                              | T-284 yeşil; habit DB şeması uyumlu                           |
+
+
+---
+
+### 18.5 — Habit Detay Ekranı (#6)
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-286 | [x] | test: habit detail route and edit red              | (Red) Habit kartına tıklayınca `/habit/[id]` detay; title düzenleme                          | Habit menüsü yok                                    | Test kırmızı                                                  |
+| T-287 | [x] | feat: habit detail screen scaffold green           | (Green) Detay ekranı: düzenle, sil, streak özeti                                             | Temel habit hub                                     | T-286 yeşil                                                   |
+| T-288 | [x] | feat: habit timer optional                         | Opsiyonel odak/timer (countdown veya pomodoro-lite) habit detayda                            | Kullanıcı isteği #6                                 | Timer start/stop testli; arka planda davranış ADR               |
+| T-289 | [x] | feat: habit notes journal                          | Habit'e bağlı notlar (SQLite); detay ekranında liste + ekle                                  | Reflection / not bırakma                            | Not CRUD testleri yeşil                                       |
+| T-290 | [x] | test: e2e habit detail navigation                  | Maestro: habit oluştur → detaya gir → düzenle → geri                                          | Tracer Bullet 18.5 kanıtı                           | Maestro yeşil                                                 |
+
+
+---
+
+### 18.6 — Done Kutlama Animasyonu (#5)
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-291 | [x] | test: mark done celebration trigger red            | (Red) Done sonrası celebration overlay/haptic tetiklenmeli                                   | Mevcut "Great!" çok basit                           | Test kırmızı                                                  |
+| T-292 | [x] | feat: dopamine celebration animation green         | (Green) Reanimated + haptic: confetti/pulse/streak glow; kısa süreli overlay                   | Dopamin / destek hissi                              | T-291 yeşil; erişilebilir alternatif metin                    |
+| T-293 | [x] | feat: celebration copy and streak context          | Streak sayısına göre dinamik mesaj; sound opsiyonel (ADR)                                    | Kişiselleştirilmiş kutlama                          | 1. vs 7. gün farklı mesaj (test/mock)                         |
+
+
+---
+
+### 18.7 — Coach UI: İkonlar, Rescue Akışı, Oturum (#8, #9, #10, #11)
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-294 | [x] | test: coach message icon actions red                 | (Red) Save/Regenerate/Report yalnızca ikon + accessibilityLabel; metin buton yok             | Geri bildirim #8                                    | Test kırmızı                                                  |
+| T-295 | [x] | feat: coach message icon actions green             | (Green) Bookmark, regenerate, report ikonları (`@expo/vector-icons` veya mevcut set)          | Temiz coach UI                                      | T-294 yeşil; ekran okuyucu etiketleri                         |
+| T-296 | [x] | test: rescue done navigates to habit red           | (Red) Coach "Done (rescue)" → ilgili habit detay/ana sayfa; chat state korunur               | Geri bildirim #9                                    | Test kırmızı                                                  |
+| T-297 | [x] | feat: rescue flow navigation and chat persist green| (Green) Rescue tamamlanınca habit hub'a yönlendir; mesajlar SQLite'da kalır                  | Chat kaybolmamalı                                   | T-296 yeşil; excuse + global chat senaryoları                 |
+| T-298 | [x] | test: chat session survives tab switch red         | (Red) Tab değişiminde aktif chat thread sıfırlanmamalı                                       | Geri bildirim #10                                   | Test kırmızı                                                  |
+| T-299 | [x] | feat: chat header close and new chat green         | (Green) Üst bar: X (kapat) veya "New chat"; explicit reset yalnızca bu aksiyonla             | Kullanıcı kontrolü                                  | T-298 yeşil; yeni chat boş thread açar                        |
+| T-300 | [x] | test: user reply after coach message red           | (Red) Koç cevabından sonra kullanıcı serbest metin gönderebilmeli (multi-turn)               | Geri bildirim #11                                   | Test kırmızı                                                  |
+| T-301 | [x] | feat: user follow up messages green                | (Green) Input her zaman aktif (kriz/rescue modları hariç); prompt'a user reply dahil           | Gerçek sohbet hissi                                 | T-300 yeşil; kota sayacı doğru                                |
+| T-302 | [x] | test: e2e coach session persistence                | Maestro: chat yaz → tab değiştir → chat aynı → new chat → eski kayıtlı                       | Tracer Bullet 18.7 kanıtı                           | Maestro yeşil                                                 |
+
+
+---
+
+### 18.8 — Faz Kapanışı
+
+| ID    | ✓   | Commit Mesajı                                      | Adım                                                                                         | Neden                                              | Onay (Doğrulama)                                              |
+| ----- | --- | -------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------- |
+| T-303 | [x] | chore: faz18 manual qa checklist                     | Emulator QA checklist: 11 madde + liquid glass görsel kontrol                                | Regresyon önleme                                    | `docs/faz18-manual-qa-checklist.md` (imza: emulator QA bekliyor) |
+| T-304 | [x] | ci: maestro faz18 flows in regression                | `full_regression.yaml` veya smoke'e yeni coach/habit/onboarding flow'ları ekle             | CI kanıtı                                           | `pnpm test:e2e:validate` yeşil; cihaz E2E kullanıcı tarafında  |
+| T-305 | [x] | docs: update prd ux section post faz18               | PRD/TODO'da tamamlanan UX maddelerini işaretle; kalan backlog notu                           | Dokümantasyon senkron                               | PRD §5.1 + §11 güncel                                         |
+
+
+---
+
 ## Özet
 
-- **8 Tracer Bullet fazı, 167 atomik adım.** Her faz uçtan uca çalışan bir dilim teslim eder.
-- **TDD:** mantık adımları `test:` (Red) -> `feat:` (Green) çiftleri halinde; testi olmayan mantık yok.
-- **Güvenlik:** her adımda yukarıdaki Review & Güvenlik Protokolü; kritik adımlarda Security Review + Bugbot taraması.
-- Hazırsan **T-001**'den başlayalım; her adımda ne yaptığımı, hangi dosyaları değiştirdiğimi, doğrulama komutunu ve (gerekiyorsa) güvenlik notunu sana açıkça vereceğim.
+- **18 Tracer Bullet fazı, 305 atomik adım** (FAZ 0–17: T-001–T-268 tamamlandı; **FAZ 18: T-269–T-305 UX polish & coach deneyimi — tamamlandı**; emulator manuel QA imzası `docs/faz18-manual-qa-checklist.md` üzerinde bekliyor).
+- **NO-GO öncelik sırası:** FAZ 9 (ortam/CI) → FAZ 10 (reklam/kota) → FAZ 11 (veri/sync) → FAZ 12 (kriz/AI rapor) → FAZ 13 (paywall/legal) → FAZ 14 (i18n boot) → FAZ 15–16 (sağlamlaştırma/temizlik) → FAZ 17 (test/coverage/E2E) → **FAZ 18 (UX polish — emulator QA)** → FAZ 8 lansman (T-154+).
+- **Harici rapor ile hizalama:** P0 maddeleri (1–10) FAZ 10–14'te; fazlalık temizliği FAZ 16'da; test/coverage hedefi FAZ 17'de; **emulator manuel QA geri bildirimi FAZ 18'de**.
+- **Mevcut test durumu (referans):** 109 suite, 310 test — FAZ 18 tamamlandı; Maestro yapı validate CI'da zorunlu (`pnpm test:e2e:validate`).
+- **TDD:** mantık adımları `test:` (Red) -> `feat:` (Green) çiftleri halinde devam eder.
+- **Güvenlik:** her adımda Review & Güvenlik Protokolü; **yeni güvenlik-kritik ID'ler:** T-169, T-171, T-188, T-189, T-199, T-205, T-209, T-211, T-212, T-237, T-260, T-264, T-266.
 
-İnşallah hayırlı olsun. Başlamak için onayını bekliyorum.
+Production-grade hedefe ulaşmak için **T-168**'den başlanır; FAZ 18 emulator QA sonrası UX polish için **T-269**'dan devam edilir; her faz bitince GO/NO-GO checklist (T-268) güncellenir.

@@ -43,7 +43,8 @@ export function ApproachSelector({ value, onChange }: ApproachSelectorProps) {
             <GlassCard
               accessibilityRole="button"
               accessibilityState={{ selected }}
-              className={`p-4 ${selected ? 'border-accent' : ''}`}
+              variant={selected ? 'accent' : 'subtle'}
+              className="p-4"
             >
               <Text className="text-base font-semibold text-foreground dark:text-foreground-dark">
                 {t(copy.title)}

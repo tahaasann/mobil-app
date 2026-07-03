@@ -1,0 +1,13 @@
+appId: com.tahaasann.mindalign
+---
+# FAZ 14 T-233: language preference persists across app restart
+- launchApp
+- runFlow:
+    file: onboarding_to_dashboard.yaml
+- tapOn: 'Profile'
+- tapOn: 'TR'
+- assertVisible: 'Bugünkü alışkanlıkların'
+- stopApp
+- launchApp
+- tapOn: 'Home'
+- assertVisible: 'Bugünkü alışkanlıkların'

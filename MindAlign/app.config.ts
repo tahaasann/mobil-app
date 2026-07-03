@@ -2,16 +2,23 @@ import type { ConfigContext, ExpoConfig } from 'expo/config';
 
 type AppEnv = 'development' | 'preview' | 'production';
 
-function getAppEnv(): AppEnv {
-  const value = process.env.APP_ENV ?? 'development';
-  if (value === 'development' || value === 'preview' || value === 'production') {
-    return value;
+const VALID_APP_ENVS: readonly AppEnv[] = ['development', 'preview', 'production'];
+
+/** Duplicated from app-env.ts — app.config runs in Node without TS path resolution. */
+function parseAppEnv(value: unknown): AppEnv {
+  if (value === undefined || value === null || value === '') {
+    return 'development';
   }
-  return 'development';
+  if (typeof value === 'string' && (VALID_APP_ENVS as readonly string[]).includes(value)) {
+    return value as AppEnv;
+  }
+  throw new Error(
+    `Invalid APP_ENV "${String(value)}". Expected one of: ${VALID_APP_ENVS.join(', ')}`,
+  );
 }
 
 export default ({ config }: ConfigContext): ExpoConfig => {
-  const appEnv = getAppEnv();
+  const appEnv = parseAppEnv(process.env.APP_ENV);
 
   const plugins: ExpoConfig['plugins'] = [
       'expo-router',
@@ -36,6 +43,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         {
           android: {
             kotlinVersion: '2.1.20',
+            allowBackup: false,
           },
           ios: {
             useFrameworks: 'static',
@@ -72,6 +80,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     android: {
       package: 'com.tahaasann.mindalign',
       googleServicesFile: './google-services.json',
+      blockedPermissions: [
+        'android.permission.SYSTEM_ALERT_WINDOW',
+        'android.permission.READ_EXTERNAL_STORAGE',
+        'android.permission.WRITE_EXTERNAL_STORAGE',
+      ],
       adaptiveIcon: {
         backgroundColor: '#E6F4FE',
         foregroundImage: './assets/images/android-icon-foreground.png',

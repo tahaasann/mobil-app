@@ -1,0 +1,13 @@
+appId: com.tahaasann.mindalign
+---
+# FAZ 11: habit persists after sign out (guest/local data model)
+- launchApp
+- runFlow:
+    file: onboarding_to_dashboard.yaml
+- assertVisible: 'Morning walk'
+- tapOn: 'Profile'
+- tapOn: 'Sign out'
+- assertVisible: 'Save your progress'
+- tapOn: 'Continue as guest'
+- assertVisible: 'Your habits today'
+- assertVisible: 'Morning walk'

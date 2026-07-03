@@ -12,11 +12,32 @@
     "topicPicker": "Konu seç",
     "inputPlaceholder": "Örn. çok yorgunum, sonra yaparım…",
     "send": "Gönder",
-    "thinking": "Düşünüyorum…"
+    "thinking": "Düşünüyorum…",
+    "report": "Raporla",
+    "reportThanks": "Bildirimin alındı. Teşekkürler.",
+    "bookmark": "Kaydet",
+    "regenerate": "Yeniden üret",
+    "bookmarkA11y": "Koç yanıtını kaydet",
+    "regenerateA11y": "Koç yanıtını yeniden üret",
+    "reportA11y": "Koç yanıtını raporla",
+    "newChat": "Yeni sohbet",
+    "closeA11y": "Sohbeti kapat ve ana sayfaya dön"
   },
   "profile": {
     "title": "Profil",
-    "subtitle": "Hesap, abonelik ve uygulama ayarları"
+    "subtitle": "Hesap, abonelik ve uygulama ayarları",
+    "avatarLabel": "Profil avatarı {{initials}}",
+    "guestBadge": "Misafir",
+    "identityLabel": "Olma hedefi",
+    "identityEmpty": "Koçunu kişiselleştirmek için onboarding'de kimlik hedefini belirle.",
+    "approachLabel": "Koç merceği",
+    "statsHabits": "Alışkanlık",
+    "statsBestStreak": "En iyi seri",
+    "statsActive": "Seride",
+    "sectionAccount": "Hesap",
+    "sectionPreferences": "Tercihler",
+    "sectionTools": "Araçlar ve wellness",
+    "sectionData": "Veri ve gizlilik"
   },
   "dashboard": {
     "title": "MindAlign",
@@ -27,13 +48,60 @@
   "habit": {
     "markDone": "Yaptım",
     "couldntDo": "Yapamadım",
-    "streak": "Seri {{count}}"
+    "streak": "Seri {{count}}",
+    "doneCelebration": "Harika!",
+    "celebration": {
+      "first": "1. gün — başladın!",
+      "building": "Seri {{count}} — devam!",
+      "milestone": "{{count}} gün güçlü!",
+      "legend": "{{count}} gün — durdurulamaz!"
+    }
+  },
+  "habitDetail": {
+    "title": "Alışkanlık detayı",
+    "loading": "Alışkanlık yükleniyor…",
+    "notFound": "Alışkanlık bulunamadı",
+    "back": "Geri",
+    "open": "Alışkanlık detayını aç",
+    "editTitle": "Başlık",
+    "editDescription": "Açıklama",
+    "save": "Değişiklikleri kaydet",
+    "deleteTitle": "Alışkanlık silinsin mi?",
+    "deleteConfirm": "Alışkanlık panodan kaldırılır. Kayıtlar bu cihazda kalır.",
+    "deleteAction": "Alışkanlığı sil",
+    "focusTitle": "Odak zamanlayıcısı",
+    "focusHint": "İsteğe bağlı 5 dakikalık odak bloğu. Yalnızca uygulama açıkken çalışır.",
+    "focusStart": "Başlat",
+    "focusStop": "Durdur",
+    "focusComplete": "Odak bloğu tamamlandı",
+    "notesTitle": "Notlar",
+    "notesHint": "Bu alışkanlığa bağlı düşüncelerini kaydet.",
+    "notePlaceholder": "Ne iyi gitti veya ne engel oldu?",
+    "addNote": "Not ekle",
+    "deleteNote": "Kaldır",
+    "notesEmpty": "Henüz not yok."
+  },
+  "microTask": {
+    "barrier": "Bariyer: {{label}}",
+    "rescue": "Yaptım (kurtar)",
+    "giveUp": "Vazgeçtim"
   },
   "addHabit": {
     "placeholder": "Yeni alışkanlık adı",
     "submit": "Alışkanlık ekle",
     "errorRequired": "Alışkanlık adı gerekli",
-    "errorFailed": "Alışkanlık eklenemedi"
+    "errorFailed": "Alışkanlık eklenemedi",
+    "noteLabel": "Alışkanlık notu",
+    "notePlaceholder": "Bu alışkanlık senin için neden önemli? (isteğe bağlı)",
+    "accentLabel": "Kart rengi",
+    "accent": {
+      "neutral": "Varsayılan",
+      "emerald": "Yeşil",
+      "amber": "Kehribar",
+      "sky": "Mavi"
+    },
+    "reminderLabel": "Günlük hatırlatma",
+    "reminderHint": "Açıkken profilindeki check-in penceresi kullanılır."
   },
   "onboarding": {
     "welcome": {
@@ -84,8 +152,8 @@
       "morning": "Sabah (7–10)",
       "afternoon": "Öğleden sonra (12–15)",
       "evening": "Akşam (18–21)",
-      "frequencyOnce": "Günde bir",
-      "frequencyTwice": "Günde iki",
+      "frequencyOnce": "Günde bir hatırlatma + akşam streak",
+      "frequencyTwice": "Günde iki hatırlatma + akşam streak",
       "skip": "Şimdilik atla",
       "finish": "Kurulumu bitir"
     }
@@ -103,7 +171,14 @@
     "signIn": "Giriş yap",
     "continueGuest": "Misafir devam et",
     "errorGeneric": "Bir şeyler ters gitti. Tekrar dene.",
-    "errorSignIn": "Giriş yapılamadı. Bilgilerini kontrol et."
+    "errorSignIn": "Giriş yapılamadı. Bilgilerini kontrol et.",
+    "errors": {
+      "anonymousDisabled": "Misafir girişi Firebase'de kapalı. Firebase Console'da Anonymous Authentication'ı açın veya yerel geliştirme için EXPO_PUBLIC_AUTH_MOCK=true kullanın.",
+      "network": "Ağ hatası. Bağlantını kontrol edip tekrar dene.",
+      "tooManyRequests": "Çok fazla deneme. Biraz bekleyip tekrar dene.",
+      "adminRestricted": "Bu giriş yöntemi bu uygulama için izinli değil.",
+      "appCheck": "App Check girişi engelledi. Debug token'ını Firebase Console'da kaydet (App Check > Manage debug tokens)."
+    }
   },
   "saved": {
     "title": "Kaydedilenler",
@@ -124,7 +199,7 @@
   },
   "paywall": {
     "title": "MindAlign Plus",
-    "subtitle": "Haftada 60 AI koç sohbeti, bookmark senkronu ve daha sakin bir deneyim.",
+    "subtitle": "Haftada 60 AI koç sohbeti ve daha sakin, reklamsız koç deneyimi.",
     "subscribe": "Abone ol",
     "startTrial": "Ücretsiz denemeyi başlat",
     "restore": "Satın alımları geri yükle",
@@ -132,7 +207,13 @@
     "upgrade": "Plus'a yükselt",
     "watchAd": "Kısa reklam izle (+1 sohbet)",
     "quotaTitle": "Haftalık ücretsiz sohbet hakkın bitti",
-    "quotaSubtitle": "Haftada 60 sohbet için yükselt veya bu hafta bir sohbet daha için nazik bir reklam izle."
+    "quotaSubtitle": "Haftada 60 sohbet için yükselt veya bu hafta bir sohbet daha için nazik bir reklam izle.",
+    "autoRenewal": "Abonelik, mağaza hesap ayarlarından iptal edilene kadar otomatik yenilenir.",
+    "termsLink": "Kullanım Şartları",
+    "privacyLink": "Gizlilik Politikası",
+    "offeringError": "Planlar yüklenemedi. Bağlantını kontrol edip tekrar dene.",
+    "retry": "Tekrar dene",
+    "purchaseError": "Satın alma tamamlanamadı. Lütfen tekrar dene."
   },
   "breathing": {
     "title": "Nefes odası",
@@ -168,6 +249,10 @@
     "resetTitle": "Tüm veri silinsin mi?",
     "resetConfirm": "Bu cihazdaki alışkanlık, sohbet ve bookmark'ları kaldırır.",
     "resetAction": "Sil",
+    "replayOnboarding": "Onboarding'i yeniden oyna",
+    "replayOnboardingTitle": "Onboarding yeniden oynansın mı?",
+    "replayOnboardingConfirm": "Kurulum adımlarını tekrar göreceksin. Alışkanlıkların ve sohbetlerin, kurulumda değiştirmedikçe bu cihazda kalır.",
+    "replayOnboardingAction": "Yeniden oyna",
     "privacyNote": "MindAlign tıbbi tavsiye değildir. Misafir verisi cihazda kalır. Giriş yapan hesaplar bookmark ve sohbeti özel bulut alanına senkronlar."
   }
 }

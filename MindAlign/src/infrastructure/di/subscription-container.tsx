@@ -10,10 +10,8 @@ import {
 
 import type { AdsPort } from '@/application/ports/ads.port';
 import type { SubscriptionOffering, SubscriptionPort } from '@/application/ports/subscription.port';
-import { MockAdsAdapter } from '@/infrastructure/ads/mock-ads.adapter';
-import { isProductionEnv } from '@/infrastructure/config/production-guard';
-import { MockSubscriptionAdapter } from '@/infrastructure/subscriptions/mock-subscription.adapter';
-import { RevenueCatSubscriptionAdapter } from '@/infrastructure/subscriptions/revenuecat-subscription.adapter';
+import { createAdsPort } from '@/infrastructure/ads/create-ads-port';
+import { createSubscriptionPort } from '@/infrastructure/subscriptions/create-subscription-port';
 
 type SubscriptionPorts = {
   subscriptionPort: SubscriptionPort;
@@ -23,44 +21,30 @@ type SubscriptionPorts = {
 type SubscriptionContextValue = SubscriptionPorts & {
   isPremium: boolean;
   offerings: SubscriptionOffering | null;
+  offeringsLoadState: 'loading' | 'ready' | 'error';
   refreshOfferings: () => Promise<void>;
 };
 
 const SubscriptionPortsContext = createContext<SubscriptionPorts | null>(null);
 const SubscriptionContext = createContext<SubscriptionContextValue | null>(null);
 
-function createSubscriptionPort(): SubscriptionPort {
-  if (process.env.EXPO_PUBLIC_SUBSCRIPTION_MOCK === 'true') {
-    if (isProductionEnv()) {
-      throw new Error('EXPO_PUBLIC_SUBSCRIPTION_MOCK is not allowed in production');
-    }
-    return new MockSubscriptionAdapter();
-  }
-  if (!process.env.EXPO_PUBLIC_REVENUECAT_API_KEY) {
-    if (isProductionEnv()) {
-      throw new Error('EXPO_PUBLIC_REVENUECAT_API_KEY is required in production');
-    }
-    return new MockSubscriptionAdapter();
-  }
-  return new RevenueCatSubscriptionAdapter();
-}
-
-function createAdsPort(): AdsPort {
-  // AdMob su an tamamen devre disi. Reklam entegrasyonu (react-native-google-mobile-ads)
-  // ileride tekrar eklenecek. Simdilik her zaman mock reklam adapteri kullaniliyor.
-  return new MockAdsAdapter();
+function createAdsPortForContainer(): AdsPort {
+  return createAdsPort();
 }
 
 export function SubscriptionContainer({ children }: { children: ReactNode }) {
   const ports = useMemo<SubscriptionPorts>(
     () => ({
       subscriptionPort: createSubscriptionPort(),
-      adsPort: createAdsPort(),
+      adsPort: createAdsPortForContainer(),
     }),
     [],
   );
   const [isPremium, setIsPremium] = useState(false);
   const [offerings, setOfferings] = useState<SubscriptionOffering | null>(null);
+  const [offeringsLoadState, setOfferingsLoadState] = useState<'loading' | 'ready' | 'error'>(
+    'loading',
+  );
 
   useEffect(() => {
     void ports.subscriptionPort.configure();
@@ -72,23 +56,39 @@ export function SubscriptionContainer({ children }: { children: ReactNode }) {
     });
   }, [ports.subscriptionPort]);
 
+  const refreshOfferings = useCallback(async () => {
+    setOfferingsLoadState('loading');
+    try {
+      const next = await ports.subscriptionPort.getOfferings();
+      setOfferings(next);
+      setOfferingsLoadState('ready');
+    } catch {
+      setOfferings(null);
+      setOfferingsLoadState('error');
+    }
+  }, [ports.subscriptionPort]);
+
   useEffect(() => {
     let cancelled = false;
 
-    void ports.subscriptionPort.getOfferings().then((next) => {
-      if (!cancelled) {
-        setOfferings(next);
-      }
-    });
+    void ports.subscriptionPort
+      .getOfferings()
+      .then((next) => {
+        if (!cancelled) {
+          setOfferings(next);
+          setOfferingsLoadState('ready');
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setOfferings(null);
+          setOfferingsLoadState('error');
+        }
+      });
 
     return () => {
       cancelled = true;
     };
-  }, [ports.subscriptionPort]);
-
-  const refreshOfferings = useCallback(async () => {
-    const next = await ports.subscriptionPort.getOfferings();
-    setOfferings(next);
   }, [ports.subscriptionPort]);
 
   const value = useMemo<SubscriptionContextValue>(
@@ -96,9 +96,10 @@ export function SubscriptionContainer({ children }: { children: ReactNode }) {
       ...ports,
       isPremium,
       offerings,
+      offeringsLoadState,
       refreshOfferings,
     }),
-    [ports, isPremium, offerings, refreshOfferings],
+    [ports, isPremium, offerings, offeringsLoadState, refreshOfferings],
   );
 
   return (

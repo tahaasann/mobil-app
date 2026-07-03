@@ -1,6 +1,7 @@
 appId: com.tahaasann.mindalign
 ---
-- launchApp
+- launchApp:
+    clearState: true
 - assertVisible: 'Welcome to MindAlign'
 - tapOn: 'Get started'
 - assertVisible: 'Choose your lens'
@@ -21,8 +22,6 @@ appId: com.tahaasann.mindalign
 - tapOn: 'Next'
 - assertVisible: 'Check-in preferences'
 - tapOn: 'Finish setup'
-- assertVisible: 'MindAlign Plus'
-- tapOn: 'Continue for free'
 - assertVisible: 'Save your progress'
 - tapOn: 'Continue as guest'
 - assertVisible: 'Your habits today'

@@ -12,11 +12,32 @@
     "topicPicker": "Choose topic",
     "inputPlaceholder": "E.g. I'm too tired, I'll do it later…",
     "send": "Send",
-    "thinking": "Thinking…"
+    "thinking": "Thinking…",
+    "report": "Report",
+    "reportThanks": "Thanks — your report was received.",
+    "bookmark": "Save",
+    "regenerate": "Regenerate",
+    "bookmarkA11y": "Save coach reply",
+    "regenerateA11y": "Regenerate coach reply",
+    "reportA11y": "Report coach reply",
+    "newChat": "New chat",
+    "closeA11y": "Close chat and go home"
   },
   "profile": {
     "title": "Profile",
-    "subtitle": "Account, subscription, and app settings"
+    "subtitle": "Account, subscription, and app settings",
+    "avatarLabel": "Profile avatar {{initials}}",
+    "guestBadge": "Guest",
+    "identityLabel": "Becoming",
+    "identityEmpty": "Set your identity goal in onboarding to personalize your coach.",
+    "approachLabel": "Coach lens",
+    "statsHabits": "Habits",
+    "statsBestStreak": "Best streak",
+    "statsActive": "On a streak",
+    "sectionAccount": "Account",
+    "sectionPreferences": "Preferences",
+    "sectionTools": "Tools & wellness",
+    "sectionData": "Data & privacy"
   },
   "dashboard": {
     "title": "MindAlign",
@@ -27,13 +48,60 @@
   "habit": {
     "markDone": "Done",
     "couldntDo": "Couldn't do it",
-    "streak": "Streak {{count}}"
+    "streak": "Streak {{count}}",
+    "doneCelebration": "Great!",
+    "celebration": {
+      "first": "Day 1 — you showed up!",
+      "building": "Streak {{count}} — keep going!",
+      "milestone": "{{count}} days strong!",
+      "legend": "{{count}} days — unstoppable!"
+    }
+  },
+  "habitDetail": {
+    "title": "Habit detail",
+    "loading": "Loading habit…",
+    "notFound": "Habit not found",
+    "back": "Back",
+    "open": "Open habit detail",
+    "editTitle": "Title",
+    "editDescription": "Description",
+    "save": "Save changes",
+    "deleteTitle": "Delete habit?",
+    "deleteConfirm": "This removes the habit from your dashboard. Logs stay on this device.",
+    "deleteAction": "Delete habit",
+    "focusTitle": "Focus timer",
+    "focusHint": "Optional 5-minute focus block. Runs in the foreground only.",
+    "focusStart": "Start",
+    "focusStop": "Stop",
+    "focusComplete": "Focus block complete",
+    "notesTitle": "Notes",
+    "notesHint": "Capture reflections tied to this habit.",
+    "notePlaceholder": "What went well or what got in the way?",
+    "addNote": "Add note",
+    "deleteNote": "Remove",
+    "notesEmpty": "No notes yet."
+  },
+  "microTask": {
+    "barrier": "Barrier: {{label}}",
+    "rescue": "Done (rescue)",
+    "giveUp": "Give up"
   },
   "addHabit": {
     "placeholder": "New habit title",
     "submit": "Add habit",
     "errorRequired": "Title is required",
-    "errorFailed": "Could not add habit"
+    "errorFailed": "Could not add habit",
+    "noteLabel": "Habit note",
+    "notePlaceholder": "Why this habit matters to you (optional)",
+    "accentLabel": "Card accent",
+    "accent": {
+      "neutral": "Default",
+      "emerald": "Green",
+      "amber": "Amber",
+      "sky": "Blue"
+    },
+    "reminderLabel": "Daily reminders",
+    "reminderHint": "Uses your profile check-in window when enabled."
   },
   "onboarding": {
     "welcome": {
@@ -84,8 +152,8 @@
       "morning": "Morning (7–10)",
       "afternoon": "Afternoon (12–15)",
       "evening": "Evening (18–21)",
-      "frequencyOnce": "Once a day",
-      "frequencyTwice": "Twice a day",
+      "frequencyOnce": "Once daily + evening streak reminder",
+      "frequencyTwice": "Twice daily + evening streak reminder",
       "skip": "Skip for now",
       "finish": "Finish setup"
     }
@@ -103,7 +171,14 @@
     "signIn": "Sign in",
     "continueGuest": "Continue as guest",
     "errorGeneric": "Something went wrong. Try again.",
-    "errorSignIn": "Could not sign in. Check your credentials."
+    "errorSignIn": "Could not sign in. Check your credentials.",
+    "errors": {
+      "anonymousDisabled": "Guest sign-in is disabled in Firebase. Enable Anonymous Authentication in Firebase Console, or set EXPO_PUBLIC_AUTH_MOCK=true for local development.",
+      "network": "Network error. Check your connection and try again.",
+      "tooManyRequests": "Too many attempts. Wait a moment and try again.",
+      "adminRestricted": "This sign-in method is not allowed for this app.",
+      "appCheck": "App Check blocked sign-in. Register your debug token in Firebase Console (App Check > Manage debug tokens)."
+    }
   },
   "saved": {
     "title": "Saved responses",
@@ -124,7 +199,7 @@
   },
   "paywall": {
     "title": "MindAlign Plus",
-    "subtitle": "Up to 60 AI coach chats per week, bookmark sync, and a calmer experience.",
+    "subtitle": "Up to 60 AI coach chats per week and a calmer, ad-free coach experience.",
     "subscribe": "Subscribe",
     "startTrial": "Start free trial",
     "restore": "Restore purchases",
@@ -132,7 +207,13 @@
     "upgrade": "Upgrade to Plus",
     "watchAd": "Watch a short ad for +1 chat",
     "quotaTitle": "Weekly free chats used",
-    "quotaSubtitle": "Upgrade for up to 60 weekly coach chats, or watch one gentle ad for one more chat this week."
+    "quotaSubtitle": "Upgrade for up to 60 weekly coach chats, or watch one gentle ad for one more chat this week.",
+    "autoRenewal": "Subscription auto-renews until canceled in your store account settings.",
+    "termsLink": "Terms of Service",
+    "privacyLink": "Privacy Policy",
+    "offeringError": "Plans could not be loaded. Check your connection and try again.",
+    "retry": "Try again",
+    "purchaseError": "Purchase could not be completed. Please try again."
   },
   "breathing": {
     "title": "Breathing room",
@@ -168,6 +249,10 @@
     "resetTitle": "Delete all data?",
     "resetConfirm": "This removes habits, chats, and bookmarks from this device.",
     "resetAction": "Delete",
+    "replayOnboarding": "Replay onboarding",
+    "replayOnboardingTitle": "Replay onboarding?",
+    "replayOnboardingConfirm": "You will walk through setup again. Your habits and chats stay on this device until you change them in setup.",
+    "replayOnboardingAction": "Replay",
     "privacyNote": "MindAlign is not medical advice. Guest data stays on-device. Signed-in accounts sync bookmarks and chat to your private cloud space."
   }
 }

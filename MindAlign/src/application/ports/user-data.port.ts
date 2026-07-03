@@ -4,6 +4,7 @@ export type UserDataSnapshot = {
   profile: unknown;
   habits: unknown[];
   habitLogs: unknown[];
+  habitNotes: unknown[];
   bookmarks: unknown[];
   chatMessages: unknown[];
   aiUsage: unknown[];

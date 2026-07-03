@@ -11,7 +11,7 @@ type ChoiceChipProps = {
 export function ChoiceChip({ label, selected, onPress }: ChoiceChipProps) {
   return (
     <Pressable accessibilityRole="button" accessibilityState={{ selected }} onPress={onPress}>
-      <GlassCard className={`mb-2 px-4 py-3 ${selected ? 'border-accent' : ''}`}>
+      <GlassCard variant={selected ? 'accent' : 'subtle'} className="mb-2 px-4 py-3">
         <Text className="text-base text-foreground dark:text-foreground-dark">{label}</Text>
       </GlassCard>
     </Pressable>

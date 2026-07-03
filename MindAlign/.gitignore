@@ -41,6 +41,11 @@ GoogleService-Info.plist
 # typescript
 *.tsbuildinfo
 
+# test & build artefacts
+coverage/
+*.log
+admob-build.log
+
 example
 
 # generated native folders

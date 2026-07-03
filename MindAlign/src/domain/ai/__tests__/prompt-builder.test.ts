@@ -45,4 +45,31 @@ describe('prompt builder', () => {
     expect(system).toContain('Common barrier: "no_time"');
     expect(system).toContain('warm, validating tone');
   });
+
+  it('instructs model to reply in English when response language is en (T-232)', () => {
+    const system = buildCoachSystemPrompt({
+      approach: 'universal',
+      habitTitle: 'Walk',
+      excuse: 'Tired',
+      responseLanguage: 'en',
+    });
+
+    expect(system).toContain('Respond in English');
+  });
+
+  it('includes prior turns in the user prompt (T-244)', () => {
+    const { user } = buildCoachPrompt({
+      approach: 'universal',
+      habitTitle: 'Walk',
+      excuse: 'Still tired',
+      conversationHistory: [
+        { role: 'user', content: 'I am tired' },
+        { role: 'assistant', content: 'Try two minutes.' },
+      ],
+    });
+
+    expect(user).toContain('Recent conversation');
+    expect(user).toContain('I am tired');
+    expect(user).toContain('Still tired');
+  });
 });

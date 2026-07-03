@@ -43,6 +43,10 @@ export class DrizzleChatMessageRepository implements ChatMessageRepository {
         },
       });
   }
+
+  async deleteByHabitId(habitId: string): Promise<void> {
+    await this.db.delete(schema.chatMessages).where(eq(schema.chatMessages.habitId, habitId));
+  }
 }
 
 function mapRow(row: typeof schema.chatMessages.$inferSelect): ChatMessage {

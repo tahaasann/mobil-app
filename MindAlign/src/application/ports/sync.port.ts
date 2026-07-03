@@ -9,4 +9,5 @@ export type SyncRecord = {
 export type SyncPort = {
   push(userId: string, entity: SyncEntityType, records: SyncRecord[]): Promise<void>;
   pull(userId: string, entity: SyncEntityType, since?: string): Promise<SyncRecord[]>;
+  deleteAllUserData(userId: string): Promise<void>;
 };

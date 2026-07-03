@@ -1,4 +1,5 @@
 import { Pressable, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 type MicroTaskCardProps = {
   barrierLabel: string;
@@ -15,10 +16,12 @@ export function MicroTaskCard({
   onComplete,
   onGiveUp,
 }: MicroTaskCardProps) {
+  const { t } = useTranslation();
+
   return (
     <View className="mt-4 rounded-2xl border border-amber-300 bg-amber-50 p-4 dark:border-amber-600 dark:bg-amber-950/40">
       <Text className="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-800 dark:text-amber-200">
-        Bariyer: {barrierLabel}
+        {t('microTask.barrier', { label: barrierLabel })}
       </Text>
       <Text className="mb-2 text-base font-semibold text-foreground dark:text-foreground-dark">
         {microTask}
@@ -31,7 +34,9 @@ export function MicroTaskCard({
           className="flex-1 rounded-lg bg-amber-500 px-3 py-2"
           onPress={onComplete}
         >
-          <Text className="text-center text-sm font-semibold text-white">Yaptım (kurtar)</Text>
+          <Text className="text-center text-sm font-semibold text-white">
+            {t('microTask.rescue')}
+          </Text>
         </Pressable>
         <Pressable
           accessibilityRole="button"
@@ -39,7 +44,7 @@ export function MicroTaskCard({
           onPress={onGiveUp}
         >
           <Text className="text-center text-sm font-semibold text-gray-800 dark:text-gray-100">
-            Vazgeçtim
+            {t('microTask.giveUp')}
           </Text>
         </Pressable>
       </View>

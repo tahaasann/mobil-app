@@ -18,17 +18,27 @@ jest.mock('@/presentation/components/glass-card', () => {
 });
 
 describe('QuotaWall', () => {
-  it('offers upgrade and rewarded ad actions', async () => {
+  it('offers upgrade and rewarded ad actions when watch ad is enabled', async () => {
     const onUpgrade = jest.fn();
     const onWatchAd = jest.fn();
     const user = userEvent.setup();
 
-    await render(<QuotaWall onUpgrade={onUpgrade} onWatchAd={onWatchAd} />);
+    await render(<QuotaWall onUpgrade={onUpgrade} onWatchAd={onWatchAd} watchAdEnabled />);
 
     expect(screen.getByTestId('quota-wall')).toBeOnTheScreen();
     await user.press(screen.getByText('paywall.upgrade'));
     await user.press(screen.getByText('paywall.watchAd'));
     expect(onUpgrade).toHaveBeenCalled();
     expect(onWatchAd).toHaveBeenCalled();
+  });
+
+  it('hides watch ad action when ads are disabled', async () => {
+    const onUpgrade = jest.fn();
+    const onWatchAd = jest.fn();
+
+    await render(<QuotaWall onUpgrade={onUpgrade} onWatchAd={onWatchAd} />);
+
+    expect(screen.getByText('paywall.upgrade')).toBeOnTheScreen();
+    expect(screen.queryByText('paywall.watchAd')).toBeNull();
   });
 });

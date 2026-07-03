@@ -1,7 +1,6 @@
 import type { AuthPort, AuthUser } from '@/application/ports/auth.port';
 import { SignInAsGuestUseCase } from '@/application/use-cases/sign-in-as-guest.use-case';
 import { SignInWithEmailUseCase } from '@/application/use-cases/sign-in-with-email.use-case';
-import { SignOutUseCase } from '@/application/use-cases/sign-out.use-case';
 
 const guestUser: AuthUser = {
   id: 'guest-1',
@@ -23,6 +22,7 @@ function createAuthPort(overrides: Partial<AuthPort> = {}): AuthPort {
     signInAnonymously: jest.fn().mockResolvedValue(guestUser),
     signInWithEmail: jest.fn().mockResolvedValue(emailUser),
     signOut: jest.fn().mockResolvedValue(undefined),
+    deleteAccount: jest.fn().mockResolvedValue(undefined),
     onAuthStateChanged: jest.fn(() => () => undefined),
     ...overrides,
   };
@@ -47,14 +47,5 @@ describe('auth use cases', () => {
 
     expect(auth.signInWithEmail).toHaveBeenCalledWith('coach@example.com', 'secret');
     expect(user.email).toBe('coach@example.com');
-  });
-
-  it('signs out current user', async () => {
-    const auth = createAuthPort();
-    const useCase = new SignOutUseCase(auth);
-
-    await useCase.execute();
-
-    expect(auth.signOut).toHaveBeenCalled();
   });
 });

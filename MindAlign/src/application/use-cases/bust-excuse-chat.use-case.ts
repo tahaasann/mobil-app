@@ -4,12 +4,16 @@ import type {
   BarrierResponse,
   CoachProfileContext,
   CoachStreamHandler,
+  CoachTurn,
 } from '@/application/ports/ai-coach.port';
 import type { AiUsageRepository } from '@/application/ports/ai-usage-repository.port';
 import type { RemoteConfigPort } from '@/application/ports/remote-config.port';
 import type { SubscriptionPort } from '@/application/ports/subscription.port';
 import { canConsumeAiQuota, getWeekStartUtc, resolveWeeklyQuotaLimit } from '@/domain/ai/ai-quota';
-import { buildCrisisSupportResponse } from '@/domain/ai/crisis-guardrail';
+import { resolveRemoteConfigModels } from '@/domain/ai/remote-config-policy';
+import { buildCrisisSupportResponse, type CrisisLocale } from '@/domain/ai/crisis-guardrail';
+import { scanCoachOutput } from '@/domain/ai/output-guardrail';
+import { buildWeeklyQuotaExceededMessage } from '@/domain/ai/quota-messages';
 import { classifyExcuseText } from '@/domain/ai/preclassifier';
 
 export type BustExcuseChatInput = {
@@ -18,6 +22,8 @@ export type BustExcuseChatInput = {
   approach: ApproachLens;
   streak?: number;
   profile?: CoachProfileContext;
+  locale?: CrisisLocale;
+  conversationHistory?: CoachTurn[];
   onPartial?: CoachStreamHandler;
 };
 
@@ -30,6 +36,8 @@ export type BustExcuseChatResult =
 const OFF_TOPIC_MESSAGE =
   'MindAlign yalnızca alışkanlık ve bahane koçluğu için tasarlandı. Lütfen bugün takıldığın alışkanlıkla ilgili bir cümle yaz.';
 
+const AI_DISABLED_MESSAGE = 'AI koçluk geçici olarak devre dışı. Lütfen daha sonra tekrar dene.';
+
 export class BustExcuseChatUseCase {
   constructor(
     private readonly aiCoach: AiCoachPort,
@@ -41,7 +49,7 @@ export class BustExcuseChatUseCase {
   async execute(input: BustExcuseChatInput): Promise<BustExcuseChatResult> {
     const classification = classifyExcuseText(input.excuse);
     if (classification === 'crisis') {
-      const crisis = buildCrisisSupportResponse();
+      const crisis = buildCrisisSupportResponse(input.locale ?? 'tr');
       return { kind: 'crisis', message: crisis.message, resources: crisis.resources };
     }
 
@@ -55,6 +63,15 @@ export class BustExcuseChatUseCase {
       this.aiUsageRepository.getUsageForWeek(weekStart),
       this.remoteConfigPort.getValues(),
     ]);
+
+    if (!remoteConfig.aiEnabled) {
+      return {
+        kind: 'quota_exceeded',
+        message: AI_DISABLED_MESSAGE,
+      };
+    }
+
+    const models = resolveRemoteConfigModels(remoteConfig);
     const limit = resolveWeeklyQuotaLimit({
       isPremium,
       bonusCount: usage.bonusCount,
@@ -65,7 +82,7 @@ export class BustExcuseChatUseCase {
     if (!canConsumeAiQuota(usage.count, limit)) {
       return {
         kind: 'quota_exceeded',
-        message: 'Bu hafta ücretsiz 3 AI koçluk hakkını kullandın. Gelecek hafta yenilenir.',
+        message: buildWeeklyQuotaExceededMessage(input.locale ?? 'tr', limit),
       };
     }
 
@@ -76,11 +93,22 @@ export class BustExcuseChatUseCase {
         approach: input.approach,
         streak: input.streak,
         profile: input.profile,
-        geminiModel: remoteConfig.geminiModel,
-        geminiLiteModel: remoteConfig.geminiLiteModel,
+        geminiModel: models.geminiModel,
+        geminiLiteModel: models.geminiLiteModel,
+        responseLanguage: input.locale ?? 'tr',
+        conversationHistory: input.conversationHistory,
       },
       input.onPartial,
     );
+
+    const guard = scanCoachOutput(response);
+    if (!guard.safe) {
+      if (guard.reason === 'crisis') {
+        const crisis = buildCrisisSupportResponse(input.locale ?? 'tr');
+        return { kind: 'crisis', message: crisis.message, resources: crisis.resources };
+      }
+      return { kind: 'off_topic', message: OFF_TOPIC_MESSAGE };
+    }
 
     await this.aiUsageRepository.incrementForWeek(weekStart);
 

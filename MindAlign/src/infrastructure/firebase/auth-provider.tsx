@@ -7,8 +7,8 @@ import {
   HandleAuthSessionUseCase,
   SignOutSessionUseCase,
 } from '@/application/use-cases/auth-session.use-case';
-import { FirebaseAuthAdapter } from '@/infrastructure/firebase/firebase-auth.adapter';
-import { MockAuthAdapter } from '@/infrastructure/firebase/mock-auth.adapter';
+import { createAuthPort } from '@/infrastructure/firebase/create-auth-port';
+import { formatAuthErrorForLog } from '@/infrastructure/firebase/parse-firebase-auth-error';
 
 type AuthContextValue = {
   user: AuthUser | null;
@@ -19,13 +19,6 @@ type AuthContextValue = {
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
-
-function createAuthPort() {
-  if (process.env.EXPO_PUBLIC_AUTH_MOCK === 'true') {
-    return new MockAuthAdapter();
-  }
-  return new FirebaseAuthAdapter();
-}
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -50,7 +43,11 @@ export function AuthProvider({
       setUser(nextUser);
       setIsLoading(false);
       if (nextUser && handleAuthSessionUseCase) {
-        void handleAuthSessionUseCase.execute(nextUser);
+        void handleAuthSessionUseCase.execute(nextUser).catch((error) => {
+          if (__DEV__) {
+            console.error('[AuthProvider] handleAuthSession failed', formatAuthErrorForLog(error));
+          }
+        });
       }
     });
     return unsubscribe;

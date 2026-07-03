@@ -1,0 +1,18 @@
+appId: com.tahaasann.mindalign
+---
+- launchApp
+- tapOn: 'Koç'
+- tapOn:
+    id: 'coach-chat-text-input'
+- inputText: 'Bugun cok yorgunum'
+- tapOn:
+    id: 'coach-chat-send'
+- tapOn: 'Ana sayfa'
+- tapOn: 'Koç'
+- assertVisible:
+    id: 'coach-chat-scroll'
+- tapOn: 'Yeni sohbet'
+- tapOn: 'Ana sayfa'
+- tapOn: 'Kaydedilenler'
+- tapOn: 'Koç'
+- assertVisible: 'Genel konuşma'

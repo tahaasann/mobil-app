@@ -1,9 +1,13 @@
 appId: com.tahaasann.mindalign
 ---
-# Tracer Bullet 7: full happy-path regression pack
+# Tracer Bullet 7 + FAZ 18: full happy-path regression pack
 - runFlow:
-    file: onboarding_to_dashboard.yaml
+    file: onboarding_full_flow.yaml
 - runFlow:
     file: habit_mark_done.yaml
 - runFlow:
+    file: habit_detail.yaml
+- runFlow:
     file: excuse_to_rescue.yaml
+- runFlow:
+    file: coach_session_persistence.yaml

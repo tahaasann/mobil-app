@@ -1,0 +1,13 @@
+appId: com.tahaasann.mindalign
+---
+- launchApp
+- tapOn: 'Yeni alışkanlık'
+- inputText: 'Detail walk'
+- tapOn: 'Ekle'
+- assertVisible: 'Detail walk'
+- tapOn: 'Detail walk'
+- assertVisible: 'Alışkanlık detayı'
+- tapOn: 'Değişiklikleri kaydet'
+- tapOn: 'Geri'
+- assertVisible: 'Detail walk'
+- stopApp

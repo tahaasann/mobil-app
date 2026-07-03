@@ -1,4 +1,8 @@
-import type { ApproachLens, CoachProfileContext } from '@/application/ports/ai-coach.port';
+import type {
+  ApproachLens,
+  CoachProfileContext,
+  CoachTurn,
+} from '@/application/ports/ai-coach.port';
 import type { CoachTone } from '@/domain/entities/user-profile';
 
 export type { CoachProfileContext };
@@ -10,6 +14,13 @@ export type PromptBuildInput = {
   streak?: number;
   islamicPolicyRules?: string[];
   profile?: CoachProfileContext;
+  responseLanguage?: 'en' | 'tr';
+  conversationHistory?: CoachTurn[];
+};
+
+const RESPONSE_LANGUAGE_INSTRUCTION: Record<'en' | 'tr', string> = {
+  en: 'Respond in English. All JSON string values must be English.',
+  tr: 'Respond in Turkish. All JSON string values must be Turkish.',
 };
 
 const MAX_HABIT_TITLE = 100;
@@ -61,6 +72,9 @@ export function buildCoachSystemPrompt(input: PromptBuildInput): string {
   return [
     'You are MindAlign, a habit coach focused ONLY on the user habit, excuse, motivation, and wellbeing.',
     'Reject unrelated requests (code, homework, general trivia) by staying within the JSON schema.',
+    input.responseLanguage
+      ? RESPONSE_LANGUAGE_INSTRUCTION[input.responseLanguage]
+      : RESPONSE_LANGUAGE_INSTRUCTION.tr,
     LENS_INSTRUCTIONS[input.approach],
     profileBlock,
     policyBlock,
@@ -77,11 +91,24 @@ export function buildCoachUserPrompt(input: PromptBuildInput): string {
       ? `Current streak: ${input.streak} days.`
       : 'Current streak: unknown.';
 
+  const historyBlock =
+    input.conversationHistory && input.conversationHistory.length > 0
+      ? [
+          'Recent conversation (oldest first):',
+          ...input.conversationHistory.map(
+            (turn) => `${turn.role === 'user' ? 'User' : 'Coach'}: ${JSON.stringify(turn.content)}`,
+          ),
+        ].join('\n')
+      : undefined;
+
   return [
     `Habit: ${JSON.stringify(habitTitle)}`,
     streakLine,
+    historyBlock,
     `User excuse / barrier message: ${JSON.stringify(excuse)}`,
-  ].join('\n');
+  ]
+    .filter(Boolean)
+    .join('\n');
 }
 
 export function buildCoachPrompt(input: PromptBuildInput): { system: string; user: string } {

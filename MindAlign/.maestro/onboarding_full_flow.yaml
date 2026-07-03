@@ -1,0 +1,5 @@
+appId: com.tahaasann.mindalign
+---
+# T-273: Full onboarding E2E — approach → identity → habits → barrier → tone → notifications → auth → dashboard
+- runFlow:
+    file: onboarding_to_dashboard.yaml

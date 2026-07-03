@@ -1,5 +1,6 @@
 import { render, screen, userEvent } from '@testing-library/react-native';
 
+import { renderWithProviders } from '../../../../__tests__/utils/render-with-providers';
 import { MicroTaskCard } from '@/presentation/components/microtask-card';
 
 describe('MicroTaskCard', () => {
@@ -8,7 +9,7 @@ describe('MicroTaskCard', () => {
     const onGiveUp = jest.fn();
     const user = userEvent.setup();
 
-    await render(
+    await renderWithProviders(
       <MicroTaskCard
         barrierLabel="Yorgunluk"
         microTask="2 dakika hazırlık"
@@ -16,6 +17,7 @@ describe('MicroTaskCard', () => {
         onComplete={onComplete}
         onGiveUp={onGiveUp}
       />,
+      { locale: 'tr' },
     );
 
     await user.press(screen.getByText(/Yaptım \(kurtar\)/i));

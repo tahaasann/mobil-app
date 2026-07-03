@@ -10,5 +10,6 @@ export type AuthPort = {
   signInAnonymously(): Promise<AuthUser>;
   signInWithEmail(email: string, password: string): Promise<AuthUser>;
   signOut(): Promise<void>;
+  deleteAccount(): Promise<void>;
   onAuthStateChanged(callback: (user: AuthUser | null) => void): () => void;
 };

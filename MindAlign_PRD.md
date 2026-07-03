@@ -1,8 +1,13 @@
 # MindAlign - Ürün Gereksinim Dokümanı (PRD)
 
 > Akıllı Alışkanlık Takipçisi ve "Bariyer / Bahane Çürütücü" Zihinsel Kalkan
-> Sürüm: 1.3 (MVP) · Tarih: Haziran 2026 · Hazırlayan: AI Eş-Kurucu (Cursor)
+> Sürüm: 1.4 (MVP) · Tarih: Temmuz 2026 · Hazırlayan: AI Eş-Kurucu (Cursor)
 > Durum: Onay bekliyor
+
+> **Sürüm 1.4 değişiklikleri (FAZ 18 — emulator QA UX polish):**
+> - **11 maddelik kullanıcı geri bildirimi kapatıldı:** onboarding yeniden oynatma, liquid glass variant'ları, profil yenileme, habit detay (timer + notlar), genişletilmiş create form, done kutlama animasyonu, koç ikon aksiyonları, rescue → habit hub, chat oturum kalıcılığı, multi-turn koç sohbeti.
+> - **Tasarım:** `GlassCard` variant'ları (`subtle` / `elevated` / `accent`); core ekranlara cam dili; Reanimated micro-interactions (bkz. ADR 007).
+> - **Kalan backlog:** Emulator/cihaz manuel QA imzası (`docs/faz18-manual-qa-checklist.md`); FAZ 8 store lansmanı (T-154+).
 
 > **Sürüm 1.3 değişiklikleri:**
 > - **Paket yöneticisi pnpm** olarak belirlendi (`pnpm-workspace.yaml` -> `nodeLinker: hoisted`; RN native modül uyumu, disk/hız avantajı). EAS Build pnpm'i otomatik destekler.
@@ -144,19 +149,33 @@ Aşamalı, kısa ama derin akış (bkz. Soru 7):
 
 ### B. Dashboard (`/(tabs)/index`)
 - Alışkanlık kartları; son 7 gün renk halkalarıyla (Yeşil/Sarı/Kırmızı/boş).
-- Karta dokun -> "Yaptım" / "Yapamadım (Bariyere takıldım)".
-- "Yaptım" -> kutlama animasyonu + streak +1.
+- Karta dokun -> **alışkanlık detay** (`/habit/[id]`: düzenle, sil, streak özeti, opsiyonel odak timer, habit notları).
+- "Yaptım" / "Yapamadım (Bariyere takıldım)" aksiyonları kart üzerinde.
+- "Yaptım" -> **streak'e göre dinamik kutlama animasyonu** (confetti/pulse + haptic) + streak +1.
 - "Yapamadım" -> Bariyer Sohbeti açılır.
 - **Belirgin, kalıcı "Şu an takıldım" butonu** (habit seçmeden de sohbete girilebilir; bkz. Soru 5).
 - Üstte toplam streak skoru + bugünün ilerlemesi.
+- **Yeni alışkanlık:** hatırlatma, sıklık, aksan rengi alanları (genişletilmiş form).
 
-### C. Bariyer / Bahane Sohbeti (`/excuse/[habitId]` ve genel mod) - ÇEKİRDEK
+### B2. Alışkanlık Detay (`/habit/[id]`) — FAZ 18
+- Başlık/açıklama düzenleme, soft delete (arşiv).
+- 7 günlük heatmap + streak özeti.
+- Opsiyonel **odak timer** (countdown; arka plan davranışı ADR 009).
+- **Habit notları** (SQLite journal): liste + ekle/sil.
+
+### B3. Profil (`/(tabs)/profile`) — FAZ 18
+- Liquid glass kartlar: avatar, streak/identity/approach özeti.
+- Ayarlar kısayolları; **onboarding'i yeniden oynat** (QA/demo).
+
+### C. Bariyer / Bahane Sohbeti (`/excuse/[habitId]`, `/(tabs)/chat`) - ÇEKİRDEK
 - **İki giriş:** genel ("şu an zorlanıyorum") veya alışkanlığa özel (habit bağlamı taşınır).
 - Çok-turlu **sohbet**: kullanıcı bahanesini/durumunu yazar; AI seçili merceğe göre, **yargılamadan**, bahanenin altındaki bariyeri isimlendirir.
 - **AI'ın bağlamı:** sistem talimatı + kullanıcı profili + seçili habit + habit geçmişi (geçmiş bariyer örüntüleri) + **kullanıcının habit notları** + sohbet geçmişi.
 - AI **5-10 dakikalık mikro-kurtarma görevi** üretir.
-- "Mikro-görevi yaptım" -> gün **Sarı (Kurtarılmış)**, zincir kırılmaz. "Vazgeçtim" -> Kırmızı + suçlamayan kapanış.
-- Her AI baloncuğunda **Bookmark** + **Regenerate** butonu.
+- "Mikro-görevi yaptım" -> gün **Sarı (Kurtarılmış)**, zincir kırılmaz; **habit detay ekranına yönlendirme** (sohbet SQLite'da kalır). "Vazgeçtim" -> Kırmızı + suçlamayan kapanış.
+- Her AI baloncuğunda **Bookmark / Regenerate / Report — yalnızca ikon** + `accessibilityLabel` (metin buton yok).
+- **Global koç sekmesi:** oturum üst barı (X kapat, "Yeni sohbet"); tab geçişinde thread korunur; explicit reset yalnızca "Yeni sohbet".
+- **Multi-turn:** koç yanıtından sonra kullanıcı serbest metinle devam edebilir (kriz modu hariç).
 - Streaming yanıt + opsiyonel **cihaz-içi TTS ile sesli dinleme**.
 
 ### D. Kaydedilenler (`/saved`)
@@ -368,7 +387,9 @@ Drizzle: şema tek kaynaktan; TS tipleri + SQL migration otomatik; `metro.config
 - Semantic token'lar: `bg`, `surface`, `text`, `success` (yeşil), `rescued` (amber), `failed` (kırmızı), `accent`. Aksan merceğe göre incelikle değişebilir.
 - **Tema:** auto | light | dark.
 
-**Bileşenler:** `GlassCard`, `HabitCard`, `StreakRing`, `ApproachSelector`, `ChatBubble` (bookmark/regenerate aksiyonlu), `MicroTaskCard`, `BreathingOrb`, `PaywallSheet`, `EmptyState`.
+**Bileşenler:** `GlassCard` (**variant:** `subtle` | `elevated` | `accent`), `HabitCard`, `StreakRing`, `ApproachSelector`, `ChatBubble` (ikon bookmark/regenerate/report), `CoachChatView`, `ChatSessionHeader`, `HabitDoneCelebration`, `MicroTaskCard`, `BreathingOrb`, `PaywallSheet`, `EmptyState`, `ProfileHeroCard`.
+
+**FAZ 18 uygulama notu:** Liquid glass token'ları ve variant kuralları [ADR 007](MindAlign/docs/adr/007-liquid-glass-design.md) ile dokümante edildi. Core ekranlar (home, auth, onboarding, profil, tab header) glass sistemine taşındı. Press scale ve kart giriş animasyonları Reanimated ile; `prefers-reduced-motion` saygılı.
 
 **Erişilebilirlik:** AA kontrast, dinamik font, >=44pt dokunma, ekran okuyucu etiketleri.
 
@@ -485,7 +506,7 @@ flowchart LR
 - **M0 - Temel:** SDK 56 projesi, hexagonal iskelet, Drizzle şema/migration, tema (liquid-glass/fildişi), i18n, Firebase (Auth/AI Logic/App Check/Remote Config/Firestore) + RevenueCat provider'ları, EAS (Windows'tan iOS build doğrulaması).
 - **M1 - Çekirdek takip + hesap:** genişletilmiş onboarding, hesap/misafir, habit CRUD + notlar, dashboard + streak, bildirim tercihleri/yoklama.
 - **M2 - Çekirdek değer:** Bahane Sohbeti, Firebase AI Logic + Gemini 3 Flash, ön-sınıflandırıcı + guardrail + İslami içerik politikası, structured output, sarı kurtarma, bookmark/regenerate + Kaydedilenler + Firestore sync, TTS, nefes ekranı.
-- **M3 - Ticarileştirme & cila:** RevenueCat paywall (onboarding sonrası soft + kota) + bölgesel fiyat + ödüllü reklam, 5 dil UI, liquid-glass/dark-light cila, review istemi, veri export, analytics/crash.
+- **M3 - Ticarileştirme & cila:** RevenueCat paywall (onboarding sonrası soft + kota) + bölgesel fiyat + ödüllü reklam, 5 dil UI, **liquid-glass/dark-light cila (FAZ 18 tamamlandı)**, review istemi, veri export, analytics/crash.
 - **M4 - Kapalı beta (stabilizasyon):** ~20 davetli testçi (TestFlight + Play closed, 14 gün), crash-free/onboarding/paywall iterasyonu, ASO varlıkları hazırlığı. (Public küçük-pazar lansmanı yok.)
 - **M5 - Global lansman:** 5 dil store listing, featuring nomination, **global eş zamanlı** çıkış, Product Hunt + organik.
 
@@ -510,6 +531,7 @@ flowchart LR
 - **Free AI kotası = 3/hafta**, kalanı ödüllü reklamla uzatılır. ✓
 - **Lansman = global eş zamanlı** (kapalı beta ile stabilizasyon sonrası); küçük pazar yok. ✓
 - **iOS test cihazı alınmayacak** -> Android-öncelikli + EAS Build + TestFlight (cihazlı testçi). ✓
+- **FAZ 18 emulator QA UX polish (11 madde)** -> kod + Jest tamam; **manuel emulator imzası** checklist'te bekliyor. ✓ (kod) / ☐ (cihaz)
 
 **Hâlâ açık:**
 1. **Uygulama adı:** "MindAlign" geçici. Aday ve kriterler aşağıda (bkz. 19.1). Senin tercihini bekliyorum.
@@ -526,4 +548,4 @@ Kriterler: kısa, 5 dilde söylenebilir, store/domain müsait, marka çakışmas
 
 ---
 
-*Sürüm 1.2 hazır. Onayların sonrası M0'dan başlayıp kodlamaya geçebiliriz. (Bekleyen önemli görevini iletebilirsin.)*
+*Sürüm 1.4 — FAZ 18 UX polish tamamlandı. Sonraki adım: FAZ 8 store lansmanı (T-154+) ve emulator QA imzası.*

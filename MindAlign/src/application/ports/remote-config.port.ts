@@ -3,6 +3,8 @@ export type RemoteConfigValues = {
   premiumWeeklyQuota: number;
   geminiModel: string;
   geminiLiteModel: string;
+  aiEnabled: boolean;
+  serverAiQuotaEnabled: boolean;
 };
 
 export type RemoteConfigPort = {

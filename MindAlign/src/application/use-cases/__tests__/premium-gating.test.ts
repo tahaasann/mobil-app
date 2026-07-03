@@ -45,6 +45,8 @@ describe('premium gating in BustExcuseChatUseCase', () => {
         premiumWeeklyQuota: 60,
         geminiModel: 'gemini-2.5-flash',
         geminiLiteModel: 'gemini-2.5-flash-lite',
+        aiEnabled: true,
+        serverAiQuotaEnabled: false,
       })),
     };
     useCase = new BustExcuseChatUseCase(

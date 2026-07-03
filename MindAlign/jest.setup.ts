@@ -1,7 +1,28 @@
 jest.mock('react-native-reanimated', () => {
-  const Reanimated = require('react-native-reanimated/mock');
-  Reanimated.default.call = () => {};
-  return Reanimated;
+  const { View } = require('react-native');
+
+  const FadeInDown = {
+    delay: () => FadeInDown,
+    duration: () => ({}),
+  };
+
+  return {
+    __esModule: true,
+    default: {
+      View,
+      createAnimatedComponent: (Component: typeof View) => Component,
+      call: () => {},
+    },
+    View,
+    createAnimatedComponent: (Component: typeof View) => Component,
+    useSharedValue: (initial: number) => ({ value: initial }),
+    useAnimatedStyle: (factory: () => object) => factory(),
+    withSpring: (value: number) => value,
+    withTiming: (value: number) => value,
+    withRepeat: (value: number) => value,
+    withSequence: (...values: number[]) => values[values.length - 1] ?? 0,
+    FadeInDown,
+  };
 });
 
 jest.mock('@react-native-firebase/app', () => ({
@@ -56,11 +77,6 @@ jest.mock('@react-native-firebase/ai', () => ({
       }),
     })),
   })),
-}));
-
-jest.mock('expo-speech', () => ({
-  speak: jest.fn(),
-  stop: jest.fn(),
 }));
 
 jest.mock('expo-localization', () => ({
@@ -191,4 +207,11 @@ jest.mock('@react-native-firebase/remote-config', () => {
 jest.mock('expo-store-review', () => ({
   isAvailableAsync: jest.fn(async () => true),
   requestReview: jest.fn(async () => undefined),
+}));
+
+jest.mock('expo-haptics', () => ({
+  notificationAsync: jest.fn(async () => undefined),
+  NotificationFeedbackType: {
+    Success: 'success',
+  },
 }));

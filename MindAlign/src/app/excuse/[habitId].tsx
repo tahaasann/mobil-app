@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -25,7 +25,7 @@ export default function ExcuseChatScreen() {
           habitId={habitId}
           habitTitle={habitTitle}
           streak={streak}
-          onRescued={() => router.back()}
+          onRescued={() => router.push(`/habit/${habitId}` as Href)}
           onGiveUp={() => router.back()}
         />
       </SafeAreaView>

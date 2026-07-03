@@ -1,7 +1,13 @@
 import { useCallback, useState } from 'react';
 
-import type { ApproachLens, CoachProfileContext } from '@/application/ports/ai-coach.port';
+import type {
+  ApproachLens,
+  CoachProfileContext,
+  CoachTurn,
+} from '@/application/ports/ai-coach.port';
 import type { BustExcuseChatResult } from '@/application/use-cases/bust-excuse-chat.use-case';
+import type { CrisisLocale } from '@/domain/ai/crisis-guardrail';
+import { trimConversationHistory } from '@/domain/ai/conversation-history';
 import { useAppContainer } from '@/infrastructure/di/app-container';
 
 type SendExcuseInput = {
@@ -10,6 +16,8 @@ type SendExcuseInput = {
   streak?: number;
   approach?: ApproachLens;
   profile?: CoachProfileContext;
+  locale?: CrisisLocale;
+  conversationHistory?: CoachTurn[];
 };
 
 export function useExcuseChat(habitId: string) {
@@ -28,6 +36,8 @@ export function useExcuseChat(habitId: string) {
           streak: input.streak,
           approach: input.approach ?? 'universal',
           profile: input.profile,
+          locale: input.locale,
+          conversationHistory: trimConversationHistory(input.conversationHistory ?? []),
           onPartial: setStreamingText,
         });
       } finally {

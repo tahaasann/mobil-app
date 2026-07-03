@@ -15,6 +15,15 @@ export const habits = sqliteTable('habits', {
   createdAt: text('created_at').notNull(),
 });
 
+export const habitNotes = sqliteTable('habit_notes', {
+  id: text('id').primaryKey().notNull(),
+  habitId: text('habit_id')
+    .notNull()
+    .references(() => habits.id),
+  content: text('content').notNull(),
+  createdAt: text('created_at').notNull(),
+});
+
 export const habitLogs = sqliteTable(
   'habit_logs',
   {

@@ -5,7 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
 import { ApproachSelector } from '@/presentation/components/approach-selector';
+import { AnimatedEnter } from '@/presentation/components/animated-enter';
 import { GlassCard } from '@/presentation/components/glass-card';
+import { GlassPressable } from '@/presentation/components/glass-pressable';
+import { HabitTitleInput } from '@/presentation/components/habit-title-input';
 import { useAppContainer } from '@/infrastructure/di/app-container';
 import { createNotificationContentBuilder } from '@/presentation/notifications/notification-content';
 import {
@@ -98,10 +101,14 @@ export default function OnboardingScreen() {
 
   return (
     <View className="flex-1 bg-ivory dark:bg-charcoal">
+      <View className="pointer-events-none absolute -right-20 top-10 h-60 w-60 rounded-full bg-accent/10" />
+      <View className="pointer-events-none absolute -left-24 bottom-20 h-56 w-56 rounded-full bg-emerald-400/10" />
+
       <SafeAreaView className="flex-1 px-4 py-6">
         <ScrollView contentContainerClassName="gap-4 pb-10">
           {step === 'welcome' ? (
-            <GlassCard className="p-6">
+            <AnimatedEnter>
+              <GlassCard variant="elevated" className="p-6">
               <Text className="text-3xl font-semibold text-foreground dark:text-foreground-dark">
                 {t('onboarding.welcome.title')}
               </Text>
@@ -109,7 +116,8 @@ export default function OnboardingScreen() {
                 {t('onboarding.welcome.subtitle')}
               </Text>
               <PrimaryButton label={t('onboarding.welcome.continue')} onPress={goNext} />
-            </GlassCard>
+              </GlassCard>
+            </AnimatedEnter>
           ) : null}
 
           {step === 'approach' ? (
@@ -149,12 +157,13 @@ export default function OnboardingScreen() {
                 subtitle={t('onboarding.habits.subtitle')}
               />
               <View className="flex-row gap-2">
-                <TextInput
-                  className="flex-1 rounded-xl border border-gray-300 px-4 py-3 text-base text-foreground dark:text-foreground-dark"
-                  placeholder={t('onboarding.habits.placeholder')}
-                  value={habitInput}
-                  onChangeText={setHabitInput}
-                />
+                <View className="flex-1 rounded-xl bg-surface/80 p-1 dark:bg-surface-dark/80">
+                  <HabitTitleInput
+                    placeholder={t('onboarding.habits.placeholder')}
+                    value={habitInput}
+                    onChangeText={setHabitInput}
+                  />
+                </View>
                 <PrimaryButton label={t('onboarding.habits.add')} onPress={addHabit} />
               </View>
               {draft.habitTitles.map((title) => (
@@ -262,13 +271,9 @@ function StepHeader({ title, subtitle }: { title: string; subtitle: string }) {
 
 function PrimaryButton({ label, onPress }: { label: string; onPress: () => void }) {
   return (
-    <Pressable
-      accessibilityRole="button"
-      className="mt-4 rounded-xl bg-accent px-4 py-3"
-      onPress={onPress}
-    >
+    <GlassPressable accessibilityRole="button" className="mt-4 rounded-xl bg-accent px-4 py-3" onPress={onPress}>
       <Text className="text-center text-base font-semibold text-white">{label}</Text>
-    </Pressable>
+    </GlassPressable>
   );
 }
 
@@ -313,7 +318,7 @@ function ChoiceChip({
 }) {
   return (
     <Pressable accessibilityRole="button" onPress={onPress}>
-      <GlassCard className={`px-4 py-3 ${selected ? 'border-accent' : ''}`}>
+      <GlassCard variant={selected ? 'accent' : 'subtle'} className="px-4 py-3">
         <Text className="text-base text-foreground dark:text-foreground-dark">{label}</Text>
       </GlassCard>
     </Pressable>

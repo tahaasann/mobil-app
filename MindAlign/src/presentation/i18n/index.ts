@@ -2,23 +2,17 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import * as Localization from 'expo-localization';
 
-import ar from './locales/ar.json';
 import en from './locales/en.json';
-import fr from './locales/fr.json';
-import ja from './locales/ja.json';
 import tr from './locales/tr.json';
 
-export const SUPPORTED_LOCALES = ['en', 'tr', 'ar', 'ja', 'fr'] as const;
+export const SUPPORTED_LOCALES = ['en', 'tr'] as const;
 export type AppLocale = (typeof SUPPORTED_LOCALES)[number];
 
-export const RTL_LOCALES: AppLocale[] = ['ar'];
+export const RTL_LOCALES: AppLocale[] = [];
 
 const resources = {
   en: { translation: en },
   tr: { translation: tr },
-  ar: { translation: ar },
-  ja: { translation: ja },
-  fr: { translation: fr },
 };
 
 function resolveDeviceLocale(): AppLocale {

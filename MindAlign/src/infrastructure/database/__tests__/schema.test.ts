@@ -4,6 +4,7 @@ import {
   bookmarks,
   chatMessages,
   habitLogs,
+  habitNotes,
   userProfile,
 } from '@/infrastructure/database/schema';
 
@@ -31,5 +32,10 @@ describe('habits schema', () => {
     expect(bookmarks.content.name).toBe('content');
     expect(chatMessages.role.name).toBe('role');
     expect(chatMessages.habitId.name).toBe('habit_id');
+  });
+
+  it('defines habit notes table', () => {
+    expect(habitNotes.habitId.name).toBe('habit_id');
+    expect(habitNotes.content.name).toBe('content');
   });
 });

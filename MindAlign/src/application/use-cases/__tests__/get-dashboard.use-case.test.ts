@@ -16,6 +16,10 @@ class FakeHabitRepository implements HabitRepository {
   async findById(id: string) {
     return this.habits.find((habit) => habit.id === id) ?? null;
   }
+
+  async update(): Promise<void> {}
+
+  async archive(): Promise<void> {}
 }
 
 class FakeHabitLogRepository implements HabitLogRepository {

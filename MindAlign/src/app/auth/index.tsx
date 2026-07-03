@@ -1,11 +1,13 @@
 import { useRouter, type Href } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
 import { GlassCard } from '@/presentation/components/glass-card';
+import { GlassPressable } from '@/presentation/components/glass-pressable';
 import { useAuth } from '@/infrastructure/firebase/auth-provider';
+import { resolveAuthErrorTranslationKey } from '@/infrastructure/firebase/parse-firebase-auth-error';
 
 export default function AuthScreen() {
   const router = useRouter();
@@ -26,8 +28,11 @@ export default function AuthScreen() {
     try {
       await signInAsGuest();
       goToApp();
-    } catch {
-      setError(t('auth.errorGeneric'));
+    } catch (caught) {
+      if (__DEV__) {
+        console.error('[AuthScreen] guest sign-in failed', caught);
+      }
+      setError(t(resolveAuthErrorTranslationKey(caught)));
     } finally {
       setIsSubmitting(false);
     }
@@ -39,8 +44,11 @@ export default function AuthScreen() {
     try {
       await signInWithEmail(email, password);
       goToApp();
-    } catch {
-      setError(t('auth.errorSignIn'));
+    } catch (caught) {
+      if (__DEV__) {
+        console.error('[AuthScreen] email sign-in failed', caught);
+      }
+      setError(t(resolveAuthErrorTranslationKey(caught)));
     } finally {
       setIsSubmitting(false);
     }
@@ -48,8 +56,11 @@ export default function AuthScreen() {
 
   return (
     <View className="flex-1 bg-ivory dark:bg-charcoal">
+      <View className="pointer-events-none absolute -right-12 top-16 h-64 w-64 rounded-full bg-accent/15" />
+      <View className="pointer-events-none absolute -left-16 bottom-24 h-52 w-52 rounded-full bg-emerald-300/10" />
+
       <SafeAreaView className="flex-1 justify-center px-4 py-6">
-        <GlassCard className="p-6">
+        <GlassCard variant="elevated" className="p-6">
           <Text className="text-2xl font-semibold text-foreground dark:text-foreground-dark">
             {t('auth.title')}
           </Text>
@@ -59,23 +70,25 @@ export default function AuthScreen() {
 
           <TextInput
             autoCapitalize="none"
-            className="mt-6 rounded-xl border border-gray-300 px-4 py-3 text-base dark:border-gray-600 dark:text-foreground-dark"
+            className="mt-6 rounded-xl border border-white/25 bg-white/40 px-4 py-3 text-base dark:border-white/10 dark:bg-black/20 dark:text-foreground-dark"
             keyboardType="email-address"
             placeholder={t('auth.emailPlaceholder')}
+            placeholderTextColor="#9CA3AF"
             value={email}
             onChangeText={setEmail}
           />
           <TextInput
             secureTextEntry
-            className="mt-3 rounded-xl border border-gray-300 px-4 py-3 text-base dark:border-gray-600 dark:text-foreground-dark"
+            className="mt-3 rounded-xl border border-white/25 bg-white/40 px-4 py-3 text-base dark:border-white/10 dark:bg-black/20 dark:text-foreground-dark"
             placeholder={t('auth.passwordPlaceholder')}
+            placeholderTextColor="#9CA3AF"
             value={password}
             onChangeText={setPassword}
           />
 
           {error ? <Text className="mt-2 text-sm text-red-600">{error}</Text> : null}
 
-          <Pressable
+          <GlassPressable
             accessibilityRole="button"
             className={`mt-4 rounded-xl bg-accent px-4 py-3 ${isSubmitting ? 'opacity-50' : ''}`}
             disabled={isSubmitting}
@@ -84,18 +97,18 @@ export default function AuthScreen() {
             <Text className="text-center text-base font-semibold text-white">
               {t('auth.signIn')}
             </Text>
-          </Pressable>
+          </GlassPressable>
 
-          <Pressable
+          <GlassPressable
             accessibilityRole="button"
-            className={`mt-3 rounded-xl border border-accent px-4 py-3 ${isSubmitting ? 'opacity-50' : ''}`}
+            className={`mt-3 rounded-xl border border-accent bg-white/20 px-4 py-3 dark:bg-black/10 ${isSubmitting ? 'opacity-50' : ''}`}
             disabled={isSubmitting}
             onPress={() => void handleGuest()}
           >
             <Text className="text-center text-base font-semibold text-accent">
               {t('auth.continueGuest')}
             </Text>
-          </Pressable>
+          </GlassPressable>
         </GlassCard>
       </SafeAreaView>
     </View>

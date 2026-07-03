@@ -1,18 +1,23 @@
-import { Pressable, Text, View } from 'react-native';
+import { Linking, Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import type {
   SubscriptionOffering,
   SubscriptionPackage,
 } from '@/application/ports/subscription.port';
+import { LEGAL_LINKS } from '@/infrastructure/config/legal-links';
 import { GlassCard } from '@/presentation/components/glass-card';
+
+export type PaywallLoadState = 'loading' | 'ready' | 'error';
 
 type PaywallSheetProps = {
   offering: SubscriptionOffering | null;
+  loadState?: PaywallLoadState;
   showContinueFree?: boolean;
   onPurchase: (pkg: SubscriptionPackage) => void;
   onRestore: () => void;
   onContinueFree?: () => void;
+  onRetry?: () => void;
   isBusy?: boolean;
 };
 
@@ -44,15 +49,45 @@ function PackageButton({
   );
 }
 
+function LegalFooter() {
+  const { t } = useTranslation();
+
+  return (
+    <View className="mt-4 gap-2">
+      <Text className="text-center text-xs text-muted dark:text-muted-dark">
+        {t('paywall.autoRenewal')}
+      </Text>
+      <View className="flex-row justify-center gap-4">
+        <Pressable
+          accessibilityRole="link"
+          onPress={() => void Linking.openURL(LEGAL_LINKS.termsOfService)}
+        >
+          <Text className="text-xs font-semibold text-accent">{t('paywall.termsLink')}</Text>
+        </Pressable>
+        <Pressable
+          accessibilityRole="link"
+          onPress={() => void Linking.openURL(LEGAL_LINKS.privacyPolicy)}
+        >
+          <Text className="text-xs font-semibold text-accent">{t('paywall.privacyLink')}</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
 export function PaywallSheet({
   offering,
+  loadState = 'ready',
   showContinueFree = false,
   onPurchase,
   onRestore,
   onContinueFree,
+  onRetry,
   isBusy = false,
 }: PaywallSheetProps) {
   const { t } = useTranslation();
+  const hasPackages = Boolean(offering?.annual || offering?.monthly);
+  const showError = loadState === 'error' || (loadState === 'ready' && !hasPackages);
 
   return (
     <GlassCard testID="paywall-sheet" className="p-6">
@@ -63,22 +98,42 @@ export function PaywallSheet({
         {t('paywall.subtitle')}
       </Text>
 
-      <View className="mt-6 gap-3">
-        {offering?.annual ? (
-          <PackageButton
-            pkg={offering.annual}
-            disabled={isBusy}
-            onPress={() => onPurchase(offering.annual!)}
-          />
-        ) : null}
-        {offering?.monthly ? (
-          <PackageButton
-            pkg={offering.monthly}
-            disabled={isBusy}
-            onPress={() => onPurchase(offering.monthly!)}
-          />
-        ) : null}
-      </View>
+      {showError ? (
+        <View className="mt-6">
+          <Text className="text-sm text-muted dark:text-muted-dark">
+            {t('paywall.offeringError')}
+          </Text>
+          {onRetry ? (
+            <Pressable
+              accessibilityRole="button"
+              className="mt-4 rounded-xl bg-accent px-4 py-3"
+              disabled={isBusy}
+              onPress={onRetry}
+            >
+              <Text className="text-center text-base font-semibold text-white">
+                {t('paywall.retry')}
+              </Text>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : (
+        <View className="mt-6 gap-3">
+          {offering?.annual ? (
+            <PackageButton
+              pkg={offering.annual}
+              disabled={isBusy}
+              onPress={() => onPurchase(offering.annual!)}
+            />
+          ) : null}
+          {offering?.monthly ? (
+            <PackageButton
+              pkg={offering.monthly}
+              disabled={isBusy}
+              onPress={() => onPurchase(offering.monthly!)}
+            />
+          ) : null}
+        </View>
+      )}
 
       <Pressable
         accessibilityRole="button"
@@ -101,6 +156,8 @@ export function PaywallSheet({
           </Text>
         </Pressable>
       ) : null}
+
+      <LegalFooter />
     </GlassCard>
   );
 }

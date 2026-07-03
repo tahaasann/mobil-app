@@ -8,14 +8,10 @@ import type {
 } from '@/application/ports/ai-coach.port';
 import { parseBarrierResponseJson } from '@/domain/ai/barrier-response';
 import { getIslamicPolicyRules } from '@/domain/ai/islamic-content-policy';
-import { MAX_PRECLASSIFIER_INPUT_LENGTH, classifyExcuseText } from '@/domain/ai/preclassifier';
 import { buildCoachPrompt } from '@/domain/ai/prompt-builder';
 
-import {
-  GEMINI_LITE_MODEL,
-  GEMINI_MODEL,
-  MAX_OUTPUT_TOKENS,
-} from '@/infrastructure/firebase/firebase-ai.constants';
+import { GEMINI_MODEL, MAX_OUTPUT_TOKENS } from '@/infrastructure/firebase/firebase-ai.constants';
+import { getProductionGeminiSafetySettings } from '@/infrastructure/firebase/firebase-ai-safety.constants';
 
 const barrierSchema = Schema.object({
   properties: {
@@ -40,6 +36,8 @@ export class FirebaseAiCoachAdapter implements AiCoachPort {
       streak: context.streak,
       profile: context.profile,
       islamicPolicyRules: getIslamicPolicyRules(context.approach === 'spiritual'),
+      responseLanguage: context.responseLanguage,
+      conversationHistory: context.conversationHistory,
     });
 
     const modelName = context.geminiModel?.trim() || GEMINI_MODEL;
@@ -47,6 +45,7 @@ export class FirebaseAiCoachAdapter implements AiCoachPort {
     const model = getGenerativeModel(ai, {
       model: modelName,
       systemInstruction: prompt.system,
+      safetySettings: getProductionGeminiSafetySettings(),
       generationConfig: {
         maxOutputTokens: MAX_OUTPUT_TOKENS,
         responseMimeType: 'application/json',
@@ -67,47 +66,5 @@ export class FirebaseAiCoachAdapter implements AiCoachPort {
 
     const result = await model.generateContent(prompt.user);
     return parseBarrierResponseJson(result.response.text());
-  }
-}
-
-export class FirebasePreclassifierAdapter {
-  async classify(text: string): Promise<ReturnType<typeof classifyExcuseText>> {
-    const heuristic = classifyExcuseText(text);
-    if (heuristic !== 'on_topic') {
-      return heuristic;
-    }
-
-    const app = getApp();
-    const ai = getAI(app);
-    const liteModelName = GEMINI_LITE_MODEL;
-    const model = getGenerativeModel(ai, {
-      model: liteModelName,
-      generationConfig: {
-        maxOutputTokens: 16,
-        responseMimeType: 'application/json',
-        responseSchema: Schema.object({
-          properties: {
-            label: Schema.string(),
-          },
-        }),
-      },
-    });
-
-    const boundedText = text.trim().slice(0, MAX_PRECLASSIFIER_INPUT_LENGTH);
-    const result = await model.generateContent(
-      `Classify this message for a habit-coaching app as on_topic, off_topic, or crisis. Message: ${JSON.stringify(boundedText)}`,
-    );
-
-    try {
-      const parsed = JSON.parse(result.response.text()) as { label?: string };
-      const label = parsed.label?.toLowerCase();
-      if (label === 'crisis' || label === 'off_topic' || label === 'on_topic') {
-        return label;
-      }
-    } catch {
-      // fall through to heuristic
-    }
-
-    return heuristic;
   }
 }

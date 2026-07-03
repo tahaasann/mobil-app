@@ -11,8 +11,9 @@ import { SubscriptionContainer } from '@/infrastructure/di/subscription-containe
 import { assertProductionConfig } from '@/infrastructure/config/production-guard';
 import { FirebaseProvider } from '@/infrastructure/firebase/firebase-provider';
 import { NotificationResponseHandler } from '@/infrastructure/notifications/notification-response-handler';
-import { I18nProvider } from '@/presentation/i18n/i18n-provider';
-import { AppThemeProvider, useAppTheme } from '@/presentation/theme/theme-provider';
+import { AppPreferencesBootstrap } from '@/presentation/bootstrap/app-preferences-bootstrap';
+import { AppErrorBoundary } from '@/presentation/components/app-error-boundary';
+import { useAppTheme } from '@/presentation/theme/theme-provider';
 
 function ThemedRootStack() {
   const { resolved } = useAppTheme();
@@ -31,6 +32,7 @@ function ThemedRootStack() {
           name="excuse/[habitId]"
           options={{ title: 'Bahane Sohbeti', presentation: 'modal' }}
         />
+        <Stack.Screen name="habit/[id]" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
@@ -42,21 +44,21 @@ export default function RootLayout() {
   return (
     <DatabaseProvider>
       <FirebaseProvider>
-        <I18nProvider>
-          <AppThemeProvider>
-            <PlatformContainer>
-              <SubscriptionContainer>
-                <AppContainerProvider>
-                  <AuthContainer>
-                    <NotificationResponseHandler>
+        <AppPreferencesBootstrap>
+          <PlatformContainer>
+            <SubscriptionContainer>
+              <AppContainerProvider>
+                <AuthContainer>
+                  <NotificationResponseHandler>
+                    <AppErrorBoundary>
                       <ThemedRootStack />
-                    </NotificationResponseHandler>
-                  </AuthContainer>
-                </AppContainerProvider>
-              </SubscriptionContainer>
-            </PlatformContainer>
-          </AppThemeProvider>
-        </I18nProvider>
+                    </AppErrorBoundary>
+                  </NotificationResponseHandler>
+                </AuthContainer>
+              </AppContainerProvider>
+            </SubscriptionContainer>
+          </PlatformContainer>
+        </AppPreferencesBootstrap>
       </FirebaseProvider>
     </DatabaseProvider>
   );

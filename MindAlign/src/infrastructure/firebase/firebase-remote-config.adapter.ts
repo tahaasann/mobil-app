@@ -14,6 +14,8 @@ export class FirebaseRemoteConfigAdapter implements RemoteConfigPort {
       premium_weekly_quota: PREMIUM_WEEKLY_AI_QUOTA,
       gemini_model: GEMINI_MODEL,
       gemini_lite_model: GEMINI_LITE_MODEL,
+      ai_enabled: true,
+      server_ai_quota_enabled: false,
     });
   }
 
@@ -29,6 +31,8 @@ export class FirebaseRemoteConfigAdapter implements RemoteConfigPort {
       premiumWeeklyQuota: config.getValue('premium_weekly_quota').asNumber(),
       geminiModel: config.getValue('gemini_model').asString(),
       geminiLiteModel: config.getValue('gemini_lite_model').asString(),
+      aiEnabled: config.getValue('ai_enabled').asBoolean(),
+      serverAiQuotaEnabled: config.getValue('server_ai_quota_enabled').asBoolean(),
     };
   }
 }

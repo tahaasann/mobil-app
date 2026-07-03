@@ -13,7 +13,11 @@ describe('BookmarkUseCase', () => {
       delete: jest.fn(),
     };
 
-    const useCase = new BookmarkUseCase(repository);
+    const enqueueSyncUseCase = {
+      execute: jest.fn(async () => undefined),
+    };
+
+    const useCase = new BookmarkUseCase(repository, enqueueSyncUseCase as never);
     const bookmark = await useCase.add({
       content: 'Take a 2-minute walk',
       barrierLabel: 'Tired',

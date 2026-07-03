@@ -24,6 +24,11 @@ export type CreateHabitInput = {
   sortOrder?: number;
 };
 
+export type UpdateHabitInput = {
+  title?: string;
+  description?: string | null;
+};
+
 const MAX_TITLE_LENGTH = 100;
 
 function createId(): string {
@@ -33,16 +38,33 @@ function createId(): string {
   );
 }
 
-export function createHabit(input: CreateHabitInput): Habit {
-  const title = input.title.trim();
+function normalizeTitle(title: string): string {
+  const trimmed = title.trim();
 
-  if (!title) {
+  if (!trimmed) {
     throw new HabitValidationError('Title is required');
   }
 
-  if (title.length > MAX_TITLE_LENGTH) {
+  if (trimmed.length > MAX_TITLE_LENGTH) {
     throw new HabitValidationError(`Title must be at most ${MAX_TITLE_LENGTH} characters`);
   }
+
+  return trimmed;
+}
+
+export function applyHabitUpdate(habit: Habit, input: UpdateHabitInput): Habit {
+  return {
+    ...habit,
+    title: input.title !== undefined ? normalizeTitle(input.title) : habit.title,
+    description:
+      input.description !== undefined
+        ? input.description?.trim() || null
+        : habit.description,
+  };
+}
+
+export function createHabit(input: CreateHabitInput): Habit {
+  const title = normalizeTitle(input.title);
 
   return {
     id: createId(),

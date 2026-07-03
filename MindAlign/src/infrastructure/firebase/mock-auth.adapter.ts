@@ -41,6 +41,11 @@ export class MockAuthAdapter implements AuthPort {
     notify();
   }
 
+  async deleteAccount(): Promise<void> {
+    currentUser = null;
+    notify();
+  }
+
   onAuthStateChanged(callback: (user: AuthUser | null) => void): () => void {
     listeners.add(callback);
     callback(currentUser);

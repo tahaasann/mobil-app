@@ -9,12 +9,13 @@ export class DrizzleUserDataRepository implements UserDataPort {
   constructor(private readonly db: ExpoSQLiteDatabase<typeof schema>) {}
 
   async exportSnapshot(): Promise<UserDataSnapshot> {
-    const [settings, profile, habits, habitLogs, bookmarks, chatMessages, aiUsage] =
+    const [settings, profile, habits, habitLogs, habitNotes, bookmarks, chatMessages, aiUsage] =
       await Promise.all([
         this.db.select().from(schema.appSettings),
         this.db.select().from(schema.userProfile),
         this.db.select().from(schema.habits),
         this.db.select().from(schema.habitLogs),
+        this.db.select().from(schema.habitNotes),
         this.db.select().from(schema.bookmarks),
         this.db.select().from(schema.chatMessages),
         this.db.select().from(schema.aiUsage),
@@ -26,6 +27,7 @@ export class DrizzleUserDataRepository implements UserDataPort {
       profile,
       habits,
       habitLogs,
+      habitNotes,
       bookmarks,
       chatMessages,
       aiUsage,
@@ -35,6 +37,7 @@ export class DrizzleUserDataRepository implements UserDataPort {
   async clearSessionData(): Promise<void> {
     await this.db.delete(schema.chatMessages);
     await this.db.delete(schema.bookmarks);
+    await this.db.delete(schema.habitNotes);
     await this.db.delete(schema.habitLogs);
     await this.db.delete(schema.habits);
     await this.db.delete(schema.aiUsage);
